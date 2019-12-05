@@ -37,6 +37,8 @@ class EatCommand(Command):
         "chiara": "🚺 Hai mangiato {food}. \n[i]Sa un po' di biscotto, ma per lo più sa di curcuma, pepe e spezie varie.[/i]",
         "marco": "🚹 Hai mangiato {food}. \n[i]Sa di carlino <.<[/i]",
         "steffo": "🚹 Hai mangiato {food}. \n[i]Sa di gelato e di Coca Cola.[/i]",
+        "alby": "🚹 Hai mangiato {food}. \n[i]Sa di judo e golf[/i]",
+        "malbyx": "🚹 Hai mangiato {food}. \n[i]Sa di judo e golf[/i]",
         
         #altro
         "tonnuooooooro": "👻 Il {food} che hai mangiato era posseduto.\n[i]Spooky![/i]",
