@@ -6,6 +6,7 @@ from .api_diario_get import ApiDiarioGetStar
 from .api_discord_cv import ApiDiscordCvStar
 from .api_wiki_get import ApiWikiGetStar
 from .api_wiki_list import ApiUserListStar
+from .api_discord_play import ApiDiscordPlayStar
 
 # Enter the PageStars of your Pack here!
 available_page_stars = [
@@ -16,6 +17,7 @@ available_page_stars = [
     ApiDiscordCvStar,
     ApiWikiGetStar,
     ApiUserListStar,
+    ApiDiscordPlayStar,
 ]
 
 # Enter the ExceptionStars of your Pack here!
