@@ -15,4 +15,6 @@ class ApiDiscordPlayStar(PageStar):
         except (ValueError, TypeError):
             guild_id = None
         response = await self.interface.call_herald_event("discord", "discord_play", url=url, guild_id=guild_id)
-        return JSONResponse(response)
+        return JSONResponse(response, headers={
+            "Access-Control-Allow-Origin": self.interface.config['Funkwhale']['instance_url'],
+        })
