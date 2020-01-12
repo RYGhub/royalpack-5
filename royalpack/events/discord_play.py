@@ -18,21 +18,28 @@ class DiscordPlayEvent(Event):
                   **kwargs) -> dict:
         if not isinstance(self.serf, DiscordSerf):
             raise UnsupportedError()
-        client: discord.Client = self.serf.client
-        if len(self.serf.voice_players) == 1:
-            voice_player: VoicePlayer = self.serf.voice_players[0]
+
+        # TODO: fix this in Royalnet sometime
+        candidate_players: List[VoicePlayer] = []
+        for player in self.serf.voice_players:
+            player: VoicePlayer
+            if not player.voice_client.is_connected():
+                continue
+            if guild_id is not None:
+                guild = self.serf.client.get_guild(guild_id)
+                if guild != player.voice_client.guild:
+                    continue
+            candidate_players.append(player)
+
+        if len(candidate_players) == 0:
+            raise UserError("Il bot non è in nessun canale vocale.\n"
+                            "Evocalo prima con [c]summon[/c]!")
+        elif len(candidate_players) == 1:
+            voice_player = candidate_players[0]
         else:
-            if guild_id is None:
-                # TODO: trovare un modo per riprodurre canzoni su più server da Telegram
-                raise InvalidInputError("Non so in che Server riprodurre questo file...\n"
-                                        "Invia il comando su Discord, per favore!")
-            guild: discord.Guild = client.get_guild(guild_id)
-            if guild is None:
-                raise InvalidInputError("Impossibile trovare il Server specificato.")
-            voice_player: VoicePlayer = self.serf.find_voice_player(guild)
-            if voice_player is None:
-                raise UserError("Il bot non è in nessun canale vocale.\n"
-                                "Evocalo prima con [c]summon[/c]!")
+            raise InvalidInputError("Non so in che Server riprodurre questo file...\n"
+                                    "Invia il comando su Discord, per favore!")
+
         ytds = await YtdlDiscord.from_url(url)
         added: List[YtdlDiscord] = []
         too_long: List[YtdlDiscord] = []
