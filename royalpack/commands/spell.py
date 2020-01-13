@@ -39,7 +39,7 @@ class SpellCommand(Command):
             stats: rs.StatsComponent = spell.stats_component
             rows.append("Il caster riceve: ")
             for stat_name in stats.stat_changes:
-                rows.append(f"[b]{stats.stat_changes[stat_name]}{stat_name}[/b]")
+                rows.append(f"[b]{stat_name}{stats.stat_changes[stat_name]}[/b]")
             rows.append("")
 
         if spell.status_effect_component:
