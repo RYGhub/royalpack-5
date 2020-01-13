@@ -20,5 +20,5 @@ class FunkwhaleCommand(PlayCommand):
                                    f"/api/v1/search?query={search}") as response:
                 j = await response.json()
         if len(j["tracks"]) < 1:
-            raise InvalidInputError("Nessun video trovato.")
+            raise UserError("Nessun file audio trovato con il nome richiesto.")
         return f'{self.config["Funkwhale"]["instance_url"]}{j["tracks"][0]["listen_url"]}'
