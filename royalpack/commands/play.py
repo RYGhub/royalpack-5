@@ -4,6 +4,7 @@ import discord
 from typing import *
 from royalnet.commands import *
 from royalnet.utils import *
+from royalnet.backpack.tables import User, Discord
 
 
 class PlayCommand(Command):
@@ -16,7 +17,7 @@ class PlayCommand(Command):
     syntax = "{url}"
 
     async def get_url(self, args: CommandArgs):
-        return args.joined()
+        return args.joined(require_at_least=1)
 
     async def run(self, args: CommandArgs, data: CommandData) -> None:
         # if not (url.startswith("http://") or url.startswith("https://")):
@@ -33,30 +34,21 @@ class PlayCommand(Command):
                 guild_id: Optional[int] = guild.id
         else:
             guild_id = None
-        response: Dict[str, Any] = await self.interface.call_herald_event("discord", "discord_play",
-                                                                          url=await self.get_url(args),
-                                                                          guild_id=guild_id)
 
-        too_long: List[Dict[str, Any]] = response["too_long"]
-        if len(too_long) > 0:
-            await data.reply(f"⚠ {len(too_long)} file non {'è' if len(too_long) == 1 else 'sono'}"
-                             f" stat{'o' if len(too_long) == 1 else 'i'} scaricat{'o' if len(too_long) == 1 else 'i'}"
-                             f" perchè durava{'' if len(too_long) == 1 else 'no'}"
-                             f" più di [c]{self.config['Play']['max_song_duration']}[/c] secondi.")
+        user: User = await data.get_author()
+        user_str = None
 
-        added: List[Dict[str, Any]] = response["added"]
-        if len(added) > 0:
-            reply = f"▶️ Aggiunt{'o' if len(added) == 1 else 'i'} {len(added)} file alla coda:\n"
-            if self.interface.name == "discord":
-                await data.reply(reply)
-                for item in added:
-                    embed = pickle.loads(base64.b64decode(bytes(item["stringified_base64_pickled_discord_embed"],
-                                                                encoding="ascii")))
-                    # noinspection PyUnboundLocalVariable
-                    await message.channel.send(embed=embed)
+        if user is not None:
+            try:
+                user_discord: Discord = user.discord[0]
+            except (AttributeError, IndexError):
+                user_str = str(user)
             else:
-                reply += numberemojiformat([a["title"] for a in added])
-                await data.reply(reply)
+                user_str = str(f"<@{user_discord.discord_id}>")
 
-        if len(added) + len(too_long) == 0:
-            raise ExternalError("Nessun video trovato.")
+        self.loop.create_task(self.interface.call_herald_event("discord", "discord_play",
+                                                               url=await self.get_url(args),
+                                                               guild_id=guild_id,
+                                                               user=user_str))
+
+        # await data.reply("✅ Richiesta di riproduzione inviata!")
