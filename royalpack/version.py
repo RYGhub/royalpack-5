@@ -1,1 +1,1 @@
-semantic = "5.2.9"
+semantic = "5.2.10"
