@@ -22,7 +22,6 @@
 
     riotwatcher = "^2.7.1"
     royalspells = "^3.2"
-    markovify = "^0.8.0"
 
     [tool.poetry.dependencies.royalnet]
         version = "^5.2.4"

@@ -30,7 +30,6 @@ from .peertube import PeertubeCommand
 from .funkwhale import FunkwhaleCommand
 from .eval import EvalCommand
 from .exec import ExecCommand
-from .markov import MarkovCommand
 
 # Enter the commands of your Pack here!
 available_commands = [
@@ -65,7 +64,6 @@ available_commands = [
     EvalCommand,
     ExecCommand,
     FunkwhaleCommand,
-    MarkovCommand
 ]
 
 # Don't change this, it should automatically generate __all__
