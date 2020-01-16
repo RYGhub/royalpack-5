@@ -5,9 +5,9 @@ import urllib.parse
 
 
 class FunkwhaleCommand(PlayCommand):
-    name: str = "fuckwhale"
+    name: str = "funkwhale"
 
-    aliases = ["funkwhale", "fw", "royalwhale", "rw"]
+    aliases = ["fuckwhale", "fw", "royalwhale", "rw"]
 
     description: str = "Cerca un video su RoyalWhale e lo aggiunge alla coda della chat vocale."
 
