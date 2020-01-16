@@ -155,8 +155,9 @@ class EatCommand(Command):
         "torta": "⬜️ Non hai mangiato niente.\n[i]La {food} è una menzogna![/i]",
         "cake": "⬜️ Non hai mangiato niente.\n[i]The {food} is a lie![/i]",
         "markov": "🗨 Stai cercando di mangiare... un matematico russo di nome {food}?\n[i]Lo trovi un po' indigesto.[/i]",
-        "mia sul fiume": "☣️Preparata dal bot con le sue stesse mani, un piatto migliore di qualsiasi altro al mondo.\n[i]Anche se non sappiamo di cosa sia"
-                         " fatto esattamente[/i]",
+        "mia sul fiume": "💧 Hai mangiato il miglior piatto al mondo, la {food}, esclusivo ai membri Royal Games.\n"
+                         "[i]Nessuno, tranne il bot, sa di cosa è fatta esattamente, ma una cosa è certa: è "
+                         "buonissima![/i]",
     }
 
     async def run(self, args: CommandArgs, data: CommandData) -> None:
