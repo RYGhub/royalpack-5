@@ -30,6 +30,7 @@ from .peertube import PeertubeCommand
 from .funkwhale import FunkwhaleCommand
 from .eval import EvalCommand
 from .exec import ExecCommand
+from .trivia import TriviaCommand
 
 # Enter the commands of your Pack here!
 available_commands = [
@@ -64,6 +65,7 @@ available_commands = [
     EvalCommand,
     ExecCommand,
     FunkwhaleCommand,
+    TriviaCommand,
 ]
 
 # Don't change this, it should automatically generate __all__

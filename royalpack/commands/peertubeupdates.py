@@ -33,6 +33,8 @@ class PeertubeUpdatesCommand(Command):
             async with session.get(self.config["Peertube"]["instance_url"] +
                                    "/feeds/videos.json?sort=-publishedAt&filter=local") as response:
                 log.debug("Parsing jsonfeed")
+                if response.status != 200:
+                    raise ExternalError("Peertube is unavailable")
                 j = await response.json()
                 log.debug("Jsonfeed parsed successfully")
         return j
