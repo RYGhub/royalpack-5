@@ -27,7 +27,7 @@ class TriviaCommand(rc.Command):
 
     _wrong_emoji = "❌"
 
-    _answer_time = 17
+    _answer_time = 20
 
     _question_lock: bool = False
 
