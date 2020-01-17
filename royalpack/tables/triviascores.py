@@ -34,6 +34,8 @@ class TriviaScore:
 
     @property
     def correct_rate(self):
+        if self.total_answers == 0:
+            return 0.0
         return self.correct_answers / self.total_answers
 
     @property
