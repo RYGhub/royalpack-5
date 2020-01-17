@@ -37,7 +37,7 @@ class ReminderCommand(Command):
     async def _remind(self, reminder):
         await sleep_until(reminder.datetime)
         if self.interface.name == "telegram":
-            chat_id: int = pickle.loads(reminder.raw_interface_data)
+            chat_id: int = pickle.loads(reminder.interface_data)
             client: telegram.Bot = self.serf.client
             await self.serf.api_call(client.send_message,
                                      chat_id=chat_id,
@@ -45,7 +45,7 @@ class ReminderCommand(Command):
                                      parse_mode="HTML",
                                      disable_web_page_preview=True)
         elif self.interface.name == "discord":
-            channel_id: int = pickle.loads(reminder.raw_interface_data)
+            channel_id: int = pickle.loads(reminder.interface_data)
             client: discord.Client = self.serf.client
             channel = client.get_channel(channel_id)
             await channel.send(discord_escape(f"❗️ {reminder.message}"))
@@ -70,7 +70,7 @@ class ReminderCommand(Command):
             return
         await data.reply(f"✅ Promemoria impostato per [b]{date.strftime('%Y-%m-%d %H:%M:%S')}[/b]")
         if self.interface.name == "telegram":
-            interface_data = pickle.dumps(data.update.effective_chat.id)
+            interface_data = pickle.dumps(data.message.chat.id)
         elif self.interface.name == "discord":
             interface_data = pickle.dumps(data.message.channel.id)
         else:
