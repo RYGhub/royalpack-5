@@ -46,10 +46,10 @@ class TriviaCommand(rc.Command):
         elif arg == "scores":
             trivia_scores = await ru.asyncify(data.session.query(self.alchemy.get(TriviaScore)).all)
             strings = ["🏆 [b]Trivia Leaderboards[/b]\n"]
-            for index, ts in enumerate(sorted(trivia_scores, key=lambda ts: -ts.correct_rate)):
+            for index, ts in enumerate(sorted(trivia_scores, key=lambda ts: -ts.score)):
                 if index > 3:
                     index = 3
-                strings.append(f"{self._medal_emojis[index]} {ts.royal.username}"
+                strings.append(f"{self._medal_emojis[index]} {ts.royal.username}: [b]{ts.score:.0f}p[/b]"
                                f" ({ts.correct_answers}/{ts.total_answers})")
             await data.reply("\n".join(strings))
             return
@@ -131,13 +131,16 @@ class TriviaCommand(rc.Command):
                 ts = self.interface.alchemy.get(TriviaScore)(royal=answerer)
                 data.session.add(ts)
                 await ru.asyncify(data.session.commit)
+            previous_score = answerer.trivia_score.score
             if self._answerers[question_id][answerer_id]:
                 results += self._correct_emoji
                 answerer.trivia_score.correct_answers += 1
             else:
                 results += self._wrong_emoji
                 answerer.trivia_score.wrong_answers += 1
-            results += f" {answerer} ({answerer.trivia_score.correct_answers}/{answerer.trivia_score.total_answers})\n"
+            current_score = answerer.trivia_score.score
+            score_difference = current_score - previous_score
+            results += f" {answerer}: [b]{current_score:.0f}p[/b] ({score_difference:+.0f}p)\n"
         await data.reply(results)
         del self._answerers[question_id]
         await ru.asyncify(data.session.commit)
