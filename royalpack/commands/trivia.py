@@ -29,7 +29,7 @@ class TriviaCommand(rc.Command):
 
     _answer_time = 20
 
-    _question_lock: bool = False
+    # _question_lock: bool = False
 
     def __init__(self, interface: rc.CommandInterface):
         super().__init__(interface)
@@ -53,9 +53,9 @@ class TriviaCommand(rc.Command):
                                f" ({ts.correct_answers}/{ts.total_answers})")
             await data.reply("\n".join(strings))
             return
-        if self._question_lock:
-            raise rc.CommandError("C'è già un'altra domanda attiva!")
-        self._question_lock = True
+        # if self._question_lock:
+        #     raise rc.CommandError("C'è già un'altra domanda attiva!")
+        # self._question_lock = True
         # Fetch the question
         async with aiohttp.ClientSession() as session:
             async with session.get("https://opentdb.com/api.php?amount=1") as response:
@@ -144,4 +144,4 @@ class TriviaCommand(rc.Command):
         await data.reply(results)
         del self._answerers[question_id]
         await ru.asyncify(data.session.commit)
-        self._question_lock = False
+        # self._question_lock = False
