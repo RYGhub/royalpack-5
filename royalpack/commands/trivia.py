@@ -64,7 +64,7 @@ class TriviaCommand(rc.Command):
         if j["response_code"] != 0:
             raise rc.CommandError(f"OpenTDB returned an error response_code ({j['response_code']}).")
         question = j["results"][0]
-        text = f'❓ [b]{question["category"]} - {question["difficulty"].capitalize()}[/b]\n' \
+        text = f'❓ [b]{question["category"]}[/b]\n' \
                f'{html.unescape(question["question"])}'
         # Prepare answers
         correct_answer: str = question["correct_answer"]
