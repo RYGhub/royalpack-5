@@ -1,6 +1,7 @@
 from sqlalchemy import *
 from sqlalchemy.orm import relationship, backref
 from sqlalchemy.ext.declarative import declared_attr
+import steam
 
 
 class Steam:
@@ -15,8 +16,12 @@ class Steam:
         return relationship("User", backref=backref("steam"))
 
     @declared_attr
-    def steam_id(self):
+    def _steamid(self):
         return Column(BigInteger, primary_key=True)
+
+    @property
+    def steamid(self):
+        return steam.SteamID(self._steamid)
 
     @declared_attr
     def persona_name(self):
@@ -39,7 +44,7 @@ class Steam:
         return Column(DateTime)
 
     def __repr__(self):
-        return f"<Steam account {self.steam_id} of {self.user}>"
+        return f"<Steam account {self._steamid} of {self.user}>"
 
     def __str__(self):
-        return f"steam:{self.steam_id}"
+        return f"[c]steam:{self._steamid}[/c]"

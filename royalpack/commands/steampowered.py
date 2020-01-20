@@ -11,7 +11,7 @@ class SteampoweredCommand(Command):
 
     description: str = "Connetti il tuo account di Steam!"
 
-    syntax: str = "{profile}"
+    syntax: str = "{profile_url}"
 
     def __init__(self, interface: CommandInterface):
         super().__init__(interface)
@@ -23,12 +23,16 @@ class SteampoweredCommand(Command):
         string = f"ℹ️ [b]{account.persona_name}[/b]\n" \
                  f"{account.profile_url}\n" \
                  f"\n" \
-                 f"SteamID: [c]{account.steam_id}[/c]\n" \
-                 f"Created on: {account.account_creation_date}\n"
+                 f"SteamID: [c]{account.steamid.as_32}[/c]\n" \
+                 f"SteamID2: [c]{account.steamid.as_steam2}[/c]\n" \
+                 f"SteamID3: [c]{account.steamid.as_steam3}[/c]\n" \
+                 f"SteamID64: [c]{account.steamid.as_64}[/c]\n" \
+                 f"\n" \
+                 f"Created on: [b]{account.account_creation_date}[/b]\n"
         return string
 
     async def _update(self, account: Steam):
-        response = await asyncify(self._api.ISteamUser.GetPlayerSummaries_v2, steamids=account.steam_id)
+        response = await asyncify(self._api.ISteamUser.GetPlayerSummaries_v2, steamids=account._steamid)
         r = response["response"]["players"][0]
         account.persona_name = r["personaname"]
         account.profile_url = r["profileurl"]
@@ -39,12 +43,13 @@ class SteampoweredCommand(Command):
     async def run(self, args: CommandArgs, data: CommandData) -> None:
         author = await data.get_author()
         if len(args) > 0:
-            steamid = args.match("([0-9]+)")[0]
-            response = await asyncify(self._api.ISteamUser.GetPlayerSummaries_v2, steamids=steamid)
+            url = args.joined()
+            steamid64 = await asyncify(steam.steamid.steam64_from_url, url)
+            response = await asyncify(self._api.ISteamUser.GetPlayerSummaries_v2, steamids=steamid64)
             r = response["response"]["players"][0]
             steam_account = self.alchemy.get(Steam)(
                 user=author,
-                steam_id=int(steamid),
+                _steamid=int(steamid64),
                 persona_name=r["personaname"],
                 profile_url=r["profileurl"],
                 avatar=r["avatarfull"],

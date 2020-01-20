@@ -3,6 +3,7 @@ from royalnet.commands import *
 from royalnet.utils import *
 from royalnet.backpack.tables import User
 from sqlalchemy import func
+from ..tables.aliases import Alias
 
 
 class UserinfoCommand(Command):
@@ -19,26 +20,17 @@ class UserinfoCommand(Command):
         if username is None:
             user: User = await data.get_author(error_if_none=True)
         else:
-            found: Optional[User] = await asyncify(
-                data.session
-                    .query(self.alchemy.get(User))
-                    .filter(func.lower(self.alchemy.get(User).username) == func.lower(username))
-                    .one_or_none
-            )
+            found: Optional[User] = await asyncify(Alias.find_by_alias, self.alchemy, data.session, username)
             if not found:
                 raise InvalidInputError("Utente non trovato.")
             else:
                 user = found
 
         r = [
-            f"ℹ️ [b]{user.username}[/b] (ID: {user.uid})",
+            f"ℹ️ [b]{user.username}[/b]",
             f"{user.role}",
             "",
         ]
-
-        if user.fiorygi:
-            r.append(f"{user.fiorygi}")
-            r.append("")
 
         # Bios are a bit too long
         # if user.bio:
@@ -48,6 +40,9 @@ class UserinfoCommand(Command):
             r.append(f"{account}")
 
         for account in user.discord:
+            r.append(f"{account}")
+
+        for account in user.steam:
             r.append(f"{account}")
 
         for account in user.leagueoflegends:
@@ -61,7 +56,13 @@ class UserinfoCommand(Command):
         r.append("")
 
         if user.trivia_score:
-            r.append(f"Trivia: [b]{user.trivia_score.correct_answers}[/b] risposte corrette / "
-                     f"{user.trivia_score.total_answers} totali")
+            r.append(f"Ha [b]{user.trivia_score.score:.0f}[/b] punti trivia, avendo risposto correttamente a"
+                     f" [b]{user.trivia_score.correct_answers}[/b] domande su"
+                     f" [b]{user.trivia_score.total_answers}[/b].")
+            r.append("")
+
+        if user.fiorygi:
+            r.append(f"Ha [b]{user.fiorygi}[/b].")
+            r.append("")
 
         await data.reply("\n".join(r))
