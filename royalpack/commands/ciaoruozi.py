@@ -9,8 +9,7 @@ class CiaoruoziCommand(Command):
 
     async def run(self, args: CommandArgs, data: CommandData) -> None:
         if self.interface.name == "telegram":
-            update: telegram.Update = data.update
-            user: telegram.User = update.effective_user
+            user: telegram.User = data.message.from_user
             # Se sei Ruozi, salutati da solo!
             if user.id == 112437036:
                 await data.reply("👋 Ciao me!")

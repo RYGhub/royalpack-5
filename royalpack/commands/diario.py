@@ -38,8 +38,7 @@ class DiarioCommand(Command):
 
     async def run(self, args: CommandArgs, data: CommandData) -> None:
         if self.interface.name == "telegram":
-            update: telegram.Update = data.update
-            message: telegram.Message = update.message
+            message: telegram.Message = data.message
             reply: telegram.Message = message.reply_to_message
             creator = await data.get_author()
             # noinspection PyUnusedLocal
