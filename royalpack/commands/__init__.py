@@ -31,6 +31,7 @@ from .funkwhale import FunkwhaleCommand
 from .eval import EvalCommand
 from .exec import ExecCommand
 from .trivia import TriviaCommand
+from .steampowered import SteampoweredCommand
 
 # Enter the commands of your Pack here!
 available_commands = [
@@ -66,6 +67,7 @@ available_commands = [
     ExecCommand,
     FunkwhaleCommand,
     TriviaCommand,
+    SteampoweredCommand,
 ]
 
 # Don't change this, it should automatically generate __all__
