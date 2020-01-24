@@ -36,7 +36,7 @@ class DotaCommand(Command):
 
     @staticmethod
     def _display(dota: Dota) -> str:
-        string = f"ℹ️ [b]{dota.steam}[/b]\n"
+        string = f"ℹ️ [b]{dota.steam.persona_name}[/b]\n"
 
         if dota.rank:
             string += f"{dota.rank}\n"
@@ -139,14 +139,12 @@ class DotaCommand(Command):
 
         message = ""
         for steam in author.steam:
-            dota = steam.dota
-            if dota is None:
+            await self._update(steam, data.session)
+            if steam.dota is None:
                 continue
             found_something = True
-            await self._update(steam)
-            message += self._display(steam)
+            message += self._display(steam.dota)
             message += "\n"
         if not found_something:
-            if len(author.leagueoflegends) == 0:
-                raise UserError("Nessun account di Dota 2 trovato.")
+            raise UserError("Nessun account di Dota 2 trovato.")
         await data.reply(message)
