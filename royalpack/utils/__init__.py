@@ -4,6 +4,9 @@ from .leaguetier import LeagueTier
 from .leaguerank import LeagueRank
 from .leagueleague import LeagueLeague
 from .royalqueue import RoyalQueue
+from .dotamedal import DotaMedal
+from .dotastars import DotaStars
+from .dotarank import DotaRank
 
 __all__ = [
     "MMChoice",
@@ -13,4 +16,7 @@ __all__ = [
     "LeagueRank",
     "LeagueLeague",
     "RoyalQueue",
+    "DotaMedal",
+    "DotaStars",
+    "DotaRank",
 ]

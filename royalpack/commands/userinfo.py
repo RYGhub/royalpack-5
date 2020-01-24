@@ -44,6 +44,8 @@ class UserinfoCommand(Command):
 
         for account in user.steam:
             r.append(f"{account}")
+            if account.dota is not None:
+                r.append(f"{account.dota}")
 
         for account in user.leagueoflegends:
             r.append(f"{account}")

@@ -11,6 +11,7 @@ from .mmresponse import MMResponse
 from .leagueoflegends import LeagueOfLegends
 from .fiorygi import Fiorygi
 from .steam import Steam
+from .dota import Dota
 
 # Enter the tables of your Pack here!
 available_tables = [
@@ -26,6 +27,7 @@ available_tables = [
     LeagueOfLegends,
     Fiorygi,
     Steam,
+    Dota,
 ]
 
 # Don't change this, it should automatically generate __all__

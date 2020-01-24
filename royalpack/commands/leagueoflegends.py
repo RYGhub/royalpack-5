@@ -40,32 +40,31 @@ class LeagueoflegendsCommand(Command):
                       attribute_name: str,
                       old_value: typing.Any,
                       new_value: typing.Any):
-        if self.interface.name == "telegram":
-            if isinstance(old_value, LeagueLeague):
-                # This is a rank change!
-                # Don't send messages for every rank change, send messages just if the TIER or RANK changes!
-                if old_value.tier == new_value.tier and old_value.rank == new_value.rank:
-                    return
-                # Find the queue
-                queue_names = {
-                    "rank_soloq": "Solo/Duo",
-                    "rank_flexq": "Flex",
-                    "rank_twtrq": "3v3",
-                    "rank_tftq": "TFT"
-                }
-                # Prepare the message
-                if new_value > old_value:
-                    message = f"📈 [b]{obj.user}[/b] è salito a {new_value} su League of Legends " \
-                              f"({queue_names[attribute_name]})! Congratulazioni!"
-                else:
-                    message = f"📉 [b]{obj.user}[/b] è sceso a {new_value} su League of Legends " \
-                              f"({queue_names[attribute_name]})."
-                # Send the message
-                await self._send(message)
-            # Level up!
-            elif attribute_name == "summoner_level":
-                if new_value == 30 or (new_value >= 50 and (new_value % 25 == 0)):
-                    await self._send(f"🆙 [b]{obj.user}[/b] è salito al livello [b]{new_value}[/b] su League of Legends!")
+        if isinstance(old_value, LeagueLeague):
+            # This is a rank change!
+            # Don't send messages for every rank change, send messages just if the TIER or RANK changes!
+            if old_value.tier == new_value.tier and old_value.rank == new_value.rank:
+                return
+            # Find the queue
+            queue_names = {
+                "rank_soloq": "Solo/Duo",
+                "rank_flexq": "Flex",
+                "rank_twtrq": "3v3",
+                "rank_tftq": "TFT"
+            }
+            # Prepare the message
+            if new_value > old_value:
+                message = f"📈 [b]{obj.user}[/b] è salito a {new_value} su League of Legends " \
+                          f"({queue_names[attribute_name]})! Congratulazioni!"
+            else:
+                message = f"📉 [b]{obj.user}[/b] è sceso a {new_value} su League of Legends " \
+                          f"({queue_names[attribute_name]})."
+            # Send the message
+            await self._send(message)
+        # Level up!
+        elif attribute_name == "summoner_level":
+            if new_value == 30 or (new_value >= 50 and (new_value % 25 == 0)):
+                await self._send(f"🆙 [b]{obj.user}[/b] è salito al livello [b]{new_value}[/b] su League of Legends!")
 
     @staticmethod
     async def _change(obj: LeagueOfLegends,

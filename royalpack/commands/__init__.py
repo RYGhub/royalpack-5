@@ -33,6 +33,7 @@ from .exec import ExecCommand
 from .trivia import TriviaCommand
 from .steampowered import SteampoweredCommand
 from .steammatch import SteammatchCommand
+from .dota import DotaCommand
 
 # Enter the commands of your Pack here!
 available_commands = [
@@ -69,7 +70,8 @@ available_commands = [
     FunkwhaleCommand,
     TriviaCommand,
     SteampoweredCommand,
-    SteammatchCommand
+    SteammatchCommand,
+    DotaCommand,
 ]
 
 # Don't change this, it should automatically generate __all__
