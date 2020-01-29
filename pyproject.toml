@@ -2,7 +2,7 @@
 
 [tool.poetry]
     name = "royalpack"
-    version = "5.3.3"
+    version = "5.3.4"
     description = "A Royalnet command pack for the Royal Games community"
     authors = ["Stefano Pigozzi <ste.pigozzi@gmail.com>"]
     license = "AGPL-3.0+"
@@ -25,7 +25,7 @@
     steam = "^0.9.1"
 
     [tool.poetry.dependencies.royalnet]
-        version = "^5.3.1"
+        version = "^5.3.2"
         # Maybe... there is a way to make these selectable?
         extras = [
             "telegram",

@@ -158,6 +158,7 @@ class EatCommand(Command):
         "mia sul fiume": "💧 Hai mangiato il miglior piatto al mondo, la {food}, esclusivo ai membri Royal Games.\n"
                          "[i]Nessuno, tranne il bot, sa di cosa è fatta esattamente, ma una cosa è certa: è "
                          "buonissima![/i]",
+        "angelo": "👼 Oh mio dio! E' un {food}!\n[i]Ora hai un digramma ad onda blu.[/i]"
     }
 
     async def run(self, args: CommandArgs, data: CommandData) -> None:
