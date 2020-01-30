@@ -13,6 +13,9 @@ class FunkwhaleCommand(PlayCommand):
 
     syntax = "{ricerca}"
 
+    def get_embed_color(self):
+        return 0x009FE3
+
     async def get_url(self, args):
         search = urllib.parse.quote(args.joined(require_at_least=1))
         async with aiohttp.ClientSession() as session:

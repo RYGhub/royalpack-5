@@ -17,6 +17,7 @@ class DiscordPlayEvent(Event):
                   url: str,
                   guild_id: Optional[int] = None,
                   user: Optional[str] = None,
+                  force_color: Optional[int] = None,
                   **kwargs) -> dict:
         if not isinstance(self.serf, DiscordSerf):
             raise UnsupportedError()
@@ -70,7 +71,10 @@ class DiscordPlayEvent(Event):
                 await main_channel.send(escape(f"▶️ Aggiunt{'o' if len(added) == 1 else 'i'} {len(added)} file alla"
                                                f" coda:"))
         for ytd in added:
-            await main_channel.send(embed=ytd.embed())
+            embed: discord.Embed = ytd.embed()
+            if force_color:
+                embed._colour = discord.Colour(force_color)
+            await main_channel.send(embed=embed)
 
         if len(too_long) > 0:
             if user:
@@ -87,12 +91,8 @@ class DiscordPlayEvent(Event):
         return {
             "added": [{
                 "title": ytd.info.title,
-                "stringified_base64_pickled_discord_embed": str(base64.b64encode(pickle.dumps(ytd.embed())),
-                                                                encoding="ascii")
             } for ytd in added],
             "too_long": [{
                 "title": ytd.info.title,
-                "stringified_base64_pickled_discord_embed": str(base64.b64encode(pickle.dumps(ytd.embed())),
-                                                                encoding="ascii")
             } for ytd in too_long]
         }
