@@ -34,6 +34,7 @@ from .trivia import TriviaCommand
 from .steampowered import SteampoweredCommand
 from .steammatch import SteammatchCommand
 from .dota import DotaCommand
+from .magickfiorygi import MagickfiorygiCommand
 
 # Enter the commands of your Pack here!
 available_commands = [
@@ -72,6 +73,7 @@ available_commands = [
     SteampoweredCommand,
     SteammatchCommand,
     DotaCommand,
+    MagickfiorygiCommand,
 ]
 
 # Don't change this, it should automatically generate __all__

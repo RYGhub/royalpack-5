@@ -12,6 +12,7 @@ from .leagueoflegends import LeagueOfLegends
 from .fiorygi import Fiorygi
 from .steam import Steam
 from .dota import Dota
+from .fiorygitransactions import FiorygiTransaction
 
 # Enter the tables of your Pack here!
 available_tables = [
@@ -28,6 +29,7 @@ available_tables = [
     Fiorygi,
     Steam,
     Dota,
+    FiorygiTransaction,
 ]
 
 # Don't change this, it should automatically generate __all__
