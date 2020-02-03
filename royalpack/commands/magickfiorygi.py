@@ -2,7 +2,8 @@ from typing import *
 import royalnet
 import royalnet.commands as rc
 import royalnet.serf.telegram as rt
-from ..tables import Alias, Fiorygi, FiorygiTransaction
+from royalnet.backpack.tables import Alias
+from ..tables import Fiorygi, FiorygiTransaction
 
 
 class MagickfiorygiCommand(rc.Command):

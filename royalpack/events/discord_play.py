@@ -38,7 +38,7 @@ class DiscordPlayEvent(rc.Event):
 
         if len(candidate_players) == 0:
             raise rc.UserError("Il bot non è in nessun canale vocale.\n"
-                            "Evocalo prima con [c]summon[/c]!")
+                               "Evocalo prima con [c]summon[/c]!")
         elif len(candidate_players) == 1:
             voice_player = candidate_players[0]
         else:
@@ -68,7 +68,7 @@ class DiscordPlayEvent(rc.Event):
                 await main_channel.send(rsd.escape(f"▶️ {user} ha aggiunto {len(added)} file alla coda:"))
             else:
                 await main_channel.send(rsd.escape(f"▶️ Aggiunt{'o' if len(added) == 1 else 'i'} {len(added)} file alla"
-                                               f" coda:"))
+                                                   f" coda:"))
         for ytd in added:
             embed: discord.Embed = ytd.embed()
             if force_color:

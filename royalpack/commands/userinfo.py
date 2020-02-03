@@ -1,9 +1,8 @@
 from typing import *
 from royalnet.commands import *
 from royalnet.utils import *
-from royalnet.backpack.tables import User
+from royalnet.backpack.tables import User, Alias
 from sqlalchemy import func
-from ..tables.aliases import Alias
 
 
 class UserinfoCommand(Command):

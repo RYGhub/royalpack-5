@@ -1,7 +1,8 @@
 from typing import *
 from royalnet.commands import *
 from royalnet.utils import *
-from ..tables import Alias, Steam
+from royalnet.backpack.tables import Alias
+from ..tables import Steam
 import steam
 import requests.exceptions
 

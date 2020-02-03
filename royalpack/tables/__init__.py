@@ -1,6 +1,5 @@
 # Imports go here!
 from .diario import Diario
-from .aliases import Alias
 from .wikipages import WikiPage
 from .wikirevisions import WikiRevision
 from .bios import Bio
@@ -17,7 +16,6 @@ from .fiorygitransactions import FiorygiTransaction
 # Enter the tables of your Pack here!
 available_tables = [
     Diario,
-    Alias,
     WikiPage,
     WikiRevision,
     Bio,

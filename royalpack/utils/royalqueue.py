@@ -43,3 +43,4 @@ class RoyalQueue(Playable):
             log.debug(f"Deleting: {self.now_playing.ytdl_file}")
             await self.now_playing.ytdl_file.delete_asap()
             log.debug(f"Deleted successfully!")
+            self.now_playing = None
