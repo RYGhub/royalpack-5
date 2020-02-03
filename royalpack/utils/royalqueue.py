@@ -1,6 +1,6 @@
 import logging
 from typing import Optional, List, AsyncGenerator, Tuple, Any, Dict
-from royalnet.bard import YtdlDiscord
+from royalnet.bard.discord import YtdlDiscord
 from royalnet.serf.discord import Playable
 import discord
 
