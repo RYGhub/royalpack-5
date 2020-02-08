@@ -1,21 +1,19 @@
 from starlette.requests import Request
 from starlette.responses import *
-from royalnet.constellation import *
+from royalnet.constellation.api import *
 from royalnet.utils import *
 from ..tables import *
 
 
-class ApiDiarioGetStar(PageStar):
-    path = "/api/diario/get/{diario_id}"
+class ApiDiarioGetStar(ApiStar):
+    path = "/api/diario/get/v1"
 
-    async def page(self, request: Request) -> JSONResponse:
-        diario_id_str = request.path_params.get("diario_id", "")
+    async def api(self, data: ApiData) -> dict:
         try:
-            diario_id = int(diario_id_str)
-        except (ValueError, TypeError):
-            return shoot(400, "Invalid diario_id")
-        async with self.alchemy.session_acm() as session:
-            entry: Diario = await asyncify(session.query(self.alchemy.get(Diario)).get, diario_id)
-            if entry is None:
-                return shoot(404, "No such user")
-            return JSONResponse(entry.json())
+            diario_id = int(data["diario_id"])
+        except ValueError:
+            raise InvalidParameterError("'diario_id' is not a valid int.")
+        entry: Diario = await asyncify(data.session.query(self.alchemy.get(Diario)).get, diario_id)
+        if entry is None:
+            raise NotFoundError("No such diario entry.")
+        return entry.json()

@@ -75,7 +75,7 @@ class DiarioCommand(Command):
                 quoted_tg = await asyncify(data.session.query(self.alchemy.get(Telegram))
                                            .filter_by(tg_id=reply.from_user.id)
                                            .one_or_none)
-                quoted_account = quoted_tg.royal if quoted_tg is not None else None
+                quoted_account = quoted_tg.user if quoted_tg is not None else None
                 # Find the quoted name to assign
                 quoted_user: telegram.User = reply.from_user
                 quoted = quoted_user.full_name
@@ -127,7 +127,7 @@ class DiarioCommand(Command):
                         )
                     else:
                         quoted_alias = None
-                    quoted_account = quoted_alias.royal if quoted_alias is not None else None
+                    quoted_account = quoted_alias.user if quoted_alias is not None else None
                 else:
                     text = None
                     quoted = None
@@ -187,7 +187,7 @@ class DiarioCommand(Command):
                 )
             else:
                 quoted_alias = None
-            quoted_account = quoted_alias.royal if quoted_alias is not None else None
+            quoted_account = quoted_alias.user if quoted_alias is not None else None
             if quoted_alias is not None and quoted_account is None:
                 raise UserError("Il nome dell'autore è ambiguo, quindi la riga non è stata aggiunta.\n"
                                 "Per piacere, ripeti il comando con un nome più specifico!")
