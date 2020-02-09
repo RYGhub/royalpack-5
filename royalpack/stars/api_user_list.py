@@ -3,12 +3,12 @@ from starlette.responses import *
 from royalnet.constellation import *
 from royalnet.utils import *
 from royalnet.backpack.tables import *
+from royalnet.constellation.api import *
 
 
-class ApiUserListStar(PageStar):
-    path = "/api/user/list"
+class ApiUserListStar(ApiStar):
+    path = "/api/user/list/v1"
 
-    async def page(self, request: Request) -> JSONResponse:
-        async with self.alchemy.session_acm() as session:
-            users: typing.List[User] = await asyncify(session.query(self.alchemy.get(User)).all)
-        return JSONResponse([user.json() for user in users])
+    async def api(self, data: ApiData) -> dict:
+        users: typing.List[User] = await asyncify(data.session.query(self.alchemy.get(User)).all)
+        return [user.json() for user in users]

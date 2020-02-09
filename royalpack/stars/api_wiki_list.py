@@ -4,12 +4,12 @@ from royalnet.constellation import *
 from royalnet.utils import *
 from royalnet.backpack.tables import *
 from ..tables import *
+from royalnet.constellation.api import *
 
 
-class ApiUserListStar(PageStar):
-    path = "/api/wiki/list"
+class ApiWikiListStar(ApiData):
+    path = "/api/wiki/list/v1"
 
-    async def page(self, request: Request) -> JSONResponse:
-        async with self.alchemy.session_acm() as session:
-            pages: typing.List[WikiPage] = await asyncify(session.query(self.alchemy.get(WikiPage)).all)
-        return JSONResponse([page.json_list() for page in pages])
+    async def api(self, data: ApiData) -> dict:
+        pages: typing.List[WikiPage] = await asyncify(data.session.query(self.alchemy.get(WikiPage)).all)
+        return [page.json_list() for page in pages]

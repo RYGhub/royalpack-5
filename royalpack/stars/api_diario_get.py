@@ -1,5 +1,3 @@
-from starlette.requests import Request
-from starlette.responses import *
 from royalnet.constellation.api import *
 from royalnet.utils import *
 from ..tables import *
@@ -10,9 +8,9 @@ class ApiDiarioGetStar(ApiStar):
 
     async def api(self, data: ApiData) -> dict:
         try:
-            diario_id = int(data["diario_id"])
+            diario_id = int(data["id"])
         except ValueError:
-            raise InvalidParameterError("'diario_id' is not a valid int.")
+            raise InvalidParameterError("'id' is not a valid int.")
         entry: Diario = await asyncify(data.session.query(self.alchemy.get(Diario)).get, diario_id)
         if entry is None:
             raise NotFoundError("No such diario entry.")

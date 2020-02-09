@@ -3,19 +3,19 @@ from starlette.responses import *
 from royalnet.constellation import *
 from royalnet.utils import *
 from royalnet.backpack.tables import *
+from royalnet.constellation.api import *
 
 
-class ApiUserGetStar(PageStar):
-    path = "/api/user/get/{uid_str}"
+class ApiUserGetStar(ApiStar):
+    path = "/api/user/get/v1"
 
-    async def page(self, request: Request) -> JSONResponse:
-        uid_str = request.path_params.get("uid_str", "")
+    async def api(self, data: ApiData) -> dict:
+        user_id_str = data["id"]
         try:
-            uid = int(uid_str)
+            user_id = int(user_id_str)
         except (ValueError, TypeError):
-            return shoot(400, "Invalid uid")
-        async with self.alchemy.session_acm() as session:
-            user: User = await asyncify(session.query(self.alchemy.get(User)).get, uid)
+            raise InvalidParameterError("'id' is not a valid int.")
+        user: User = await asyncify(data.session.query(self.alchemy.get(User)).get, user_id)
         if user is None:
-            return shoot(404, "No such user")
-        return JSONResponse(user.json())
+            raise NotFoundError("No such user.")
+        return user.json()

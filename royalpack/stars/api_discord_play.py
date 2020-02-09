@@ -1,6 +1,4 @@
 from typing import *
-from starlette.requests import Request
-from starlette.responses import *
 from royalnet.constellation.api import *
 import logging
 
@@ -9,7 +7,7 @@ log = logging.getLogger(__name__)
 
 
 class ApiDiscordPlayStar(ApiStar):
-    path = "/api/discord/play"
+    path = "/api/discord/play/v1"
 
     async def api(self, data: ApiData) -> dict:
         url = data["url"]
@@ -25,6 +23,4 @@ class ApiDiscordPlayStar(ApiStar):
                                                           url=url,
                                                           guild_id=guild_id,
                                                           user=user)
-        return JSONResponse(response, headers={
-            "Access-Control-Allow-Origin": "*",
-        })
+        return response

@@ -4,19 +4,19 @@ from royalnet.constellation import *
 from royalnet.utils import *
 from ..tables import *
 import uuid
+from royalnet.constellation.api import *
 
 
-class ApiWikiGetStar(PageStar):
-    path = "/api/wiki/get/{wiki_page_uuid}"
+class ApiWikiGetStar(ApiStar):
+    path = "/api/wiki/get/v1"
 
-    async def page(self, request: Request) -> JSONResponse:
-        wiki_page_uuid_str = request.path_params.get("wiki_page_uuid", "")
+    async def api(self, data: ApiData) -> dict:
+        wikipage_id_str = data["id"]
         try:
-            wiki_page_uuid = uuid.UUID(wiki_page_uuid_str)
+            wikipage_id = uuid.UUID(wikipage_id_str)
         except (ValueError, AttributeError, TypeError):
-            return shoot(400, "Invalid wiki_page_uuid")
-        async with self.alchemy.session_acm() as session:
-            wikipage: WikiPage = await asyncify(session.query(self.alchemy.get(WikiPage)).get, wiki_page_uuid)
-            if wikipage is None:
-                return shoot(404, "No such page")
-            return JSONResponse(wikipage.json_full())
+            raise InvalidParameterError("'id' is not a valid UUID.")
+        wikipage: WikiPage = await asyncify(data.session.query(self.alchemy.get(WikiPage)).get, wikipage_id)
+        if wikipage is None:
+            raise NotFoundError("No such page.")
+        return wikipage.json_full()
