@@ -43,4 +43,4 @@ class TriviaScore:
         return (self.correct_answers + self.correct_answers * self.correct_rate) * 10
 
     def __repr__(self):
-        return f"<TriviaScore of {self.royal}: ({self.correct_answers}|{self.wrong_answers})>"
+        return f"<TriviaScore of {self.user}: ({self.correct_answers}|{self.wrong_answers})>"

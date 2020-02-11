@@ -19,7 +19,7 @@ class UserinfoCommand(Command):
         if username is None:
             user: User = await data.get_author(error_if_none=True)
         else:
-            found: Optional[User] = await asyncify(Alias.find_by_alias, self.alchemy, data.session, username)
+            found: Optional[User] = await Alias.find_user(self.alchemy, data.session, username)
             if not found:
                 raise InvalidInputError("Utente non trovato.")
             else:
