@@ -9,11 +9,11 @@ class TriviaScore:
     __tablename__ = "triviascores"
 
     @declared_attr
-    def royal_id(self):
+    def user_id(self):
         return Column(Integer, ForeignKey("users.uid"), primary_key=True)
 
     @declared_attr
-    def royal(self):
+    def user(self):
         return relationship("User", backref=backref("trivia_score", uselist=False))
 
     @declared_attr

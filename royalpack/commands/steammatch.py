@@ -65,7 +65,7 @@ class SteammatchCommand(Command):
         users.append(author)
 
         for arg in args:
-            user = await asyncify(Alias.find_by_alias, self.alchemy, data.session, arg)
+            user = await Alias.find_user(self.alchemy, data.session, arg)
             users.append(user)
 
         if len(users) < 2:

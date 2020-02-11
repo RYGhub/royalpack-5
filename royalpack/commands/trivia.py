@@ -49,7 +49,7 @@ class TriviaCommand(rc.Command):
             for index, ts in enumerate(sorted(trivia_scores, key=lambda ts: -ts.score)):
                 if index > 3:
                     index = 3
-                strings.append(f"{self._medal_emojis[index]} {ts.royal.username}: [b]{ts.score:.0f}p[/b]"
+                strings.append(f"{self._medal_emojis[index]} {ts.user.username}: [b]{ts.score:.0f}p[/b]"
                                f" ({ts.correct_answers}/{ts.total_answers})")
             await data.reply("\n".join(strings))
             return
@@ -128,7 +128,7 @@ class TriviaCommand(rc.Command):
         for answerer_id in self._answerers[question_id]:
             answerer = data.session.query(self.alchemy.get(User)).get(answerer_id)
             if answerer.trivia_score is None:
-                ts = self.interface.alchemy.get(TriviaScore)(royal=answerer)
+                ts = self.interface.alchemy.get(TriviaScore)(user=answerer)
                 data.session.add(ts)
                 await ru.asyncify(data.session.commit)
             previous_score = answerer.trivia_score.score
