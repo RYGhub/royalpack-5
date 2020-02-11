@@ -1,12 +1,9 @@
 # Imports go here!
 from .diario import Diario
 from .wikipages import WikiPage
-from .wikirevisions import WikiRevision
 from .bios import Bio
 from .reminders import Reminder
 from .triviascores import TriviaScore
-from .mmevents import MMEvent
-from .mmresponse import MMResponse
 from .leagueoflegends import LeagueOfLegends
 from .fiorygi import Fiorygi
 from .steam import Steam
@@ -17,12 +14,9 @@ from .fiorygitransactions import FiorygiTransaction
 available_tables = [
     Diario,
     WikiPage,
-    WikiRevision,
     Bio,
     Reminder,
     TriviaScore,
-    MMEvent,
-    MMResponse,
     LeagueOfLegends,
     Fiorygi,
     Steam,

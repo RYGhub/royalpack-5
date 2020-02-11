@@ -7,6 +7,7 @@ from .royalqueue import RoyalQueue
 from .dotamedal import DotaMedal
 from .dotastars import DotaStars
 from .dotarank import DotaRank
+from .finduser import find_user_api
 
 __all__ = [
     "MMChoice",
@@ -19,4 +20,5 @@ __all__ = [
     "DotaMedal",
     "DotaStars",
     "DotaRank",
+    "find_user_api",
 ]
