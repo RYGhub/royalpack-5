@@ -18,6 +18,8 @@ class ApiDiscordPlayStar(ApiStar):
                 guild_id: Optional[int] = int(guild_id_str)
             except (ValueError, TypeError):
                 raise InvalidParameterError("'guild_id' is not a valid int.")
+        else:
+            guild_id = None
         log.info(f"Received request to play {url} on guild_id {guild_id} via web")
         response = await self.interface.call_herald_event("discord", "discord_play",
                                                           url=url,
