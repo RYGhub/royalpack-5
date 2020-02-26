@@ -24,7 +24,7 @@ class MagickfiorygiCommand(rc.Command):
 
         if user_arg is None:
             raise rc.InvalidInputError("Non hai specificato un destinatario!")
-        user = Alias.find_by_alias(self.alchemy, data.session, user_arg)
+        user = await Alias.find_user(self.alchemy, data.session, user_arg)
         if user is None:
             raise rc.InvalidInputError("L'utente specificato non esiste!")
 
