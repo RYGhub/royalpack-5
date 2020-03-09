@@ -7,7 +7,17 @@ from ..tables import Bio
 class ApiBioSetStar(ApiStar):
     path = "/api/bio/set/v1"
 
-    methods = ["POST"]
+    methods = ["PUT"]
+
+    summary = "Set the bio of the logged in Royalnet user."
+
+    parameters = {
+        "contents": "The contents of the bio."
+    }
+
+    requires_auth = True
+
+    tags = ["bio"]
 
     async def api(self, data: ApiData) -> ru.JSON:
         contents = data["contents"]

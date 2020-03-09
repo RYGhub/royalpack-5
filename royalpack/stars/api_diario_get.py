@@ -6,6 +6,14 @@ from ..tables import *
 class ApiDiarioGetStar(ApiStar):
     path = "/api/diario/get/v1"
 
+    summary = "Get the diario entry with a specific id."
+
+    parameters = {
+        "id": "The id of the diario entry to get."
+    }
+
+    tags = ["diario"]
+
     async def api(self, data: ApiData) -> dict:
         try:
             diario_id = int(data["id"])

@@ -43,7 +43,7 @@ class DiscordPlayEvent(rc.Event):
             voice_player = candidate_players[0]
         else:
             raise rc.CommandError("Non so in che Server riprodurre questo file...\n"
-                               "Invia il comando su Discord, per favore!")
+                                  "Invia il comando su Discord, per favore!")
 
         ytds = await rbd.YtdlDiscord.from_url(url)
         added: List[rbd.YtdlDiscord] = []

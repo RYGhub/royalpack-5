@@ -9,6 +9,16 @@ log = logging.getLogger(__name__)
 class ApiDiscordPlayStar(ApiStar):
     path = "/api/discord/play/v1"
 
+    summary = "Add a audio file to the RoyalQueue of a Discord Guild."
+
+    parameters = {
+        "url": "The url of the audio file to add.",
+        "user": "The name to display in the File Added message.",
+        "guild_id": "The id of the guild owning the RoyalQueue to add the audio file to."
+    }
+
+    tags = ["discord"]
+
     async def api(self, data: ApiData) -> dict:
         url = data["url"]
         user = data.get("user")

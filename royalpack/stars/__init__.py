@@ -3,8 +3,6 @@ from .api_bio_get import ApiBioGetStar
 from .api_bio_set import ApiBioSetStar
 from .api_diario_get import ApiDiarioGetStar
 from .api_diario_list import ApiDiarioListStar
-from .api_user_list import ApiUserListStar
-from .api_user_get import ApiUserGetStar
 from .api_discord_cv import ApiDiscordCvStar
 from .api_discord_play import ApiDiscordPlayStar
 from .api_wiki_edit import ApiWikiEditStar
@@ -19,8 +17,6 @@ available_page_stars = [
     ApiDiarioListStar,
     ApiDiscordCvStar,
     ApiDiscordPlayStar,
-    ApiUserGetStar,
-    ApiUserListStar,
     ApiWikiEditStar,
     ApiWikiGetStar,
     ApiWikiListStar,

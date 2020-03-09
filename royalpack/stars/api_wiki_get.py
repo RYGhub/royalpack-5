@@ -10,6 +10,14 @@ from royalnet.constellation.api import *
 class ApiWikiGetStar(ApiStar):
     path = "/api/wiki/get/v1"
 
+    summary = "Get information about a specific wiki page."
+
+    parameters = {
+        "id": "The id of the wiki page to get information for."
+    }
+
+    tags = ["wiki"]
+
     async def api(self, data: ApiData) -> dict:
         wikipage_id_str = data["id"]
         try:

@@ -7,6 +7,14 @@ from ..tables import *
 class ApiDiarioListStar(ApiStar):
     path = "/api/diario/list/v1"
 
+    summary = "Get a list of up to 500 diario entries."
+
+    parameters = {
+        "page": "The diario page you want to get. Can be negative to get the entries in reverse order."
+    }
+
+    tags = ["diario"]
+
     async def api(self, data: ApiData) -> dict:
         page_str = data["page"]
         try:

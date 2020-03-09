@@ -10,6 +10,20 @@ class ApiWikiEditStar(ApiStar):
 
     methods = ["POST"]
 
+    summary = "Edit the contents of a wiki page, or create a new one."
+
+    parameters = {
+        "id": "The id of the wiki page to edit. Leave empty to create a new one.",
+        "title": "The new title of the wiki page.",
+        "contents": "The new contents of the wiki page.",
+        "format": "The format of the wiki page. The default is markdown.",
+        "theme": "The theme of the wiki page. The default is default."
+    }
+
+    requires_auth = True
+
+    tags = ["wiki"]
+
     async def api(self, data: ApiData) -> ru.JSON:
         page_id = data.get("id")
         title = data["title"]
