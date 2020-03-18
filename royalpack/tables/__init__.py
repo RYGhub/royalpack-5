@@ -9,6 +9,7 @@ from .fiorygi import Fiorygi
 from .steam import Steam
 from .dota import Dota
 from .fiorygitransactions import FiorygiTransaction
+from .brawlhalla import Brawlhalla
 
 # Enter the tables of your Pack here!
 available_tables = [
@@ -22,6 +23,7 @@ available_tables = [
     Steam,
     Dota,
     FiorygiTransaction,
+    Brawlhalla,
 ]
 
 # Don't change this, it should automatically generate __all__
