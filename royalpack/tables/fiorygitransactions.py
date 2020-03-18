@@ -19,8 +19,12 @@ class FiorygiTransaction:
         return Column(Integer, ForeignKey("fiorygi.user_id"), nullable=False)
 
     @declared_attr
-    def user(self):
+    def wallet(self):
         return relationship("Fiorygi", backref=backref("transactions"))
+
+    @property
+    def user(self):
+        return self.wallet.user
 
     @declared_attr
     def reason(self):

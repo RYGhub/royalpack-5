@@ -8,6 +8,7 @@ from .api_discord_play import ApiDiscordPlayStar
 from .api_wiki_edit import ApiWikiEditStar
 from .api_wiki_get import ApiWikiGetStar
 from .api_wiki_list import ApiWikiListStar
+from .api_fiorygi_get import ApiFiorygiGetStar
 
 # Enter the PageStars of your Pack here!
 available_page_stars = [
@@ -20,6 +21,7 @@ available_page_stars = [
     ApiWikiEditStar,
     ApiWikiGetStar,
     ApiWikiListStar,
+    ApiFiorygiGetStar,
 ]
 
 # Don't change this, it should automatically generate __all__
