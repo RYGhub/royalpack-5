@@ -7,7 +7,7 @@ from royalnet.commands import *
 from royalnet.utils import *
 from royalnet.serf.telegram.escape import escape as tg_escape
 from ..tables import Steam, Dota
-from ..utils import DotaRank
+from ..types import DotaRank
 
 log = logging.getLogger(__name__)
 
@@ -15,7 +15,7 @@ log = logging.getLogger(__name__)
 class DotaCommand(Command):
     name: str = "dota"
 
-    aliases = ["dota2", "doto", "doto2"]
+    aliases = ["dota2", "doto", "doto2", "dotka", "dotka2"]
 
     description: str = "Visualizza le tue statistiche di Dota!"
 

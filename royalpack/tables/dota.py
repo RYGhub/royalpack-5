@@ -2,9 +2,7 @@ from typing import *
 from sqlalchemy import *
 from sqlalchemy.orm import relationship, backref
 from sqlalchemy.ext.declarative import declared_attr
-from ..utils.dotamedal import DotaMedal
-from ..utils.dotastars import DotaStars
-from ..utils.dotarank import DotaRank
+from ..types import DotaMedal, DotaStars, DotaRank
 import steam
 
 

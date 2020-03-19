@@ -7,7 +7,7 @@ from royalnet.commands import *
 from royalnet.utils import *
 from royalnet.serf.telegram import *
 from ..tables import LeagueOfLegends
-from ..utils import LeagueLeague
+from ..types import LeagueLeague
 
 log = logging.getLogger(__name__)
 

@@ -35,6 +35,7 @@ from .steampowered import SteampoweredCommand
 from .steammatch import SteammatchCommand
 from .dota import DotaCommand
 from .magickfiorygi import MagickfiorygiCommand
+from .brawlhalla import BrawlhallaCommand
 
 # Enter the commands of your Pack here!
 available_commands = [
@@ -74,6 +75,7 @@ available_commands = [
     SteammatchCommand,
     DotaCommand,
     MagickfiorygiCommand,
+    BrawlhallaCommand,
 ]
 
 # Don't change this, it should automatically generate __all__

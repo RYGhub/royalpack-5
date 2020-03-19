@@ -2,8 +2,10 @@ from sqlalchemy import *
 from sqlalchemy.orm import *
 from sqlalchemy.ext.declarative import declared_attr
 import steam
+from ..types import BrawlhallaRank, BrawlhallaTier, BrawlhallaMetal
 
 
+# noinspection PyAttributeOutsideInit
 class Brawlhalla:
     __tablename__ = "brawlhalla"
 
@@ -25,12 +27,33 @@ class Brawlhalla:
 
     @declared_attr
     def name(self):
-        return Column(String)
+        return Column(String, nullable=False)
 
     @declared_attr
     def rating_1v1(self):
         return Column(Integer)
 
-    @property
+    @declared_attr
     def tier_1v1(self):
-        return Column(String)
+        return Column(Enum(BrawlhallaTier))
+
+    @declared_attr
+    def metal_1v1(self):
+        return Column(Enum(BrawlhallaMetal))
+
+    @property
+    def rank_1v1(self):
+        return BrawlhallaRank(metal=self.metal_1v1, tier=self.tier_1v1)
+
+    @rank_1v1.setter
+    def rank_1v1(self, value):
+        if not isinstance(value, BrawlhallaRank):
+            raise TypeError("rank_1v1 can only be set to BrawlhallaRank values.")
+        self.metal_1v1 = value.metal
+        self.tier_1v1 = value.tier
+
+    def __repr__(self):
+        return f"<Brawlhalla account {self._steamid}>"
+
+    def __str__(self):
+        return f"[c]brawlhalla:{self.brawlhalla_id}[/c]"

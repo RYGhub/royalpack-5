@@ -1,7 +1,7 @@
 from sqlalchemy import *
 from sqlalchemy.orm import relationship, composite
 from sqlalchemy.ext.declarative import declared_attr
-from ..utils import LeagueRank, LeagueTier, LeagueLeague
+from ..types import LeagueRank, LeagueTier, LeagueLeague
 
 
 class LeagueOfLegends:
