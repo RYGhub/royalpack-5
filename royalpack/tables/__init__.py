@@ -13,6 +13,7 @@ from .brawlhalla import Brawlhalla
 from .polls import Poll
 from .pollcomments import PollComment
 from .pollvotes import PollVote
+from .brawlhalladuos import BrawlhallaDuo
 
 # Enter the tables of your Pack here!
 available_tables = [
@@ -30,6 +31,7 @@ available_tables = [
     Poll,
     PollComment,
     PollVote,
+    BrawlhallaDuo,
 ]
 
 # Don't change this, it should automatically generate __all__

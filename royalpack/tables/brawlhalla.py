@@ -15,7 +15,7 @@ class Brawlhalla:
 
     @declared_attr
     def _steamid(self):
-        return Column(BigInteger, ForeignKey("steam._steamid"), primary_key=True)
+        return Column(BigInteger, ForeignKey("steam._steamid"), unique=True)
 
     @declared_attr
     def steam(self):
@@ -51,6 +51,38 @@ class Brawlhalla:
             raise TypeError("rank_1v1 can only be set to BrawlhallaRank values.")
         self.metal_1v1 = value.metal
         self.tier_1v1 = value.tier
+
+    @property
+    def duos(self):
+        return [*self._duos_one, *self._duos_two]
+
+    @property
+    def rating_2v2(self):
+        duos = sorted(self.duos, key=lambda d: -d.rating)
+        if len(duos) == 0:
+            return None
+        return duos[0].rating_2v2
+
+    @property
+    def tier_2v2(self):
+        duos = sorted(self.duos, key=lambda d: -d.rating)
+        if len(duos) == 0:
+            return None
+        return duos[0].tier_2v2
+
+    @property
+    def metal_2v2(self):
+        duos = sorted(self.duos, key=lambda d: -d.rating)
+        if len(duos) == 0:
+            return None
+        return duos[0].metal_2v2
+
+    @property
+    def rank_2v2(self):
+        duos = sorted(self.duos, key=lambda d: -d.rating)
+        if len(duos) == 0:
+            return None
+        return duos[0].rank_2v2
 
     def __repr__(self):
         return f"<Brawlhalla account {self._steamid}>"
