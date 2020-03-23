@@ -9,6 +9,7 @@ from .dotarank import DotaRank
 from .brawlhallatier import BrawlhallaTier
 from .brawlhallametal import BrawlhallaMetal
 from .brawlhallarank import BrawlhallaRank
+from .pollmood import PollMood
 
 
 __all__ = [
@@ -24,4 +25,5 @@ __all__ = [
     "BrawlhallaMetal",
     "BrawlhallaRank",
     "BrawlhallaTier",
+    "PollMood",
 ]

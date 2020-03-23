@@ -10,6 +10,9 @@ from .steam import Steam
 from .dota import Dota
 from .fiorygitransactions import FiorygiTransaction
 from .brawlhalla import Brawlhalla
+from .polls import Poll
+from .pollcomments import PollComment
+from .pollvotes import PollVote
 
 # Enter the tables of your Pack here!
 available_tables = [
@@ -24,6 +27,9 @@ available_tables = [
     Dota,
     FiorygiTransaction,
     Brawlhalla,
+    Poll,
+    PollComment,
+    PollVote,
 ]
 
 # Don't change this, it should automatically generate __all__

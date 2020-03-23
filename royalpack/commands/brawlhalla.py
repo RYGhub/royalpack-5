@@ -39,7 +39,7 @@ class BrawlhallaCommand(Command):
         string = f"ℹ️ [b]{bh.name}[/b]\n\n"
 
         if bh.rank_1v1:
-            string += f"1v1: [b]{bh.rank_1v1}[/b]\n"
+            string += f"1v1: [b]{bh.rank_1v1}[/b] ({bh.rating_1v1} MMR)\n"
 
         return string
 
