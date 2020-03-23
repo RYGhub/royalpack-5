@@ -9,6 +9,7 @@ from .api_wiki_edit import ApiWikiEditStar
 from .api_wiki_get import ApiWikiGetStar
 from .api_wiki_list import ApiWikiListStar
 from .api_fiorygi_get import ApiFiorygiGetStar
+from .api_diario_random import ApiDiarioRandomStar
 
 # Enter the PageStars of your Pack here!
 available_page_stars = [
@@ -22,6 +23,7 @@ available_page_stars = [
     ApiWikiGetStar,
     ApiWikiListStar,
     ApiFiorygiGetStar,
+    ApiDiarioRandomStar,
 ]
 
 # Don't change this, it should automatically generate __all__
