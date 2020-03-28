@@ -5,6 +5,7 @@ from .discord_play import DiscordPlayEvent
 from .discord_skip import DiscordSkipEvent
 from .discord_queue import DiscordQueueEvent
 from .discord_pause import DiscordPauseEvent
+from .discord_playable import DiscordPlaymodeEvent
 
 # Enter the commands of your Pack here!
 available_events = [
@@ -14,6 +15,7 @@ available_events = [
     DiscordSkipEvent,
     DiscordQueueEvent,
     DiscordPauseEvent,
+    DiscordPlaymodeEvent,
 ]
 
 # Don't change this, it should automatically generate __all__

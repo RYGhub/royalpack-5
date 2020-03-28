@@ -46,12 +46,13 @@ class RoyalQueue(Playable):
             self.now_playing = None
 
     async def destroy(self):
-        log.debug(f"Deleting: {self.now_playing}")
-        await self.now_playing.delete_asap()
-        log.debug(f"Deleting: {self.now_playing.ytdl_file}")
-        await self.now_playing.ytdl_file.delete_asap()
-        log.debug(f"Deleted successfully!")
-        self.now_playing = None
+        if self.now_playing is not None:
+            log.debug(f"Deleting: {self.now_playing}")
+            await self.now_playing.delete_asap()
+            log.debug(f"Deleting: {self.now_playing.ytdl_file}")
+            await self.now_playing.ytdl_file.delete_asap()
+            log.debug(f"Deleted successfully!")
+            self.now_playing = None
         for file in self.contents:
             log.debug(f"Deleting: {file}")
             await file.delete_asap()
