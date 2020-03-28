@@ -10,5 +10,5 @@ class YoutubeCommand(PlayCommand):
 
     syntax = "{ricerca}"
 
-    async def get_url(self, args):
-        return f"ytsearch:{args.joined()}"
+    async def get_urls(self, args):
+        return [f"ytsearch:{args.joined()}"]

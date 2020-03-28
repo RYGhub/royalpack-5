@@ -16,7 +16,7 @@ class FunkwhaleCommand(PlayCommand):
     def get_embed_color(self):
         return 0x009FE3
 
-    async def get_url(self, args):
+    async def get_urls(self, args):
         search = urllib.parse.quote(args.joined(require_at_least=1))
         async with aiohttp.ClientSession() as session:
             async with session.get(self.config["Funkwhale"]["instance_url"] +
@@ -24,4 +24,4 @@ class FunkwhaleCommand(PlayCommand):
                 j = await response.json()
         if len(j["tracks"]) < 1:
             raise UserError("Nessun file audio trovato con il nome richiesto.")
-        return f'{self.config["Funkwhale"]["instance_url"]}{j["tracks"][0]["listen_url"]}'
+        return [f'{self.config["Funkwhale"]["instance_url"]}{j["tracks"][0]["listen_url"]}']

@@ -14,12 +14,12 @@ class PlayCommand(Command):
 
     syntax = "{url}"
 
-    async def get_url(self, args: CommandArgs):
+    async def get_urls(self, args: CommandArgs):
         url = args.joined(require_at_least=1)
         if not (url.startswith("http://") or url.startswith("https://")):
             raise InvalidInputError(f"L'URL specificato non inizia con il nome di un protocollo supportato"
                                     f" ([c]http://[/c] o [c]https://[/c]).")
-        return url
+        return [url]
 
     def get_embed_color(self) -> Optional[int]:
         return None
@@ -46,14 +46,19 @@ class PlayCommand(Command):
             else:
                 user_str = str(f"<@{user_discord.discord_id}>")
 
+        urls = await self.get_urls(args)
+
         play_task: aio.Task = self.loop.create_task(
             self.interface.call_herald_event("discord", "discord_play",
-                                             url=await self.get_url(args),
+                                             urls=urls,
                                              guild_id=guild_id,
                                              user=user_str,
                                              force_color=self.get_embed_color())
         )
 
-        await data.reply("⌛ Attendi un attimo...")
+        if len(urls) > 1:
+            await data.reply("⌛ Attendi qualche minuto...")
+        else:
+            await data.reply("⌛ Attendi un attimo...")
 
         await play_task

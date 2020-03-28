@@ -13,7 +13,7 @@ class DiscordPlayEvent(rc.Event):
     name = "discord_play"
 
     async def run(self,
-                  url: str,
+                  urls: List[str],
                   guild_id: Optional[int] = None,
                   user: Optional[str] = None,
                   force_color: Optional[int] = None,
@@ -23,18 +23,8 @@ class DiscordPlayEvent(rc.Event):
 
         serf: rsd.DiscordSerf = self.serf
         client: discord.Client = self.serf.client
-
-        # TODO: fix this in Royalnet sometime
-        candidate_players: List[rsd.VoicePlayer] = []
-        for player in serf.voice_players:
-            player: rsd.VoicePlayer
-            if not player.voice_client.is_connected():
-                continue
-            if guild_id is not None:
-                guild = client.get_guild(guild_id)
-                if guild != player.voice_client.guild:
-                    continue
-            candidate_players.append(player)
+        guild: discord.Guild = client.get_guild(guild_id) if guild_id is not None else None
+        candidate_players: List[rsd.VoicePlayer] = serf.find_voice_players(guild)
 
         if len(candidate_players) == 0:
             raise rc.UserError("Il bot non è in nessun canale vocale.\n"
@@ -45,21 +35,23 @@ class DiscordPlayEvent(rc.Event):
             raise rc.CommandError("Non so in che Server riprodurre questo file...\n"
                                   "Invia il comando su Discord, per favore!")
 
-        ytds = await rbd.YtdlDiscord.from_url(url)
         added: List[rbd.YtdlDiscord] = []
         too_long: List[rbd.YtdlDiscord] = []
-        if isinstance(voice_player.playing, RoyalQueue):
-            for index, ytd in enumerate(ytds):
-                if ytd.info.duration >= datetime.timedelta(seconds=self.config["Play"]["max_song_duration"]):
-                    too_long.append(ytd)
-                    continue
-                await ytd.convert_to_pcm()
-                added.append(ytd)
-                voice_player.playing.contents.append(ytd)
-            if not voice_player.voice_client.is_playing():
-                await voice_player.start()
-        else:
-            raise rc.CommandError(f"Non so come aggiungere musica a [c]{voice_player.playing.__class__.__qualname__}[/c]!")
+
+        for url in urls:
+            ytds = await rbd.YtdlDiscord.from_url(url)
+            if isinstance(voice_player.playing, RoyalQueue):
+                for index, ytd in enumerate(ytds):
+                    if ytd.info.duration >= datetime.timedelta(seconds=self.config["Play"]["max_song_duration"]):
+                        too_long.append(ytd)
+                        continue
+                    await ytd.convert_to_pcm()
+                    added.append(ytd)
+                    voice_player.playing.contents.append(ytd)
+                if not voice_player.voice_client.is_playing():
+                    await voice_player.start()
+            else:
+                raise rc.CommandError(f"Non so come aggiungere musica a [c]{voice_player.playing.__class__.__qualname__}[/c]!")
 
         main_channel: discord.TextChannel = client.get_channel(self.config["Discord"]["main_channel_id"])
 
@@ -85,7 +77,7 @@ class DiscordPlayEvent(rc.Event):
                 ))
 
         if len(added) + len(too_long) == 0:
-            raise
+            raise rc.InvalidInputError("Non è stato aggiunto nessun file alla coda.")
 
         return {
             "added": [{

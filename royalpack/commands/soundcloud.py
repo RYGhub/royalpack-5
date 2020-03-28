@@ -10,5 +10,5 @@ class SoundcloudCommand(PlayCommand):
 
     syntax = "{ricerca}"
 
-    async def get_url(self, args):
-        return f"scsearch:{args.joined()}"
+    async def get_urls(self, args):
+        return [f"scsearch:{args.joined()}"]
