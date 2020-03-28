@@ -11,7 +11,7 @@ class QueueCommand(Command):
 
     aliases = ["q"]
 
-    description: str = "Visualizza la coda di riproduzione attuale.."
+    description: str = "Visualizza la coda di riproduzione attuale."
 
     async def run(self, args: CommandArgs, data: CommandData) -> None:
         if self.interface.name == "discord":

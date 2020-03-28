@@ -38,6 +38,7 @@ from .magickfiorygi import MagickfiorygiCommand
 from .brawlhalla import BrawlhallaCommand
 from .diarioshuffle import DiarioshuffleCommand
 from .funkwhaleplaylist import FunkwhaleplaylistCommand
+from .voicestatus import VoicestatusCommand
 
 # Enter the commands of your Pack here!
 available_commands = [
@@ -80,6 +81,7 @@ available_commands = [
     BrawlhallaCommand,
     DiarioshuffleCommand,
     FunkwhaleplaylistCommand,
+    VoicestatusCommand,
 ]
 
 # Don't change this, it should automatically generate __all__
