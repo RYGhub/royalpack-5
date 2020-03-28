@@ -9,7 +9,7 @@ class FunkwhaleCommand(PlayCommand):
 
     aliases = ["fuckwhale", "fw", "royalwhale", "rw"]
 
-    description: str = "Cerca un video su RoyalWhale e lo aggiunge alla coda della chat vocale."
+    description: str = "Cerca una canzone su RoyalWhale e aggiungila alla coda della chat vocale."
 
     syntax = "{ricerca}"
 
