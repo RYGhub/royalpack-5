@@ -35,9 +35,9 @@ class DiscordPlaymodeEvent(rc.Event):
                                   "Invia il comando su Discord, per favore!")
 
         if playable_string.upper() == "QUEUE":
-            playable = RoyalQueue()
+            playable = await RoyalQueue.create()
         elif playable_string.upper() == "POOL":
-            playable = RoyalPool()
+            playable = await RoyalPool.create()
         else:
             raise rc.InvalidInputError(f"Unknown playable '{playable_string.upper()}'")
 

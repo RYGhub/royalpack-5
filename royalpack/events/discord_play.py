@@ -6,7 +6,7 @@ import royalnet.commands as rc
 import royalnet.serf.discord as rsd
 import royalnet.bard.discord as rbd
 
-from ..utils import RoyalQueue
+from ..utils import RoyalQueue, RoyalPool
 
 
 class DiscordPlayEvent(rc.Event):
@@ -48,6 +48,17 @@ class DiscordPlayEvent(rc.Event):
                     await ytd.convert_to_pcm()
                     added.append(ytd)
                     voice_player.playing.contents.append(ytd)
+                if not voice_player.voice_client.is_playing():
+                    await voice_player.start()
+            elif isinstance(voice_player.playing, RoyalPool):
+                for index, ytd in enumerate(ytds):
+                    if ytd.info.duration >= datetime.timedelta(seconds=self.config["Play"]["max_song_duration"]):
+                        too_long.append(ytd)
+                        continue
+                    await ytd.convert_to_pcm()
+                    added.append(ytd)
+                    voice_player.playing.full_pool.append(ytd)
+                    voice_player.playing.remaining_pool.append(ytd)
                 if not voice_player.voice_client.is_playing():
                     await voice_player.start()
             else:
