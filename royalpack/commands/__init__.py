@@ -40,6 +40,14 @@ from .diarioshuffle import DiarioshuffleCommand
 from .funkwhaleplaylist import FunkwhaleplaylistCommand
 from .voicestatus import VoicestatusCommand
 from .playmode import PlaymodeCommand
+from .lazyplay import LazyplayCommand
+from .lazyfunkwhale import LazyfunkwhaleCommand
+from .lazyfunkwhaleplaylist import LazyfunkwhaleplaylistCommand
+from .lazygooglevideo import LazygooglevideoCommand
+from .lazypeertube import LazypeertubeCommand
+from .lazysoundcloud import LazysoundcloudCommand
+from .lazyyahoovideo import LazyyahoovideoCommand
+from .lazyyoutube import LazyyoutubeCommand
 
 # Enter the commands of your Pack here!
 available_commands = [
@@ -84,6 +92,14 @@ available_commands = [
     FunkwhaleplaylistCommand,
     VoicestatusCommand,
     PlaymodeCommand,
+    LazyplayCommand,
+    LazyfunkwhaleCommand,
+    LazyfunkwhaleplaylistCommand,
+    LazygooglevideoCommand,
+    LazypeertubeCommand,
+    LazysoundcloudCommand,
+    LazyyahoovideoCommand,
+    LazyyoutubeCommand,
 ]
 
 # Don't change this, it should automatically generate __all__

@@ -1,15 +1,15 @@
-from .play import PlayCommand
+from .lazyplay import LazyplayCommand
 from royalnet.commands import *
 import aiohttp
 import urllib.parse
 
 
-class PeertubeCommand(PlayCommand):
-    name: str = "peertube"
+class LazypeertubeCommand(LazyplayCommand):
+    name: str = "lazypeertube"
 
-    aliases = ["pt", "royaltube", "rt"]
+    aliases = ["lpt", "lazyroyaltube", "lrt"]
 
-    description: str = "Cerca un video su RoyalTube e lo aggiunge alla coda della chat vocale."
+    description: str = "Cerca un video su RoyalTube e lo aggiunge (lazy) alla coda della chat vocale."
 
     syntax = "{ricerca}"
 
