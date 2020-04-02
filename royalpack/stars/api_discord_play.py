@@ -32,7 +32,7 @@ class ApiDiscordPlayStar(ApiStar):
             guild_id = None
         log.info(f"Received request to play {url} on guild_id {guild_id} via web")
         response = await self.interface.call_herald_event("discord", "discord_play",
-                                                          url=url,
+                                                          urls=[url],
                                                           guild_id=guild_id,
                                                           user=user)
         return response
