@@ -19,7 +19,8 @@ class SteampoweredCommand(Command):
             raise ConfigurationError("[c]Steam.web_api_key[/c] config option is missing!")
         self._api = steam.WebAPI(self.config["Steam"]["web_api_key"])
 
-    def _display(self, account: Steam):
+    @staticmethod
+    def _display(account: Steam):
         string = f"ℹ️ [b]{account.persona_name}[/b]\n" \
                  f"{account.profile_url}\n" \
                  f"\n" \
@@ -31,8 +32,16 @@ class SteampoweredCommand(Command):
                  f"Created on: [b]{account.account_creation_date}[/b]\n"
         return string
 
+    @staticmethod
+    async def _call(method, *args, **kwargs):
+        try:
+            await asyncify(method, *args, **kwargs)
+        except Exception:
+            raise ExternalError("Steam API request returned an error.")
+
     async def _update(self, account: Steam):
-        response = await asyncify(self._api.ISteamUser.GetPlayerSummaries_v2, steamids=account._steamid)
+        # noinspection PyProtectedMember
+        response = await self._call(self._api.ISteamUser.GetPlayerSummaries_v2, steamids=account._steamid)
         r = response["response"]["players"][0]
         account.persona_name = r["personaname"]
         account.profile_url = r["profileurl"]
@@ -44,8 +53,8 @@ class SteampoweredCommand(Command):
         author = await data.get_author()
         if len(args) > 0:
             url = args.joined()
-            steamid64 = await asyncify(steam.steamid.steam64_from_url, url)
-            response = await asyncify(self._api.ISteamUser.GetPlayerSummaries_v2, steamids=steamid64)
+            steamid64 = await self._call(steam.steamid.steam64_from_url, url)
+            response = await self._call(self._api.ISteamUser.GetPlayerSummaries_v2, steamids=steamid64)
             r = response["response"]["players"][0]
             steam_account = self.alchemy.get(Steam)(
                 user=author,
