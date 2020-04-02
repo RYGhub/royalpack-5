@@ -23,10 +23,11 @@ class DiscordSkipEvent(Event):
             guild: discord.Guild = client.get_guild(guild_id)
             if guild is None:
                 raise InvalidInputError("Impossibile trovare il Server specificato.")
-            voice_player: VoicePlayer = self.serf.find_voice_player(guild)
-            if voice_player is None:
+            voice_players = self.serf.find_voice_players(guild)
+            if len(voice_players):
                 raise UserError("Il bot non è in nessun canale vocale.\n"
                                 "Evocalo prima con [c]summon[/c]!")
+            voice_player = voice_players[0]
         # Stop the playback of the current song
         voice_player.voice_client.stop()
         # Done!
