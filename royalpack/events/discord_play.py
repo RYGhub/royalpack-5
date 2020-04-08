@@ -72,11 +72,13 @@ class DiscordPlayEvent(rc.Event):
             else:
                 await main_channel.send(rsd.escape(f"▶️ Aggiunt{'o' if len(added) == 1 else 'i'} {len(added)} file alla"
                                                    f" coda:"))
-        for ytd in added:
+        for ytd in added[:5]:
             embed: discord.Embed = ytd.embed()
             if force_color:
                 embed._colour = discord.Colour(force_color)
             await main_channel.send(embed=embed)
+        if len(added) > 5:
+            await main_channel.send(f"e altri {len(added) - 5}!")
 
         if len(too_long) > 0:
             if user:
