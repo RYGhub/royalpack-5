@@ -48,6 +48,8 @@ from .lazypeertube import LazypeertubeCommand
 from .lazysoundcloud import LazysoundcloudCommand
 from .lazyyahoovideo import LazyyahoovideoCommand
 from .lazyyoutube import LazyyoutubeCommand
+from .funkwhalealbum import FunkwhalealbumCommand
+from .lazyfunkwhalealbum import LazyfunkwhalealbumCommand
 
 # Enter the commands of your Pack here!
 available_commands = [
@@ -100,6 +102,8 @@ available_commands = [
     LazysoundcloudCommand,
     LazyyahoovideoCommand,
     LazyyoutubeCommand,
+    FunkwhalealbumCommand,
+    LazyfunkwhalealbumCommand,
 ]
 
 # Don't change this, it should automatically generate __all__
