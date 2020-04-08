@@ -14,6 +14,8 @@ from .polls import Poll
 from .pollcomments import PollComment
 from .pollvotes import PollVote
 from .brawlhalladuos import BrawlhallaDuo
+from .mmevents import MMEvent
+from .mmresponse import MMResponse
 
 # Enter the tables of your Pack here!
 available_tables = [
@@ -32,6 +34,8 @@ available_tables = [
     PollComment,
     PollVote,
     BrawlhallaDuo,
+    MMEvent,
+    MMResponse,
 ]
 
 # Don't change this, it should automatically generate __all__
