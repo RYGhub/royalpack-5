@@ -73,12 +73,21 @@ class MatchmakingCommand(Command):
         self.loop.create_task(self._run_mmevent(mmevent.mmid))
         await data.reply(f"✅ Evento [b]{mmevent.title}[/b] creato!")
 
+    _mmchoice_values = {
+        MMChoice.YES: 4,
+        MMChoice.LATE_SHORT: 3,
+        MMChoice.LATE_MEDIUM: 2,
+        MMChoice.LATE_LONG: 1,
+        MMChoice.MAYBE: 0,
+        MMChoice.NO: -1
+    }
+
     def _gen_mm_message(self, mmevent: MMEvent) -> str:
         text = f"🌐 [{mmevent.datetime.strftime('%Y-%m-%d %H:%M')}] [b]{mmevent.title}[/b]\n"
         if mmevent.description:
             text += f"{mmevent.description}\n"
         text += "\n"
-        for response in mmevent.responses:
+        for response in sorted(mmevent.responses, key=lambda r: self._mmchoice_values[r.choice]):
             response: MMResponse
             text += f"{response.choice.value} {response.user}\n"
         return text
@@ -249,14 +258,12 @@ class MatchmakingCommand(Command):
                 except Unauthorized:
                     await self.interface.serf.api_call(client.send_message,
                                                        chat_id=self.config["Telegram"]["main_group_id"],
-                                                       text=telegram_escape(
-                                                           self._gen_unauth_message(response.user)),
+                                                       text=telegram_escape(self._gen_unauth_message(response.user)),
                                                        parse_mode="HTML",
                                                        disable_webpage_preview=True)
         else:
             raise UnsupportedError()
-        # Delete the event message after 10 minutes
-        await asyncio.sleep(600)
+        # Delete the event message
         if self.interface.name == "telegram":
             await self.interface.serf.api_call(client.delete_message,
                                                chat_id=mmevent.interface_data.chat_id,
