@@ -28,8 +28,7 @@ class EatCommand(Command):
         "evilbalu": "🚹 Hai mangiato {food}.\n[i]Sa di snado.[/i]",
         "balubis": "🚹 Hai mangiato {food}.\n[i]Sa di acqua calda.[/i]",
         "goodbalu": "🚹 Hai mangiato {food}.\n[i]Sa di acqua calda.[/i]",
-        "chiara": "🚺 Hai mangiato {food}.\n[i]Sa un po' di biscotto, ma per lo più sa di curcuma, pepe e spezie"
-                  " varie.[/i]",
+        "chiara": "🚺 Hai mangiato {food}.\n[i]Sa un po' di biscotto, ma per lo più sa di curcuma e pepe.[/i]",
         "fabio": "🚹 Hai mangiato {food}.\n[i]Sa di gelatina tuttigusti+1.[/i]",
         "proto": "🚹 Hai mangiato {food}.\n[i]Sa di gelatina tuttigusti+1.[/i]",
         "marco": "🚹 Hai mangiato {food}.\n[i]Sa di carlino <.<[/i]",
@@ -74,11 +73,14 @@ class EatCommand(Command):
         "little salami": "🥓 Mmmh, tasty!\n[i]Cats can have {food} too![/i]",
         "a little salami": "🥓 Mmmh, tasty!\n[i]Cats can have {food} too![/i]",
         "pollo": '🍗 Il {food} che hai appena mangiato proveniva dallo spazio.\n[i]Coccodè?[/i]',
+        "pranzo di marco": '🍗 Hai mangiato il {food}.\n[i]Ti senti lactose-free, ma un po\' povero in calcio.[/i]',
+        "pranzo di mallllco": '🍗 Hai mangiato il {food}.\n[i]Ti senti lactose-free, ma un po\' povero in calcio.[/i]',
         "gnocchetti": "🥘 Ullà, sono duri 'sti {food}!\n[i]Fai fatica a digerirli.[/i]",
         "spam": "🥫 Hai mangiato {food}. La famosa carne in gelatina, ovviamente!\n[i]A questo proposito, di "
                 "sicuro sarai interessato all'acquisto di 1087 scatole di Simmenthal in offerta speciale![/i]",
         "riso": "🍚 Hai mangiato del {food}. Non ci resta che il Pianto! \n[i]Ba dum tsss![/i]",
         "gelato": "🍨 Mangiando del {food}, hai invocato Steffo.\n[i]Cedigli ora il tuo gelato.[/i]",
+        "gelato di steffo": "🍨 Hai provato a rubare il {food}...\n[i]...Ma sei arrivato tardi: l'ha già mangiato.[/i]",
         "biscotto": "🍪 Hai mangiato un {food} di contrabbando.\n[i]L'Inquisizione non lo saprà mai![/i]",
         "biscotti": "🍪 Hai mangiato tanti {food} di contrabbando.\n[i]Attento! L'Inquisizione è sulle tue tracce![/i]",
 
@@ -96,6 +98,7 @@ class EatCommand(Command):
         "kaffé": "☕️ Ma BUONGIORNISSIMOOO !!!!\n[i]Non si può iniziare la giornata senza un buon {food} !![/i]",
         "kaffe": "☕️ Ma BUONGIORNISSIMOOO !!!!\n[i]Non si può iniziare la giornata senza un buon {food} !![/i]",
         "birra": "🍺 Hai mangiato {food}.\n[i]Adesso sei un povero barbone alcolizzato.[/i]",
+        "martini": "🍸 Hai ordinato un {food}. Agitato, non mescolato.\n[i]Adesso hai licenza di uccidere![/i]",
         "redbull": "🍾 Hai mangiato {food}.\n[i]Adesso puoi volare![/i]",
         "red bull": "🍾 Hai mangiato {food}.\n[i]Adesso puoi volare![/i]",
 
@@ -135,6 +138,10 @@ class EatCommand(Command):
         "royal bot": "🤖 Come osi provare a mangiarmi?!\n[i]Il {food} è arrabbiato con te.[/i]",
         "re": "👑 Hai mangiato il {food} avversario! \n[i]Scacco matto![/i]",
         "furry": "🐕 Hai mangiato {food}.\n[i]OwO[/i]",
+        "qualcosa che non mi piace": "🥦 Hai assaggiato il cibo, ma non ti piace proprio./n[i]Dai, mangialo, che ti"
+        " fa bene! In africa i bambini muoiono di fame, e tu... ![/i]",
+        "qualcosa che non ti piace": "🥦 Hai assaggiato il cibo, ma non ti piace proprio./n[i]Dai, mangialo, che ti"
+        " fa bene! In africa i bambini muoiono di fame, e tu... ![/i]",
         "polvere": "☁️ Hai mangiato la {food}.\n[i]Ti hanno proprio battuto![/i]",
         "giaroun": "🥌 Il {food} che hai mangiato era duro come un {food}.\n[i]Stai soffrendo di indigestione![/i]",
         "giarone": "🥌 Il {food} che hai mangiato era duro come un {food}.\n[i]Stai soffrendo di indigestione![/i]",
