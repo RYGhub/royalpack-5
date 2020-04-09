@@ -45,6 +45,8 @@ class UserinfoCommand(Command):
             r.append(f"{account}")
             if account.dota is not None:
                 r.append(f"{account.dota}")
+            if account.brawlhalla is not None:
+                r.append(f"{account.brawlhalla}")
 
         for account in user.leagueoflegends:
             r.append(f"{account}")
