@@ -2,6 +2,7 @@ import datetime
 import re
 import dateparser
 import typing
+import asyncio
 from telegram import Bot as PTBBot
 from telegram import Message as PTBMessage
 from telegram import InlineKeyboardMarkup as InKM
@@ -83,6 +84,8 @@ class MatchmakingCommand(Command):
         return text
 
     def _gen_telegram_keyboard(self, mmevent: MMEvent):
+        if mmevent.datetime <= datetime.datetime.now():
+            return None
         return InKM([
             [
                 InKB(f"{MMChoice.YES.value} Ci sarò!",
@@ -130,7 +133,7 @@ class MatchmakingCommand(Command):
                 mmresponse.choice = choice
             await data.session_commit()
             await self._update_telegram_mm_message(client, mmevent)
-            return f"✅ Messaggio ricevuto!"
+            await data.reply(f"✅ Messaggio ricevuto!")
 
         return callback
 
@@ -252,7 +255,8 @@ class MatchmakingCommand(Command):
                                                        disable_webpage_preview=True)
         else:
             raise UnsupportedError()
-        # Delete the event message
+        # Delete the event message after 10 minutes
+        await asyncio.sleep(600)
         if self.interface.name == "telegram":
             await self.interface.serf.api_call(client.delete_message,
                                                chat_id=mmevent.interface_data.chat_id,
