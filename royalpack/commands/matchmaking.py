@@ -87,7 +87,7 @@ class MatchmakingCommand(Command):
         if mmevent.description:
             text += f"{mmevent.description}\n"
         text += "\n"
-        for response in sorted(mmevent.responses, key=lambda r: self._mmchoice_values[r.choice]):
+        for response in sorted(mmevent.responses, key=lambda r: -self._mmchoice_values[r.choice]):
             response: MMResponse
             text += f"{response.choice.value} {response.user}\n"
         return text
