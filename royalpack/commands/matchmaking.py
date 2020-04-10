@@ -11,7 +11,7 @@ from telegram.error import BadRequest, Unauthorized
 from royalnet.commands import *
 from royalnet.serf.telegram import TelegramSerf as TelegramBot
 from royalnet.serf.telegram import escape as telegram_escape
-from royalnet.utils import asyncify, sleep_until
+from royalnet.utils import asyncify, sleep_until, sentry_async_wrap
 from royalnet.backpack.tables import User
 from ..tables import MMEvent, MMResponse
 from ..types import MMChoice, MMInterfaceDataTelegram
@@ -157,6 +157,7 @@ class MatchmakingCommand(Command):
         return f"⚠️ Non sono autorizzato a mandare messaggi a [b]{user.username}[/b]!\n" \
                f"{user.telegram.mention()}, apri una chat privata con me e mandami un messaggio!"
 
+    @sentry_async_wrap()
     async def _run_mmevent(self, mmid: int):
         """Run a MMEvent."""
         # Open a new Alchemy Session
@@ -267,8 +268,6 @@ class MatchmakingCommand(Command):
         if self.interface.name == "telegram":
             await self.interface.serf.api_call(client.delete_message,
                                                chat_id=mmevent.interface_data.chat_id,
-                                               message_id=mmevent.interface_data.message_id,
-                                               parse_mode="HTML",
-                                               disable_webpage_preview=True)
+                                               message_id=mmevent.interface_data.message_id)
         # The end!
         await asyncify(session.close)
