@@ -33,10 +33,11 @@ class MatchmakingCommand(Command):
         # Find all relevant MMEvents and run them
         session = self.alchemy.Session()
         mmevents = (
-            session.query(self.alchemy.get(MMEvent))
-                   .filter(self.alchemy.get(MMEvent).interface == self.interface.name,
-                           self.alchemy.get(MMEvent).datetime > datetime.datetime.now())
-                   .all()
+            session
+            .query(self.alchemy.get(MMEvent))
+            .filter(self.alchemy.get(MMEvent).interface == self.interface.name,
+                    self.alchemy.get(MMEvent).datetime > datetime.datetime.now())
+            .all()
         )
         for mmevent in mmevents:
             self.interface.loop.create_task(self._run_mmevent(mmevent.mmid))
@@ -71,7 +72,7 @@ class MatchmakingCommand(Command):
         data.session.add(mmevent)
         await data.session_commit()
         self.loop.create_task(self._run_mmevent(mmevent.mmid))
-        await data.reply(f"✅ Evento [b]{mmevent.title}[/b] creato!")
+        await data.reply(f"✅ Matchmaking creato!")
 
     _mmchoice_values = {
         MMChoice.YES: 4,
@@ -92,7 +93,8 @@ class MatchmakingCommand(Command):
             text += f"{response.choice.value} {response.user}\n"
         return text
 
-    def _gen_telegram_keyboard(self, mmevent: MMEvent):
+    @staticmethod
+    def _gen_telegram_keyboard(mmevent: MMEvent):
         if mmevent.datetime <= datetime.datetime.now():
             return None
         return InKM([
@@ -142,18 +144,20 @@ class MatchmakingCommand(Command):
                 mmresponse.choice = choice
             await data.session_commit()
             await self._update_telegram_mm_message(client, mmevent)
-            await data.reply(f"✅ Messaggio ricevuto!")
+            await data.reply(f"{choice.value} Messaggio ricevuto!")
 
         return callback
 
-    def _gen_event_start_message(self, mmevent: MMEvent):
+    @staticmethod
+    def _gen_event_start_message(mmevent: MMEvent):
         text = f"🚩 L'evento [b]{mmevent.title}[/b] è iniziato!\n\n"
         for response in mmevent.responses:
             response: MMResponse
             text += f"{response.choice.value} {response.user}\n"
         return text
 
-    def _gen_unauth_message(self, user: User):
+    @staticmethod
+    def _gen_unauth_message(user: User):
         return f"⚠️ Non sono autorizzato a mandare messaggi a [b]{user.username}[/b]!\n" \
                f"{user.telegram.mention()}, apri una chat privata con me e mandami un messaggio!"
 

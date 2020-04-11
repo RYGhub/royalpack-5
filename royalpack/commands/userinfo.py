@@ -26,7 +26,7 @@ class UserinfoCommand(Command):
                 user = found
 
         r = [
-            f"ℹ️ [b]{user.username}[/b]",
+            f"ℹ️ [url=https://ryg.steffo.eu/#/user/{user.uid}]{user.username}[/url]",
             f"{user.role}",
             "",
         ]
@@ -53,13 +53,14 @@ class UserinfoCommand(Command):
 
         r.append("")
 
-        r.append(f"Ha creato [b]{len(user.diario_created)}[/b] righe di diario, e vi compare in"
+        r.append(f"Ha creato [b]{len(user.diario_created)}[/b] righe di "
+                 f"[url=https://ryg.steffo.eu/#/diario]Diario[/url], e vi compare in"
                  f" [b]{len(user.diario_quoted)}[/b] righe.")
 
         r.append("")
 
         if user.trivia_score:
-            r.append(f"Ha [b]{user.trivia_score.score:.0f}[/b] punti trivia, avendo risposto correttamente a"
+            r.append(f"Ha [b]{user.trivia_score.score:.0f}[/b] punti Trivia, avendo risposto correttamente a"
                      f" [b]{user.trivia_score.correct_answers}[/b] domande su"
                      f" [b]{user.trivia_score.total_answers}[/b].")
             r.append("")

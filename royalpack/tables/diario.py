@@ -88,7 +88,7 @@ class Diario:
             text += f" da {str(self.creator)}"
         text += f" il {self.timestamp.strftime('%Y-%m-%d %H:%M')}):\n"
         if self.media_url is not None:
-            text += f"{self.media_url}\n"
+            text += f"[url={self.media_url}]Media[/url]\n"
         if self.text is not None:
             if self.spoiler:
                 hidden = re.sub(r"\w", "█", self.text)
