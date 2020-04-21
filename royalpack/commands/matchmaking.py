@@ -255,11 +255,11 @@ class MatchmakingCommand(Command):
                 if response.choice == MMChoice.NO:
                     return
                 try:
-                    await self.interface.serf.api_call(client.send_message,
-                                                       chat_id=response.user.telegram[0].tg_id,
-                                                       text=telegram_escape(self._gen_event_start_message(mmevent)),
-                                                       parse_mode="HTML",
-                                                       disable_webpage_preview=True)
+                    await asyncify(client.send_message,
+                                   chat_id=response.user.telegram[0].tg_id,
+                                   text=telegram_escape(self._gen_event_start_message(mmevent)),
+                                   parse_mode="HTML",
+                                   disable_webpage_preview=True)
                 except TelegramError:
                     await self.interface.serf.api_call(client.send_message,
                                                        chat_id=self.config["Telegram"]["main_group_id"],
