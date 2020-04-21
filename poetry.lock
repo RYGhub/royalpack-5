@@ -521,7 +521,7 @@ description = "We have made you a wrapper you can't refuse"
 name = "python-telegram-bot"
 optional = false
 python-versions = "*"
-version = "12.6"
+version = "12.6.1"
 
 [package.dependencies]
 certifi = "*"
@@ -588,7 +588,7 @@ description = "A multipurpose bot and web framework"
 name = "royalnet"
 optional = false
 python-versions = ">=3.8,<4.0"
-version = "5.7.5"
+version = "5.7.6"
 
 [package.dependencies]
 dateparser = ">=0.7.2,<0.8.0"
@@ -1271,8 +1271,8 @@ python-multipart = [
     {file = "python-multipart-0.0.5.tar.gz", hash = "sha256:f7bb5f611fc600d15fa47b3974c8aa16e93724513b49b5f95c81e6624c83fa43"},
 ]
 python-telegram-bot = [
-    {file = "python-telegram-bot-12.6.tar.gz", hash = "sha256:a9b5615edc69216e75745dc25ff11fbe5be0104efbaad0772e0aa6a4bc2fc844"},
-    {file = "python_telegram_bot-12.6-py2.py3-none-any.whl", hash = "sha256:c4278fe3aad0e30aa1d2e79850f22e7fa2f6951e1e20a1b0c4e6f335220bb0cf"},
+    {file = "python-telegram-bot-12.6.1.tar.gz", hash = "sha256:935397390910291c8e41d7f2a06a3bb13d1d74d78b59562be9f8a330d4527049"},
+    {file = "python_telegram_bot-12.6.1-py2.py3-none-any.whl", hash = "sha256:c7bdb5788ad2edea5c5c1bc8e50967fad68aa35245c209baadf74fc8ad00ff06"},
 ]
 pytz = [
     {file = "pytz-2019.3-py2.py3-none-any.whl", hash = "sha256:1c557d7d0e871de1f5ccd5833f60fb2550652da6be2693c1e02300743d21500d"},
@@ -1310,8 +1310,8 @@ riotwatcher = [
     {file = "riotwatcher-2.7.1.tar.gz", hash = "sha256:5349271c7e00637b7619491a6070e66603705db60558ea2a690e7016f6e6d9a4"},
 ]
 royalnet = [
-    {file = "royalnet-5.7.5-py3-none-any.whl", hash = "sha256:d85afa59524482f8fa72f984cb9ec24e5517a0dfd280812097e766073fb98529"},
-    {file = "royalnet-5.7.5.tar.gz", hash = "sha256:785dad6a8b9afaf6517ec30f06441265a3a57acf033e199706f1bc3156cd843a"},
+    {file = "royalnet-5.7.6-py3-none-any.whl", hash = "sha256:7c37ebaf4ba15c3fbb292305476112bc01554fb1f1a0f616985ff5bf96ec0bae"},
+    {file = "royalnet-5.7.6.tar.gz", hash = "sha256:2be381b35ccb1f30651021bbb3515cb8523bf3f98713a0bb861757747090f554"},
 ]
 royalspells = [
     {file = "royalspells-3.2.tar.gz", hash = "sha256:2bd4a9a66514532e35c02c3907425af48c7cb292364c4843c795719a82b25dfe"},

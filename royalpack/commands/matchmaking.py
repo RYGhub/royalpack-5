@@ -7,7 +7,7 @@ from telegram import Bot as PTBBot
 from telegram import Message as PTBMessage
 from telegram import InlineKeyboardMarkup as InKM
 from telegram import InlineKeyboardButton as InKB
-from telegram.error import BadRequest, Unauthorized
+from telegram.error import TelegramError
 from royalnet.commands import *
 from royalnet.serf.telegram import TelegramSerf as TelegramBot
 from royalnet.serf.telegram import escape as telegram_escape
@@ -260,7 +260,7 @@ class MatchmakingCommand(Command):
                                                        text=telegram_escape(self._gen_event_start_message(mmevent)),
                                                        parse_mode="HTML",
                                                        disable_webpage_preview=True)
-                except Unauthorized:
+                except TelegramError:
                     await self.interface.serf.api_call(client.send_message,
                                                        chat_id=self.config["Telegram"]["main_group_id"],
                                                        text=telegram_escape(self._gen_unauth_message(response.user)),
