@@ -34,34 +34,8 @@ class MagickfiorygiCommand(rc.Command):
             qty = int(qty_arg)
         except ValueError:
             raise rc.InvalidInputError("La quantità specificata non è un numero!")
-        if qty == 0:
-            raise rc.InvalidInputError("La quantità non può essere 0!")
 
         if reason_arg == "":
             raise rc.InvalidInputError("Non hai specificato un motivo!")
 
-        transaction = self.alchemy.get(FiorygiTransaction)(
-            user_id=user.uid,
-            change=qty,
-            reason=reason_arg
-        )
-        data.session.add(transaction)
-        user.fiorygi.fiorygi += qty
-        await data.session_commit()
-
-        if len(user.telegram) > 0:
-            user_str = user.telegram[0].mention()
-        else:
-            user_str = user.username
-
-        if qty > 0:
-            msg = f"💰 [b]{user_str}[/b] ha ottenuto [b]{qty}[/b] fioryg{'i' if qty != 1 else ''} per [i]{reason_arg}[/i]!"
-        else:
-            msg = f"💸 [b]{user_str}[/b] ha perso [b]{-qty}[/b] fioryg{'i' if qty != -1 else ''} per [i]{reason_arg}[/i]."
-
-        client = self.serf.client
-        await self.serf.api_call(client.send_message,
-                                 chat_id=self.config["Telegram"]["main_group_id"],
-                                 text=rt.escape(msg),
-                                 parse_mode="HTML",
-                                 disable_webpage_preview=True)
+        await FiorygiTransaction.spawn_fiorygi(data, user, qty, reason_arg)
