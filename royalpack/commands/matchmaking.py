@@ -150,10 +150,9 @@ class MatchmakingCommand(Command):
 
         return callback
 
-    @staticmethod
-    def _gen_event_start_message(mmevent: MMEvent):
+    def _gen_event_start_message(self, mmevent: MMEvent):
         text = f"🚩 L'evento [b]{mmevent.title}[/b] è iniziato!\n\n"
-        for response in mmevent.responses:
+        for response in sorted(mmevent.responses, key=lambda r: -self._mmchoice_values[r.choice]):
             response: MMResponse
             text += f"{response.choice.value} {response.user}\n"
         return text
