@@ -2,7 +2,7 @@ import datetime
 import re
 import dateparser
 import typing
-import asyncio
+import random
 from telegram import Bot as PTBBot
 from telegram import Message as PTBMessage
 from telegram import InlineKeyboardMarkup as InKM
@@ -13,7 +13,7 @@ from royalnet.serf.telegram import TelegramSerf as TelegramBot
 from royalnet.serf.telegram import escape as telegram_escape
 from royalnet.utils import asyncify, sleep_until, sentry_async_wrap
 from royalnet.backpack.tables import User
-from ..tables import MMEvent, MMResponse
+from ..tables import MMEvent, MMResponse, FiorygiTransaction
 from ..types import MMChoice, MMInterfaceDataTelegram
 
 
@@ -127,7 +127,7 @@ class MatchmakingCommand(Command):
                                                parse_mode="HTML",
                                                disable_web_page_preview=True,
                                                reply_markup=self._gen_telegram_keyboard(mmevent))
-        except BadRequest:
+        except TelegramError:
             pass
 
     def _gen_mm_telegram_callback(self, client: PTBBot, mmid: int, choice: MMChoice):
@@ -140,6 +140,8 @@ class MatchmakingCommand(Command):
             if mmresponse is None:
                 mmresponse = self.alchemy.get(MMResponse)(user=author, mmevent=mmevent, choice=choice)
                 data.session.add(mmresponse)
+                if random.randrange(14) == 0:
+                    await FiorygiTransaction.spawn_fiorygi(data, author, 1, "aver risposto a un matchmaking")
             else:
                 mmresponse.choice = choice
             await data.session_commit()
