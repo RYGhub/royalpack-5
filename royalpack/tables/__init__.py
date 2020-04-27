@@ -16,6 +16,7 @@ from .pollvotes import PollVote
 from .brawlhalladuos import BrawlhallaDuo
 from .mmevents import MMEvent
 from .mmresponse import MMResponse
+from .cvstats import Cvstats
 
 # Enter the tables of your Pack here!
 available_tables = [
@@ -36,6 +37,7 @@ available_tables = [
     BrawlhallaDuo,
     MMEvent,
     MMResponse,
+    Cvstats,
 ]
 
 # Don't change this, it should automatically generate __all__
