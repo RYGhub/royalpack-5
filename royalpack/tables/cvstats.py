@@ -45,3 +45,16 @@ class Cvstats:
     @declared_attr
     def users_total(self):
         return Column(Integer)
+
+    def json(self):
+        return {
+            "timestamp": self.timestamp.isoformat(),
+            "users_total": self.users_total,
+            "members_total": self.members_total,
+            "users_online": self.users_online,
+            "members_online": self.members_online,
+            "users_connected": self.users_connected,
+            "members_connected": self.members_connected,
+            "users_playing": self.users_playing,
+            "members_playing": self.members_playing,
+        }
