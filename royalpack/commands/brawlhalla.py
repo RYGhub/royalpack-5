@@ -24,7 +24,7 @@ class BrawlhallaCommand(Command):
 
     def __init__(self, interface: CommandInterface):
         super().__init__(interface)
-        if self.interface.name == "telegram":
+        if self.interface.name == "telegram" and self.config["Brawlhalla"]["updater"]:
             self.loop.create_task(self._updater(7200))
 
     async def _send(self, message):
@@ -44,13 +44,10 @@ class BrawlhallaCommand(Command):
             string.append(f"[b]{bh.rank_1v1}[/b] ({bh.rating_1v1} MMR)")
             string.append("")
 
-        duos = bh.duos
-
         if len(bh.duos) != 0:
             string.append(f"👥 [b]2v2[/b]")
 
         for duo in bh.duos:
-
             other = duo.other(bh)
             string.append(f"Con [b]{other.steam.user}[/b]: [b]{duo.rank_2v2}[/b] ({duo.rating_2v2} MMR)")
 

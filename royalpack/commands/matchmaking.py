@@ -109,7 +109,7 @@ class MatchmakingCommand(Command):
                      callback_data=f"mm{mmevent.mmid}_LATE_SHORT"),
                 InKB(f"{MMChoice.LATE_MEDIUM.value} 30 min",
                      callback_data=f"mm{mmevent.mmid}_LATE_MEDIUM"),
-                InKB(f"{MMChoice.LATE_LONG.value} 60 min",
+                InKB(f"{MMChoice.LATE_LONG.value} 60+ min",
                      callback_data=f"mm{mmevent.mmid}_LATE_LONG"),
             ],
             [

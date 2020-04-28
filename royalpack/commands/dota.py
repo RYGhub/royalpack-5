@@ -23,7 +23,7 @@ class DotaCommand(Command):
 
     def __init__(self, interface: CommandInterface):
         super().__init__(interface)
-        if self.interface.name == "telegram":
+        if self.interface.name == "telegram" and self.config["Dota"]["updater"]:
             self.loop.create_task(self._updater(7200))
 
     async def _send(self, message):
