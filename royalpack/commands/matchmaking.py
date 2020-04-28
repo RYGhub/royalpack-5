@@ -160,7 +160,7 @@ class MatchmakingCommand(Command):
     @staticmethod
     def _gen_unauth_message(user: User):
         return f"⚠️ Non sono autorizzato a mandare messaggi a [b]{user.username}[/b]!\n" \
-               f"{user.telegram.mention()}, apri una chat privata con me e mandami un messaggio!"
+               f"{user.telegram[0].mention()}, apri una chat privata con me e mandami un messaggio!"
 
     @sentry_async_wrap()
     async def _run_mmevent(self, mmid: int):
