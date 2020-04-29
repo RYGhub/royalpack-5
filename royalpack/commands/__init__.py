@@ -52,6 +52,7 @@ from .funkwhalealbum import FunkwhalealbumCommand
 from .lazyfunkwhalealbum import LazyfunkwhalealbumCommand
 from .matchmaking import MatchmakingCommand
 from .cvstats import CvstatsCommand
+from .elevatormusic import ElevatormusicCommand
 
 # Enter the commands of your Pack here!
 available_commands = [
@@ -107,7 +108,8 @@ available_commands = [
     FunkwhalealbumCommand,
     LazyfunkwhalealbumCommand,
     MatchmakingCommand,
-    CvstatsCommand
+    CvstatsCommand,
+    ElevatormusicCommand,
 ]
 
 # Don't change this, it should automatically generate __all__
