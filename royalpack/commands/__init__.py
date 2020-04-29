@@ -53,6 +53,7 @@ from .lazyfunkwhalealbum import LazyfunkwhalealbumCommand
 from .matchmaking import MatchmakingCommand
 from .cvstats import CvstatsCommand
 from .elevatormusic import ElevatormusicCommand
+from .royalpack import RoyalpackCommand
 
 # Enter the commands of your Pack here!
 available_commands = [
@@ -110,6 +111,7 @@ available_commands = [
     MatchmakingCommand,
     CvstatsCommand,
     ElevatormusicCommand,
+    RoyalpackCommand,
 ]
 
 # Don't change this, it should automatically generate __all__
