@@ -1,7 +1,7 @@
 from typing import *
 from royalnet.commands import *
 from royalnet.utils import *
-from ..tables.steam import Steam
+from ..tables import Steam, FiorygiTransaction
 import steam
 import datetime
 
@@ -68,6 +68,8 @@ class SteampoweredCommand(Command):
             data.session.add(steam_account)
             await data.session_commit()
             await data.reply(f"↔️ Account {steam_account} connesso a {author}!")
+            await FiorygiTransaction.spawn_fiorygi(data, author, 1,
+                                                   "aver connesso il proprio account di Steam a Royalnet")
         else:
             # Update and display the Steam info for the current account
             if len(author.steam) == 0:

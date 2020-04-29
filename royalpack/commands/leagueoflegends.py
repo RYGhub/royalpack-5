@@ -6,7 +6,7 @@ import sentry_sdk
 from royalnet.commands import *
 from royalnet.utils import *
 from royalnet.serf.telegram import *
-from ..tables import LeagueOfLegends
+from ..tables import LeagueOfLegends, FiorygiTransaction
 from ..types import LeagueLeague
 
 log = logging.getLogger(__name__)
@@ -204,6 +204,8 @@ class LeagueoflegendsCommand(Command):
             data.session.add(leagueoflegends)
             await data.session_commit()
             await data.reply(f"↔️ Account {leagueoflegends} connesso a {author}!")
+            await FiorygiTransaction.spawn_fiorygi(data, author, 1,
+                                                   "aver connesso il proprio account di League of Legends a Royalnet")
         else:
             # Update and display the League of Legends stats for the current account
             if len(author.leagueoflegends) == 0:
