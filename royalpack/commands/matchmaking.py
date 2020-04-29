@@ -72,7 +72,7 @@ class MatchmakingCommand(Command):
         data.session.add(mmevent)
         await data.session_commit()
         self.loop.create_task(self._run_mmevent(mmevent.mmid))
-        await data.reply(f"✅ Matchmaking creato!")
+        await data.reply(f"🚩 Matchmaking creato!")
 
     _mmchoice_values = {
         MMChoice.YES: 4,
@@ -84,13 +84,28 @@ class MatchmakingCommand(Command):
     }
 
     def _gen_mm_message(self, mmevent: MMEvent) -> str:
-        text = f"🌐 [{mmevent.datetime.strftime('%Y-%m-%d %H:%M')}] [b]{mmevent.title}[/b]\n"
+        text = f"🚩 [{mmevent.datetime.strftime('%Y-%m-%d %H:%M')}] [b]{mmevent.title}[/b]\n"
         if mmevent.description:
             text += f"{mmevent.description}\n"
         text += "\n"
         for response in sorted(mmevent.responses, key=lambda r: -self._mmchoice_values[r.choice]):
             response: MMResponse
-            text += f"{response.choice.value} {response.user}\n"
+
+            if response.choice == MMChoice.LATE_SHORT:
+                td = mmevent.datetime + datetime.timedelta(minutes=10)
+                time_text = f" [{td.strftime('%H:%M')}]"
+            elif response.choice == MMChoice.LATE_SHORT:
+                td = mmevent.datetime + datetime.timedelta(minutes=30)
+                time_text = f" [{td.strftime('%H:%M')}]"
+            elif response.choice == MMChoice.LATE_SHORT:
+                td = mmevent.datetime + datetime.timedelta(minutes=60)
+                time_text = f" [{td.strftime('%H:%M')}+]"
+            else:
+                time_text = ""
+
+            creator_crown = " 👑" if response.user == mmevent.creator else ""
+
+            text += f"{response.choice.value} {response.user}{time_text}{creator_crown}\n"
         return text
 
     @staticmethod
@@ -101,8 +116,6 @@ class MatchmakingCommand(Command):
             [
                 InKB(f"{MMChoice.YES.value} Ci sarò!",
                      callback_data=f"mm{mmevent.mmid}_YES"),
-                InKB(f"{MMChoice.MAYBE.value} Forse...",
-                     callback_data=f"mm{mmevent.mmid}_MAYBE"),
             ],
             [
                 InKB(f"{MMChoice.LATE_SHORT.value} 10 min",
@@ -113,6 +126,8 @@ class MatchmakingCommand(Command):
                      callback_data=f"mm{mmevent.mmid}_LATE_LONG"),
             ],
             [
+                InKB(f"{MMChoice.MAYBE.value} Forse...",
+                     callback_data=f"mm{mmevent.mmid}_MAYBE"),
                 InKB(f"{MMChoice.NO.value} Non mi interessa.",
                      callback_data=f"mm{mmevent.mmid}_NO"),
             ]
@@ -252,6 +267,13 @@ class MatchmakingCommand(Command):
             bot.unregister_keyboard_key(f"mm{mmevent.mmid}_LATE_MEDIUM")
             bot.unregister_keyboard_key(f"mm{mmevent.mmid}_LATE_LONG")
             bot.unregister_keyboard_key(f"mm{mmevent.mmid}_NO")
+
+            await asyncify(client.send_message,
+                           chat_id=self.config["Telegram"]["main_group_id"],
+                           text=telegram_escape(self._gen_event_start_message(mmevent)),
+                           parse_mode="HTML",
+                           disable_webpage_preview=True)
+
             for response in mmevent.responses:
                 if response.choice == MMChoice.NO:
                     return
