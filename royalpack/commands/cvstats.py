@@ -70,6 +70,12 @@ class CvstatsCommand(rc.Command):
                         if self._is_ryg_member(m):
                             members_playing += 1
 
+        assert users_online >= members_online
+        assert users_online >= users_connected
+        assert users_online >= users_playing
+        assert members_online >= members_connected
+        assert members_online >= members_playing
+
         log.debug(f"Total users: {users_total}")
         log.debug(f"Total members: {members_total}")
         log.debug(f"Online users: {users_online}")
