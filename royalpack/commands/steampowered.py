@@ -32,12 +32,11 @@ class SteampoweredCommand(Command):
                  f"Created on: [b]{account.account_creation_date}[/b]\n"
         return string
 
-    @staticmethod
-    async def _call(method, *args, **kwargs):
+    async def _call(self, method, *args, **kwargs):
         try:
             await asyncify(method, *args, **kwargs)
-        except Exception:
-            raise ExternalError("Steam API request returned an error.")
+        except Exception as e:
+            raise ExternalError("\n".join(e.args).replace(self.config["Steam"]["web_api_key"], "HIDDEN"))
 
     async def _update(self, account: Steam):
         # noinspection PyProtectedMember
@@ -54,6 +53,8 @@ class SteampoweredCommand(Command):
         if len(args) > 0:
             url = args.joined()
             steamid64 = await self._call(steam.steamid.steam64_from_url, url)
+            if steamid64 is None:
+                raise InvalidInputError("Quel link non è associato ad alcun account Steam.")
             response = await self._call(self._api.ISteamUser.GetPlayerSummaries_v2, steamids=steamid64)
             r = response["response"]["players"][0]
             steam_account = self.alchemy.get(Steam)(

@@ -59,11 +59,12 @@ class MatchmakingCommand(Command):
         except OverflowError:
             dt = None
         if dt is None:
-            await data.reply("⚠️ La data che hai specificato non è valida.")
-            return
+            raise InvalidInputError("⚠️ La data che hai specificato non è valida.")
         if dt <= datetime.datetime.now():
-            await data.reply("⚠️ La data che hai specificato è nel passato.")
-            return
+            raise InvalidInputError("⚠️ La data che hai specificato è nel passato.")
+        if dt - datetime.datetime.now() >= datetime.timedelta(days=366):
+            raise InvalidInputError("⚠️ Hai specificato una data tra più di un anno!\n"
+                                    "Se volevi scrivere un'orario, ricordati che le ore sono separati ")
         mmevent: MMEvent = self.alchemy.get(MMEvent)(creator=author,
                                                      datetime=dt,
                                                      title=title,
