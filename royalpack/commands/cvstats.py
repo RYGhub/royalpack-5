@@ -59,16 +59,16 @@ class CvstatsCommand(rc.Command):
                 if self._is_ryg_member(m):
                     members_online += 1
 
-            if m["voice"] is not None and not m["voice"]["afk"]:
-                users_connected += 1
-                if self._is_ryg_member(m):
-                    members_connected += 1
-
-            for mact in m["activities"]:
-                if mact.get("type") == 0:
-                    users_playing += 1
+                if m["voice"] is not None and not m["voice"]["afk"]:
+                    users_connected += 1
                     if self._is_ryg_member(m):
-                        members_playing += 1
+                        members_connected += 1
+
+                for mact in m["activities"]:
+                    if mact.get("type") == 0:
+                        users_playing += 1
+                        if self._is_ryg_member(m):
+                            members_playing += 1
 
         log.debug(f"Total users: {users_total}")
         log.debug(f"Total members: {members_total}")
