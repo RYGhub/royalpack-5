@@ -1,11 +1,11 @@
 from typing import *
+import datetime
 
 from sqlalchemy import *
 from sqlalchemy.orm import *
 from sqlalchemy.ext.declarative import declared_attr
 
 from .fiorygi import Fiorygi
-from royalnet.utils import asyncify
 
 if TYPE_CHECKING:
     from royalnet.commands import CommandData
@@ -38,6 +38,10 @@ class FiorygiTransaction:
     def reason(self):
         return Column(String, nullable=False, default="")
 
+    @declared_attr
+    def timestamp(self):
+        return Column(DateTime)
+
     def __repr__(self):
         return f"<{self.__class__.__name__}: {self.change:+} to {self.user.username} for {self.reason}>"
 
@@ -53,7 +57,8 @@ class FiorygiTransaction:
         transaction = data._interface.alchemy.get(FiorygiTransaction)(
             user_id=user.uid,
             change=qty,
-            reason=reason
+            reason=reason,
+            timestamp=datetime.datetime.now()
         )
         data.session.add(transaction)
 
