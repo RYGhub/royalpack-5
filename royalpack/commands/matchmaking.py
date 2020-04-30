@@ -1,14 +1,17 @@
+from typing import *
 import datetime
 import re
 import dateparser
 import typing
 import random
+import enum
+import asyncio as aio
 from telegram import Bot as PTBBot
 from telegram import Message as PTBMessage
 from telegram import InlineKeyboardMarkup as InKM
 from telegram import InlineKeyboardButton as InKB
 from telegram.error import TelegramError
-from royalnet.commands import *
+import royalnet.commands as rc
 from royalnet.serf.telegram import TelegramSerf as TelegramBot
 from royalnet.serf.telegram import escape as telegram_escape
 from royalnet.utils import asyncify, sleep_until, sentry_async_wrap
@@ -17,7 +20,13 @@ from ..tables import MMEvent, MMResponse, FiorygiTransaction
 from ..types import MMChoice, MMInterfaceDataTelegram
 
 
-class MatchmakingCommand(Command):
+class Interrupts(enum.Enum):
+    TIME_RAN_OUT = enum.auto()
+    MANUAL_START = enum.auto()
+    MANUAL_DELETE = enum.auto()
+
+
+class MatchmakingCommand(rc.Command):
     name: str = "matchmaking"
 
     description: str = "Cerca persone per una partita a qualcosa!"
@@ -28,7 +37,7 @@ class MatchmakingCommand(Command):
 
     tables = {MMEvent, MMResponse}
 
-    def __init__(self, interface: CommandInterface):
+    def __init__(self, interface: rc.CommandInterface):
         super().__init__(interface)
         # Find all relevant MMEvents and run them
         session = self.alchemy.Session()
@@ -36,21 +45,25 @@ class MatchmakingCommand(Command):
             session
             .query(self.alchemy.get(MMEvent))
             .filter(self.alchemy.get(MMEvent).interface == self.interface.name,
-                    self.alchemy.get(MMEvent).datetime > datetime.datetime.now())
+                    self.alchemy.get(MMEvent).datetime > datetime.datetime.now(),
+                    self.alchemy.get(MMEvent).interrupted == False)
             .all()
         )
+        self.tasks_created = {}
+        self.queue: Dict[int, aio.queues.Queue] = {}
         for mmevent in mmevents:
-            self.interface.loop.create_task(self._run_mmevent(mmevent.mmid))
+            task = self.interface.loop.create_task(self._run_mmevent(mmevent.mmid))
+            self.tasks_created[mmevent.mmid] = task
 
-    async def run(self, args: CommandArgs, data: CommandData) -> None:
+    async def run(self, args: rc.CommandArgs, data: rc.CommandData) -> None:
         # Create a new MMEvent and run it
         if self.interface.name != "telegram":
-            raise UnsupportedError(f"{self.interface.prefix}matchmaking funziona solo su Telegram. Per ora.")
+            raise rc.UnsupportedError(f"{self.interface.prefix}matchmaking funziona solo su Telegram. Per ora.")
         author = await data.get_author(error_if_none=True)
 
         try:
             timestring, title, description = args.match(r"\[\s*([^]]+)\s*]\s*([^\n]+)\s*\n?\s*(.+)?\s*", re.DOTALL)
-        except InvalidInputError:
+        except rc.InvalidInputError:
             timestring, title, description = args.match(r"\s*(.+?)\s*\n\s*([^\n]+)\s*\n?\s*(.+)?\s*", re.DOTALL)
         try:
             dt: typing.Optional[datetime.datetime] = dateparser.parse(timestring, settings={
@@ -59,12 +72,13 @@ class MatchmakingCommand(Command):
         except OverflowError:
             dt = None
         if dt is None:
-            raise InvalidInputError("⚠️ La data che hai specificato non è valida.")
+            raise rc.InvalidInputError("La data che hai specificato non è valida.")
         if dt <= datetime.datetime.now():
-            raise InvalidInputError("⚠️ La data che hai specificato è nel passato.")
+            raise rc.InvalidInputError("La data che hai specificato è nel passato.")
         if dt - datetime.datetime.now() >= datetime.timedelta(days=366):
-            raise InvalidInputError("⚠️ Hai specificato una data tra più di un anno!\n"
-                                    "Se volevi scrivere un'orario, ricordati che le ore sono separati ")
+            raise rc.InvalidInputError("Hai specificato una data tra più di un anno!\n"
+                                       "Se volevi scrivere un'orario, ricordati che le ore sono separate da due punti"
+                                       " (:) e non da punto semplice!")
         mmevent: MMEvent = self.alchemy.get(MMEvent)(creator=author,
                                                      datetime=dt,
                                                      title=title,
@@ -117,6 +131,10 @@ class MatchmakingCommand(Command):
             [
                 InKB(f"{MMChoice.YES.value} Ci sarò!",
                      callback_data=f"mm{mmevent.mmid}_YES"),
+                InKB(f"{MMChoice.MAYBE.value} Forse...",
+                     callback_data=f"mm{mmevent.mmid}_MAYBE"),
+                InKB(f"{MMChoice.NO.value} Non mi interessa.",
+                     callback_data=f"mm{mmevent.mmid}_NO"),
             ],
             [
                 InKB(f"{MMChoice.LATE_SHORT.value} 10 min",
@@ -127,10 +145,10 @@ class MatchmakingCommand(Command):
                      callback_data=f"mm{mmevent.mmid}_LATE_LONG"),
             ],
             [
-                InKB(f"{MMChoice.MAYBE.value} Forse...",
-                     callback_data=f"mm{mmevent.mmid}_MAYBE"),
-                InKB(f"{MMChoice.NO.value} Non mi interessa.",
-                     callback_data=f"mm{mmevent.mmid}_NO"),
+                InKB(f"🗑 Elimina",
+                     callback_data=f"mm{mmevent.mmid}_DELETE"),
+                InKB(f"🚩 Inizia",
+                     callback_data=f"mm{mmevent.mmid}_START"),
             ]
         ])
 
@@ -147,9 +165,8 @@ class MatchmakingCommand(Command):
             pass
 
     def _gen_mm_telegram_callback(self, client: PTBBot, mmid: int, choice: MMChoice):
-        async def callback(data: CommandData):
+        async def callback(data: rc.CommandData):
             author = await data.get_author(error_if_none=True)
-            # Find the MMEvent with the current session
             mmevent: MMEvent = await asyncify(data.session.query(self.alchemy.get(MMEvent)).get, mmid)
             mmresponse: MMResponse = await asyncify(
                 data.session.query(self.alchemy.get(MMResponse)).filter_by(user=author, mmevent=mmevent).one_or_none)
@@ -163,8 +180,32 @@ class MatchmakingCommand(Command):
             await data.session_commit()
             await self._update_telegram_mm_message(client, mmevent)
             await data.reply(f"{choice.value} Messaggio ricevuto!")
-
         return callback
+
+    def _gen_mm_telegram_delete(self, client, mmid: int):
+        async def callback(data: rc.CommandData):
+            author = await data.get_author(error_if_none=True)
+            mmevent: MMEvent = await asyncify(data.session.query(self.alchemy.get(MMEvent)).get, mmid)
+            if author != mmevent.creator:
+                raise rc.UserError("Non sei il creatore di questo matchmaking!")
+            await self.queue[mmid].put(Interrupts.MANUAL_DELETE)
+            await data.reply(f"🗑 Evento eliminato!")
+        return callback
+
+    def _gen_mm_telegram_start(self, client, mmid: int):
+        async def callback(data: rc.CommandData):
+            author = await data.get_author(error_if_none=True)
+            mmevent: MMEvent = await asyncify(data.session.query(self.alchemy.get(MMEvent)).get, mmid)
+            if author != mmevent.creator:
+                raise rc.UserError("Non sei il creatore di questo matchmaking!")
+            await self.queue[mmid].put(Interrupts.MANUAL_START)
+            await data.reply(f"🚩 Evento avviato!")
+        return callback
+
+    async def _set_event_after(self, mmid: int, dt: datetime.datetime):
+        await sleep_until(dt)
+        if mmid in self.queue:
+            await self.queue[mmid].put(Interrupts.TIME_RAN_OUT)
 
     def _gen_event_start_message(self, mmevent: MMEvent):
         text = f"🚩 L'evento [b]{mmevent.title}[/b] è iniziato!\n\n"
@@ -181,6 +222,8 @@ class MatchmakingCommand(Command):
     @sentry_async_wrap()
     async def _run_mmevent(self, mmid: int):
         """Run a MMEvent."""
+        # Create the event in the dict
+        self.queue[mmid] = aio.Queue()
         # Open a new Alchemy Session
         session = self.alchemy.Session()
         # Find the MMEvent with the current session
@@ -213,51 +256,67 @@ class MatchmakingCommand(Command):
                                                                  message_id=message.message_id)
                 await asyncify(session.commit)
             else:
-                raise UnsupportedError()
+                raise rc.UnsupportedError()
         # Register handlers for the keyboard events
         if self.interface.name == "telegram":
             bot: TelegramBot = self.interface.serf
             client: PTBBot = bot.client
-            bot.register_keyboard_key(f"mm{mmevent.mmid}_YES", key=KeyboardKey(
+            bot.register_keyboard_key(f"mm{mmevent.mmid}_YES", key=rc.KeyboardKey(
                 interface=self.interface,
                 short=f"{MMChoice.YES.value}",
                 text="Ci sarò!",
                 callback=self._gen_mm_telegram_callback(client, mmid, MMChoice.YES)
             ))
-            bot.register_keyboard_key(f"mm{mmevent.mmid}_LATE_SHORT", key=KeyboardKey(
+            bot.register_keyboard_key(f"mm{mmevent.mmid}_LATE_SHORT", key=rc.KeyboardKey(
                 interface=self.interface,
                 short=f"{MMChoice.LATE_SHORT.value}",
                 text="10 min",
                 callback=self._gen_mm_telegram_callback(client, mmid, MMChoice.LATE_SHORT)
             ))
-            bot.register_keyboard_key(f"mm{mmevent.mmid}_LATE_MEDIUM", key=KeyboardKey(
+            bot.register_keyboard_key(f"mm{mmevent.mmid}_LATE_MEDIUM", key=rc.KeyboardKey(
                 interface=self.interface,
                 short=f"{MMChoice.LATE_MEDIUM.value}",
                 text="30 min",
                 callback=self._gen_mm_telegram_callback(client, mmid, MMChoice.LATE_MEDIUM)
             ))
-            bot.register_keyboard_key(f"mm{mmevent.mmid}_LATE_LONG", key=KeyboardKey(
+            bot.register_keyboard_key(f"mm{mmevent.mmid}_LATE_LONG", key=rc.KeyboardKey(
                 interface=self.interface,
                 short=f"{MMChoice.LATE_LONG.value}",
                 text="60 min",
                 callback=self._gen_mm_telegram_callback(client, mmid, MMChoice.LATE_LONG)
             ))
-            bot.register_keyboard_key(f"mm{mmevent.mmid}_MAYBE", key=KeyboardKey(
+            bot.register_keyboard_key(f"mm{mmevent.mmid}_MAYBE", key=rc.KeyboardKey(
                 interface=self.interface,
                 short=f"{MMChoice.MAYBE.value}",
                 text="Forse...",
                 callback=self._gen_mm_telegram_callback(client, mmid, MMChoice.MAYBE)
             ))
-            bot.register_keyboard_key(f"mm{mmevent.mmid}_NO", key=KeyboardKey(
+            bot.register_keyboard_key(f"mm{mmevent.mmid}_NO", key=rc.KeyboardKey(
                 interface=self.interface,
                 short=f"{MMChoice.NO.value}",
                 text="Non mi interessa.",
                 callback=self._gen_mm_telegram_callback(client, mmid, MMChoice.NO)
             ))
+            bot.register_keyboard_key(f"mm{mmevent.mmid}_DELETE", key=rc.KeyboardKey(
+                interface=self.interface,
+                short=f"🗑",
+                text="Elimina",
+                callback=self._gen_mm_telegram_delete(client, mmid)
+            ))
+            bot.register_keyboard_key(f"mm{mmevent.mmid}_START", key=rc.KeyboardKey(
+                interface=self.interface,
+                short=f"🚩",
+                text="Inizia",
+                callback=self._gen_mm_telegram_start(client, mmid)
+            ))
         else:
-            raise UnsupportedError()
-        # Sleep until the time of the event
-        await sleep_until(mmevent.datetime)
+            raise rc.UnsupportedError()
+        # Sleep until something interrupts
+        self.loop.create_task(self._set_event_after(mmid, mmevent.datetime))
+        interrupt = await self.queue[mmid].get()
+        mmevent.interrupted = True
+        await asyncify(session.commit)
+        del self.queue[mmid]
         # Notify the positive answers of the event start
         if self.interface.name == "telegram":
             bot: TelegramBot = self.interface.serf
@@ -268,34 +327,49 @@ class MatchmakingCommand(Command):
             bot.unregister_keyboard_key(f"mm{mmevent.mmid}_LATE_MEDIUM")
             bot.unregister_keyboard_key(f"mm{mmevent.mmid}_LATE_LONG")
             bot.unregister_keyboard_key(f"mm{mmevent.mmid}_NO")
+            bot.unregister_keyboard_key(f"mm{mmevent.mmid}_DELETE")
+            bot.unregister_keyboard_key(f"mm{mmevent.mmid}_START")
 
-            await asyncify(client.send_message,
-                           chat_id=self.config["Telegram"]["main_group_id"],
-                           text=telegram_escape(self._gen_event_start_message(mmevent)),
-                           parse_mode="HTML",
-                           disable_webpage_preview=True)
+            if interrupt == Interrupts.TIME_RAN_OUT or interrupt == Interrupts.MANUAL_START:
+                await asyncify(client.send_message,
+                               chat_id=self.config["Telegram"]["main_group_id"],
+                               text=telegram_escape(self._gen_event_start_message(mmevent)),
+                               parse_mode="HTML",
+                               disable_webpage_preview=True)
 
-            for response in mmevent.responses:
-                if response.choice == MMChoice.NO:
-                    return
-                try:
-                    await asyncify(client.send_message,
-                                   chat_id=response.user.telegram[0].tg_id,
-                                   text=telegram_escape(self._gen_event_start_message(mmevent)),
-                                   parse_mode="HTML",
-                                   disable_webpage_preview=True)
-                except TelegramError:
-                    await self.interface.serf.api_call(client.send_message,
-                                                       chat_id=self.config["Telegram"]["main_group_id"],
-                                                       text=telegram_escape(self._gen_unauth_message(response.user)),
-                                                       parse_mode="HTML",
-                                                       disable_webpage_preview=True)
-        else:
-            raise UnsupportedError()
-        # Delete the event message
-        if self.interface.name == "telegram":
+                for response in mmevent.responses:
+                    if response.choice == MMChoice.NO:
+                        return
+                    try:
+                        await asyncify(client.send_message,
+                                       chat_id=response.user.telegram[0].tg_id,
+                                       text=telegram_escape(self._gen_event_start_message(mmevent)),
+                                       parse_mode="HTML",
+                                       disable_webpage_preview=True)
+                    except TelegramError:
+                        await self.interface.serf.api_call(
+                            client.send_message,
+                            chat_id=self.config["Telegram"]["main_group_id"],
+                            text=telegram_escape(self._gen_unauth_message(response.user)),
+                            parse_mode="HTML",
+                            disable_webpage_preview=True
+                        )
+
+            elif interrupt == Interrupts.MANUAL_DELETE:
+                await self.interface.serf.api_call(
+                    client.send_message,
+                    chat_id=self.config["Telegram"]["main_group_id"],
+                    text=telegram_escape(f"🗑 L'evento [b]{mmevent.title}[/b] è stato annullato."),
+                    parse_mode="HTML",
+                    disable_webpage_preview=True
+                )
+
             await self.interface.serf.api_call(client.delete_message,
                                                chat_id=mmevent.interface_data.chat_id,
                                                message_id=mmevent.interface_data.message_id)
+
+        else:
+            raise rc.UnsupportedError()
         # The end!
         await asyncify(session.close)
+        del self.tasks_created[mmid]

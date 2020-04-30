@@ -48,5 +48,9 @@ class MMEvent:
     def interface_data(self, value):
         self.raw_interface_data = pickle.dumps(value)
 
+    @declared_attr
+    def interrupted(self):
+        return Column(Boolean, nullable=False, default=False)
+
     def __repr__(self):
         return f"<MMEvent {self.mmid}: {self.title}>"
