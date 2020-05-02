@@ -32,16 +32,15 @@ class RoyalPool(Playable):
                 else:
                     self.remaining_pool = self.full_pool.copy()
                     random.shuffle(self.remaining_pool)
-            else:
-                log.debug(f"Dequeuing an item...")
-                # Get the first YtdlDiscord of the queue
-                self.now_playing: YtdlDiscord = self.remaining_pool.pop(0)
-                log.debug(f"Yielding FileAudioSource from: {self.now_playing}")
-                # Create a FileAudioSource from the YtdlDiscord
-                # If the file hasn't been fetched / downloaded / converted yet, it will do so before yielding
-                async with self.now_playing.spawn_audiosource() as fas:
-                    # Yield the resulting AudioSource
-                    yield fas
+            log.debug(f"Dequeuing an item...")
+            # Get the first YtdlDiscord of the queue
+            self.now_playing: YtdlDiscord = self.remaining_pool.pop(0)
+            log.debug(f"Yielding FileAudioSource from: {self.now_playing}")
+            # Create a FileAudioSource from the YtdlDiscord
+            # If the file hasn't been fetched / downloaded / converted yet, it will do so before yielding
+            async with self.now_playing.spawn_audiosource() as fas:
+                # Yield the resulting AudioSource
+                yield fas
 
     async def destroy(self):
         for file in self.full_pool:

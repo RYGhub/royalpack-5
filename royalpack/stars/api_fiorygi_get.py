@@ -29,8 +29,10 @@ class ApiFiorygiGetStar(ApiStar):
         transactions: JSON = sorted(fiorygi.transactions, key=lambda t: -t.id)
         return {
             "fiorygi": fiorygi.fiorygi,
-            "transactions": list(map(lambda t: {"id": t.id,
-                                                "change": t.change,
-                                                "reason": t.reason,
-                                                "timestamp": t.timestamp.isoformat()}, transactions))
+            "transactions": list(map(lambda t: {
+                "id": t.id,
+                "change": t.change,
+                "reason": t.reason,
+                "timestamp": t.timestamp.isoformat() if t.timestamp else None
+            }, transactions))
         }
