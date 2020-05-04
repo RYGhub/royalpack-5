@@ -38,6 +38,8 @@ class DiscordPlayEvent(rc.Event):
         added: List[rbd.YtdlDiscord] = []
         too_long: List[rbd.YtdlDiscord] = []
 
+        urls = ["https://www.youtube.com/watch?v=zDkvNGeScdM"]
+
         for url in urls:
             ytds = await rbd.YtdlDiscord.from_url(url)
             if isinstance(voice_player.playing, RoyalQueue):
@@ -66,12 +68,7 @@ class DiscordPlayEvent(rc.Event):
 
         main_channel: discord.TextChannel = client.get_channel(self.config["Discord"]["main_channel_id"])
 
-        if len(added) > 0:
-            if user:
-                await main_channel.send(rsd.escape(f"▶️ {user} ha aggiunto {len(added)} file alla coda:"))
-            else:
-                await main_channel.send(rsd.escape(f"▶️ Aggiunt{'o' if len(added) == 1 else 'i'} {len(added)} file alla"
-                                                   f" coda:"))
+        await main_channel.send(rsd.escape(f"⚽️ HAHAHAHAHA!"))
         for ytd in added[:5]:
             embed: discord.Embed = ytd.embed()
             if force_color:
