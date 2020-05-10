@@ -1,15 +1,16 @@
+from typing import *
 import re
-from royalnet.commands import *
+import royalnet.commands as rc
 
 
-class ShipCommand(Command):
+class ShipCommand(rc.Command):
     name: str = "ship"
 
     description: str = "Crea una ship tra due nomi."
 
     syntax = "{nomeuno} {nomedue}"
 
-    async def run(self, args: CommandArgs, data: CommandData) -> None:
+    async def run(self, args: rc.CommandArgs, data: rc.CommandData) -> None:
         name_one = args[0]
         name_two = args[1]
         if name_two == "+":

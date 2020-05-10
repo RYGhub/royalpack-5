@@ -1,3 +1,4 @@
+from typing import *
 from .play import PlayCommand
 
 

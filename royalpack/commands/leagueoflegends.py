@@ -1,18 +1,19 @@
-import typing
+from typing import *
 import riotwatcher
 import logging
 import asyncio
 import sentry_sdk
-from royalnet.commands import *
-from royalnet.utils import *
-from royalnet.serf.telegram import *
+import royalnet.commands as rc
+import royalnet.utils as ru
+import royalnet.serf.telegram as rst
+
 from ..tables import LeagueOfLegends, FiorygiTransaction
 from ..types import LeagueLeague
 
 log = logging.getLogger(__name__)
 
 
-class LeagueoflegendsCommand(Command):
+class LeagueoflegendsCommand(rc.Command):
     name: str = "leagueoflegends"
 
     aliases = ["lol", "league"]
@@ -21,7 +22,7 @@ class LeagueoflegendsCommand(Command):
 
     syntax = "[nomeevocatore]"
 
-    def __init__(self, interface: CommandInterface):
+    def __init__(self, interface: rc.CommandInterface):
         super().__init__(interface)
         self._riotwatcher = riotwatcher.RiotWatcher(api_key=self.config["Lol"]["token"])
         if self.interface.name == "telegram" and self.config["Lol"]["updater"]:
@@ -31,15 +32,15 @@ class LeagueoflegendsCommand(Command):
         client = self.serf.client
         await self.serf.api_call(client.send_message,
                                  chat_id=self.config["Telegram"]["main_group_id"],
-                                 text=escape(message),
+                                 text=rst.escape(message),
                                  parse_mode="HTML",
                                  disable_webpage_preview=True)
 
     async def _notify(self,
                       obj: LeagueOfLegends,
                       attribute_name: str,
-                      old_value: typing.Any,
-                      new_value: typing.Any):
+                      old_value: Any,
+                      new_value: Any):
         if isinstance(old_value, LeagueLeague):
             # This is a rank change!
             # Don't send messages for every rank change, send messages just if the TIER or RANK changes!
@@ -69,9 +70,9 @@ class LeagueoflegendsCommand(Command):
     @staticmethod
     async def _change(obj: LeagueOfLegends,
                       attribute_name: str,
-                      new_value: typing.Any,
-                      callback: typing.Callable[
-                          [LeagueOfLegends, str, typing.Any, typing.Any], typing.Awaitable[None]]):
+                      new_value: Any,
+                      callback: Callable[
+                          [LeagueOfLegends, str, Any, Any], Awaitable[None]]):
         old_value = obj.__getattribute__(attribute_name)
         if old_value != new_value:
             await callback(obj, attribute_name, old_value, new_value)
@@ -80,8 +81,8 @@ class LeagueoflegendsCommand(Command):
     async def _update(self, lol: LeagueOfLegends):
         log.info(f"Updating: {lol}")
         log.debug(f"Getting summoner data: {lol}")
-        summoner = await asyncify(self._riotwatcher.summoner.by_id, region=self.config["Lol"]["region"],
-                                  encrypted_summoner_id=lol.summoner_id)
+        summoner = await ru.asyncify(self._riotwatcher.summoner.by_id, region=self.config["Lol"]["region"],
+                                     encrypted_summoner_id=lol.summoner_id)
         await self._change(lol, "profile_icon_id", summoner["profileIconId"], self._notify)
         await self._change(lol, "summoner_name", summoner["name"], self._notify)
         await self._change(lol, "puuid", summoner["puuid"], self._notify)
@@ -89,8 +90,8 @@ class LeagueoflegendsCommand(Command):
         await self._change(lol, "summoner_id", summoner["id"], self._notify)
         await self._change(lol, "account_id", summoner["accountId"], self._notify)
         log.debug(f"Getting leagues data: {lol}")
-        leagues = await asyncify(self._riotwatcher.league.by_summoner, region=self.config["Lol"]["region"],
-                                 encrypted_summoner_id=lol.summoner_id)
+        leagues = await ru.asyncify(self._riotwatcher.league.by_summoner, region=self.config["Lol"]["region"],
+                                    encrypted_summoner_id=lol.summoner_id)
         soloq = LeagueLeague()
         flexq = LeagueLeague()
         twtrq = LeagueLeague()
@@ -109,9 +110,9 @@ class LeagueoflegendsCommand(Command):
         await self._change(lol, "rank_twtrq", twtrq, self._notify)
         await self._change(lol, "rank_tftq", tftq, self._notify)
         log.debug(f"Getting mastery data: {lol}")
-        mastery = await asyncify(self._riotwatcher.champion_mastery.scores_by_summoner,
-                                 region=self.config["Lol"]["region"],
-                                 encrypted_summoner_id=lol.summoner_id)
+        mastery = await ru.asyncify(self._riotwatcher.champion_mastery.scores_by_summoner,
+                                    region=self.config["Lol"]["region"],
+                                    encrypted_summoner_id=lol.summoner_id)
         await self._change(lol, "mastery_score", mastery, self._notify)
 
     async def _updater(self, period: int):
@@ -128,7 +129,7 @@ class LeagueoflegendsCommand(Command):
                     sentry_sdk.capture_exception(e)
                     log.error(f"Error while updating {lol.user.username}: {e}")
                 await asyncio.sleep(1)
-            await asyncify(session.commit)
+            await ru.asyncify(session.commit)
             session.close()
             log.info(f"Sleeping for {period}s")
             await asyncio.sleep(period)
@@ -149,7 +150,7 @@ class LeagueoflegendsCommand(Command):
             string += f"TFT: {lol.rank_tftq}\n"
         return string
 
-    async def run(self, args: CommandArgs, data: CommandData) -> None:
+    async def run(self, args: rc.CommandArgs, data: rc.CommandData) -> None:
         author = await data.get_author(error_if_none=True)
 
         name = args.joined()
@@ -159,10 +160,10 @@ class LeagueoflegendsCommand(Command):
             log.debug(f"Searching for: {name}")
             summoner = self._riotwatcher.summoner.by_name(region=self.config["Lol"]["region"], summoner_name=name)
             # Ensure the account isn't already connected to something else
-            leagueoflegends = await asyncify(
+            leagueoflegends = await ru.asyncify(
                 data.session.query(self.alchemy.get(LeagueOfLegends)).filter_by(summoner_id=summoner["id"]).one_or_none)
             if leagueoflegends:
-                raise CommandError(f"L'account {leagueoflegends} è già registrato su Royalnet.")
+                raise rc.CommandError(f"L'account {leagueoflegends} è già registrato su Royalnet.")
             # Get rank information
             log.debug(f"Getting leagues data: {name}")
             leagues = self._riotwatcher.league.by_summoner(region=self.config["Lol"]["region"],
@@ -209,7 +210,7 @@ class LeagueoflegendsCommand(Command):
         else:
             # Update and display the League of Legends stats for the current account
             if len(author.leagueoflegends) == 0:
-                raise UserError("Nessun account di League of Legends trovato.")
+                raise rc.UserError("Nessun account di League of Legends trovato.")
             message = ""
             for account in author.leagueoflegends:
                 try:

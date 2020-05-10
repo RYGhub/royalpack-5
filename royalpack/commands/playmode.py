@@ -1,8 +1,7 @@
 from typing import *
-import royalnet
 import royalnet.commands as rc
 import discord
-from royalnet.backpack.tables import User, Discord
+import royalnet.backpack.tables as rbt
 
 
 class PlaymodeCommand(rc.Command):
@@ -25,12 +24,12 @@ class PlaymodeCommand(rc.Command):
         else:
             guild_id = None
 
-        user: User = await data.get_author()
+        user: rbt.User = await data.get_author()
         user_str = None
 
         if user is not None:
             try:
-                user_discord: Discord = user.discord[0]
+                user_discord: rbt.Discord = user.discord[0]
             except (AttributeError, IndexError):
                 user_str = str(user)
             else:

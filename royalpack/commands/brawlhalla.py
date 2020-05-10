@@ -1,14 +1,15 @@
+from typing import *
+
 import asyncio
 import logging
-import sentry_sdk
 import aiohttp
-from typing import *
 from royalnet.commands import *
 from royalnet.utils import *
 from royalnet.serf.telegram.escape import escape as tg_escape
+from sqlalchemy import or_, and_
+
 from ..tables import Steam, Brawlhalla, BrawlhallaDuo
 from ..types import BrawlhallaRank, BrawlhallaMetal, BrawlhallaTier
-from sqlalchemy import or_, and_
 
 log = logging.getLogger(__name__)
 

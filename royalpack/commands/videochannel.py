@@ -1,9 +1,9 @@
-import typing
+from typing import *
 import discord
-from royalnet.commands import *
+import royalnet.commands as rc
 
 
-class VideochannelCommand(Command):
+class VideochannelCommand(rc.Command):
     name: str = "videochannel"
 
     aliases = ["golive", "live", "video"]
@@ -12,33 +12,33 @@ class VideochannelCommand(Command):
 
     syntax = "[nomecanale]"
 
-    async def run(self, args: CommandArgs, data: CommandData) -> None:
+    async def run(self, args: rc.CommandArgs, data: rc.CommandData) -> None:
         if self.interface.name != "discord":
-            raise UnsupportedError(f"{self} non è supportato su {self.interface.name}.")
+            raise rc.UnsupportedError(f"{self} non è supportato su {self.interface.name}.")
         bot: discord.Client = self.serf.client
         message: discord.Message = data.message
         channel_name: str = args.optional(0)
         if channel_name:
-            guild: typing.Optional[discord.Guild] = message.guild
+            guild: Optional[discord.Guild] = message.guild
             if guild is not None:
-                channels: typing.List[discord.abc.GuildChannel] = guild.channels
+                channels: List[discord.abc.GuildChannel] = guild.channels
             else:
                 channels = bot.get_all_channels()
-            matching_channels: typing.List[discord.VoiceChannel] = []
+            matching_channels: List[discord.VoiceChannel] = []
             for channel in channels:
                 if isinstance(channel, discord.VoiceChannel):
                     if channel.name == channel_name:
                         matching_channels.append(channel)
             if len(matching_channels) == 0:
-                raise InvalidInputError("Non esiste alcun canale vocale con il nome specificato.")
+                raise rc.InvalidInputError("Non esiste alcun canale vocale con il nome specificato.")
             elif len(matching_channels) > 1:
-                raise UserError("Esiste più di un canale vocale con il nome specificato.")
+                raise rc.UserError("Esiste più di un canale vocale con il nome specificato.")
             channel = matching_channels[0]
         else:
             author: discord.Member = message.author
-            voice: typing.Optional[discord.VoiceState] = author.voice
+            voice: Optional[discord.VoiceState] = author.voice
             if voice is None:
-                raise InvalidInputError("Non sei connesso a nessun canale vocale.")
+                raise rc.InvalidInputError("Non sei connesso a nessun canale vocale.")
             channel = voice.channel
             if author.is_on_mobile():
                 await data.reply(f"📹 Per entrare in modalità video, clicca qui:\n"

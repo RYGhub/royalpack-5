@@ -1,16 +1,16 @@
-import discord
 from typing import *
-from royalnet.commands import *
+import discord
+import royalnet.commands as rc
 
 
-class PauseCommand(Command):
+class PauseCommand(rc.Command):
     name: str = "pause"
 
     aliases = ["resume"]
 
     description: str = "Metti in pausa o riprendi la riproduzione di un file."
 
-    async def run(self, args: CommandArgs, data: CommandData) -> None:
+    async def run(self, args: rc.CommandArgs, data: rc.CommandData) -> None:
         if self.interface.name == "discord":
             message: discord.Message = data.message
             guild: discord.Guild = message.guild

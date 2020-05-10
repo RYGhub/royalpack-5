@@ -1,5 +1,6 @@
 from typing import *
 import royalnet.commands as rc
+
 from ..version import semantic
 
 

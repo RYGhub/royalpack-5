@@ -1,9 +1,8 @@
 from typing import *
-import royalnet
 import royalnet.commands as rc
-import royalnet.serf.telegram as rt
-from royalnet.backpack.tables import Alias
-from ..tables import Fiorygi, FiorygiTransaction
+import royalnet.backpack.tables as rbt
+
+from ..tables import FiorygiTransaction
 
 
 class MagickfiorygiCommand(rc.Command):
@@ -24,7 +23,7 @@ class MagickfiorygiCommand(rc.Command):
 
         if user_arg is None:
             raise rc.InvalidInputError("Non hai specificato un destinatario!")
-        user = await Alias.find_user(self.alchemy, data.session, user_arg)
+        user = await rbt.Alias.find_user(self.alchemy, data.session, user_arg)
         if user is None:
             raise rc.InvalidInputError("L'utente specificato non esiste!")
 

@@ -1,9 +1,9 @@
-import typing
+from typing import *
 import random
-from royalnet.commands import *
+import royalnet.commands as rc
 
 
-class SmecdsCommand(Command):
+class SmecdsCommand(rc.Command):
     name: str = "smecds"
 
     aliases = ["secondomeecolpadellostagista"]
@@ -61,6 +61,6 @@ class SmecdsCommand(Command):
                 "dello Slime God", "del salassato", "della salsa", "di Senjougahara", "di Sugar", "della Stampa",
                 "della Stampante"]
 
-    async def run(self, args: CommandArgs, data: CommandData) -> None:
+    async def run(self, args: rc.CommandArgs, data: rc.CommandData) -> None:
         ds = random.sample(self._DS_LIST, 1)[0]
         await data.reply(f"🤔 Secondo me, è colpa {ds}.")

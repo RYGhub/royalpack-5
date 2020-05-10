@@ -1,18 +1,19 @@
-import typing
+from typing import *
 import dateparser
 import datetime
 import pickle
 import telegram
 import discord
 from sqlalchemy import and_
-from royalnet.commands import *
-from royalnet.utils import *
+import royalnet.commands as rc
+import royalnet.utils as ru
 from royalnet.serf.telegram import escape as telegram_escape
 from royalnet.serf.discord import escape as discord_escape
+
 from ..tables import Reminder
 
 
-class ReminderCommand(Command):
+class ReminderCommand(rc.Command):
     name: str = "reminder"
 
     aliases = ["calendar"]
@@ -21,7 +22,7 @@ class ReminderCommand(Command):
 
     syntax: str = "[ {data} ] {messaggio}"
 
-    def __init__(self, interface: CommandInterface):
+    def __init__(self, interface: rc.CommandInterface):
         super().__init__(interface)
         session = interface.alchemy.Session()
         reminders = (
@@ -35,7 +36,7 @@ class ReminderCommand(Command):
             interface.loop.create_task(self._remind(reminder))
 
     async def _remind(self, reminder):
-        await sleep_until(reminder.datetime)
+        await ru.sleep_until(reminder.datetime)
         if self.interface.name == "telegram":
             chat_id: int = pickle.loads(reminder.interface_data)
             client: telegram.Bot = self.serf.client
@@ -50,14 +51,14 @@ class ReminderCommand(Command):
             channel = client.get_channel(channel_id)
             await channel.send(discord_escape(f"❗️ {reminder.message}"))
 
-    async def run(self, args: CommandArgs, data: CommandData) -> None:
+    async def run(self, args: rc.CommandArgs, data: rc.CommandData) -> None:
         try:
             date_str, reminder_text = args.match(r"\[\s*([^]]+)\s*]\s*([^\n]+)\s*")
-        except InvalidInputError:
+        except rc.InvalidInputError:
             date_str, reminder_text = args.match(r"\s*(.+?)\s*\n\s*([^\n]+)\s*")
 
         try:
-            date: typing.Optional[datetime.datetime] = dateparser.parse(date_str, settings={
+            date: Optional[datetime.datetime] = dateparser.parse(date_str, settings={
                 "PREFER_DATES_FROM": "future"
             })
         except OverflowError:
@@ -74,7 +75,7 @@ class ReminderCommand(Command):
         elif self.interface.name == "discord":
             interface_data = pickle.dumps(data.message.channel.id)
         else:
-            raise UnsupportedError("This command does not support the current interface.")
+            raise rc.UnsupportedError("This command does not support the current interface.")
         creator = await data.get_author()
         reminder = self.interface.alchemy.get(Reminder)(creator=creator,
                                                         interface_name=self.interface.name,
@@ -83,4 +84,4 @@ class ReminderCommand(Command):
                                                         message=reminder_text)
         self.interface.loop.create_task(self._remind(reminder))
         data.session.add(reminder)
-        await asyncify(data.session.commit)
+        await ru.asyncify(data.session.commit)

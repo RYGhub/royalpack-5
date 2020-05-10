@@ -1,3 +1,4 @@
+from typing import *
 import telegram
 from royalnet.commands import *
 

@@ -1,5 +1,7 @@
+from typing import *
 import random
 import royalnet.commands as rc
+
 from .play import PlayCommand
 
 

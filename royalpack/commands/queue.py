@@ -1,19 +1,19 @@
+from typing import *
 import pickle
 import base64
 import discord
-from typing import *
-from royalnet.commands import *
-from royalnet.utils import *
+import royalnet.commands as rc
+import royalnet.utils as ru
 
 
-class QueueCommand(Command):
+class QueueCommand(rc.Command):
     name: str = "queue"
 
     aliases = ["q"]
 
     description: str = "Visualizza la coda di riproduzione attuale."
 
-    async def run(self, args: CommandArgs, data: CommandData) -> None:
+    async def run(self, args: rc.CommandArgs, data: rc.CommandData) -> None:
         if self.interface.name == "discord":
             message: discord.Message = data.message
             guild: discord.Guild = message.guild
@@ -54,9 +54,9 @@ class QueueCommand(Command):
                         # noinspection PyUnboundLocalVariable
                         await message.channel.send(embed=embed)
                 else:
-                    reply += numberemojiformat([a["title"] for a in next_up[:5]])
+                    reply += ru.numberemojiformat([a["title"] for a in next_up[:5]])
                     await data.reply(reply)
             else:
                 await data.reply("ℹ️ Non ci sono altri file in coda.")
         else:
-            raise CommandError(f"Non so come visualizzare il contenuto di un [c]{queue_type}[/c].")
+            raise rc.CommandError(f"Non so come visualizzare il contenuto di un [c]{queue_type}[/c].")

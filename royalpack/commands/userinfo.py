@@ -1,11 +1,9 @@
 from typing import *
-from royalnet.commands import *
-from royalnet.utils import *
-from royalnet.backpack.tables import User, Alias
-from sqlalchemy import func
+import royalnet.commands as rc
+import royalnet.backpack.tables as rbt
 
 
-class UserinfoCommand(Command):
+class UserinfoCommand(rc.Command):
     name: str = "userinfo"
 
     aliases = ["uinfo", "ui", "useri"]
@@ -14,22 +12,26 @@ class UserinfoCommand(Command):
 
     syntax = "[username]"
 
-    async def run(self, args: CommandArgs, data: CommandData) -> None:
+    async def run(self, args: rc.CommandArgs, data: rc.CommandData) -> None:
         username = args.optional(0)
         if username is None:
-            user: User = await data.get_author(error_if_none=True)
+            user: rbt.User = await data.get_author(error_if_none=True)
         else:
-            found: Optional[User] = await Alias.find_user(self.alchemy, data.session, username)
+            found: Optional[rbt.User] = await rbt.User.find(self.alchemy, data.session, username)
             if not found:
-                raise InvalidInputError("Utente non trovato.")
+                raise rc.InvalidInputError("Utente non trovato.")
             else:
                 user = found
 
         r = [
             f"ℹ️ [url=https://ryg.steffo.eu/#/user/{user.uid}]{user.username}[/url]",
-            f"{user.role}",
-            "",
+            f"{', '.join(user.roles)}",
         ]
+
+        if user.email:
+            r.append(f"{user.email}")
+
+        r.append("")
 
         # Bios are a bit too long
         # if user.bio:

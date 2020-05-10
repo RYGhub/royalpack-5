@@ -1,7 +1,7 @@
-from .lazyplay import LazyplayCommand
-from royalnet.commands import *
 import aiohttp
 import urllib.parse
+import royalnet.commands as rc
+from .lazyplay import LazyplayCommand
 
 
 class LazyfunkwhaleplaylistCommand(LazyplayCommand):
@@ -23,7 +23,7 @@ class LazyfunkwhaleplaylistCommand(LazyplayCommand):
                                    f"/api/v1/playlists/?q={search}&ordering=-creation_date&playable=true") as response:
                 j = await response.json()
             if len(j["results"]) < 1:
-                raise UserError("Nessuna playlist trovata con il nome richiesto.")
+                raise rc.UserError("Nessuna playlist trovata con il nome richiesto.")
             playlist = j["results"][0]
             playlist_id = playlist["id"]
             async with session.get(self.config["Funkwhale"]["instance_url"] +

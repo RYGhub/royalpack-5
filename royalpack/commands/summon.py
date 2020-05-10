@@ -1,8 +1,9 @@
+from typing import *
+import royalnet.commands as rc
 import discord
-from royalnet.commands import *
 
 
-class SummonCommand(Command):
+class SummonCommand(rc.Command):
     name: str = "summon"
 
     aliases = ["cv"]
@@ -11,7 +12,7 @@ class SummonCommand(Command):
 
     syntax: str = "[nomecanale]"
 
-    async def run(self, args: CommandArgs, data: CommandData) -> None:
+    async def run(self, args: rc.CommandArgs, data: rc.CommandData) -> None:
         channel_name = args.joined()
         if self.interface.name == "discord":
             message: discord.Message = data.message

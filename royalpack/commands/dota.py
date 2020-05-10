@@ -1,18 +1,19 @@
+from typing import *
 import asyncio
 import logging
 import sentry_sdk
 import aiohttp
-from typing import *
-from royalnet.commands import *
-from royalnet.utils import *
-from royalnet.serf.telegram.escape import escape as tg_escape
+import royalnet.commands as rc
+import royalnet.utils as ru
+import royalnet.serf.telegram as rst
+
 from ..tables import Steam, Dota
 from ..types import DotaRank
 
 log = logging.getLogger(__name__)
 
 
-class DotaCommand(Command):
+class DotaCommand(rc.Command):
     name: str = "dota"
 
     aliases = ["dota2", "doto", "doto2", "dotka", "dotka2"]
@@ -21,7 +22,7 @@ class DotaCommand(Command):
 
     syntax: str = ""
 
-    def __init__(self, interface: CommandInterface):
+    def __init__(self, interface: rc.CommandInterface):
         super().__init__(interface)
         if self.interface.name == "telegram" and self.config["Dota"]["updater"]:
             self.loop.create_task(self._updater(7200))
@@ -30,7 +31,7 @@ class DotaCommand(Command):
         client = self.serf.client
         await self.serf.api_call(client.send_message,
                                  chat_id=self.config["Telegram"]["main_group_id"],
-                                 text=tg_escape(message),
+                                 text=rst.escape(message),
                                  parse_mode="HTML",
                                  disable_webpage_preview=True)
 
@@ -85,7 +86,7 @@ class DotaCommand(Command):
             # Get profile data
             async with session.get(f"https://api.opendota.com/api/players/{steam.steamid.as_32}/") as response:
                 if response.status != 200:
-                    raise ExternalError(f"OpenDota / returned {response.status}!")
+                    raise rc.ExternalError(f"OpenDota / returned {response.status}!")
                 p = await response.json()
                 # No such user
                 if "profile" not in p:
@@ -94,7 +95,7 @@ class DotaCommand(Command):
             # Get win/loss data
             async with session.get(f"https://api.opendota.com/api/players/{steam.steamid.as_32}/wl") as response:
                 if response.status != 200:
-                    raise ExternalError(f"OpenDota /wl returned {response.status}!")
+                    raise rc.ExternalError(f"OpenDota /wl returned {response.status}!")
                 wl = await response.json()
                 # No such user
                 if wl["win"] == 0 and wl["lose"] == 0:
@@ -127,12 +128,12 @@ class DotaCommand(Command):
                     sentry_sdk.capture_exception(e)
                     log.error(f"Error while updating {steam.user.username}: {e}")
                 await asyncio.sleep(1)
-            await asyncify(session.commit)
+            await ru.asyncify(session.commit)
             session.close()
             log.info(f"Sleeping for {period}s")
             await asyncio.sleep(period)
 
-    async def run(self, args: CommandArgs, data: CommandData) -> None:
+    async def run(self, args: rc.CommandArgs, data: rc.CommandData) -> None:
         author = await data.get_author(error_if_none=True)
 
         found_something = False
@@ -146,5 +147,5 @@ class DotaCommand(Command):
             message += self._display(steam.dota)
             message += "\n"
         if not found_something:
-            raise UserError("Nessun account di Dota 2 trovato.")
+            raise rc.UserError("Nessun account di Dota 2 trovato.")
         await data.reply(message)

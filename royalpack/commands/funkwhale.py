@@ -1,7 +1,9 @@
-from .play import PlayCommand
-from royalnet.commands import *
+from typing import *
 import aiohttp
 import urllib.parse
+import royalnet.commands as rc
+
+from .play import PlayCommand
 
 
 class FunkwhaleCommand(PlayCommand):
@@ -23,5 +25,5 @@ class FunkwhaleCommand(PlayCommand):
                                    f"/api/v1/search?query={search}") as response:
                 j = await response.json()
         if len(j["tracks"]) < 1:
-            raise UserError("Nessun file audio trovato con il nome richiesto.")
+            raise rc.UserError("Nessun file audio trovato con il nome richiesto.")
         return [f'{self.config["Funkwhale"]["instance_url"]}{j["tracks"][0]["listen_url"]}']

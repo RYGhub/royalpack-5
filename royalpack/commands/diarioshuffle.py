@@ -1,11 +1,12 @@
 from typing import *
-from royalnet.commands import *
-from royalnet.utils import *
-from ..tables import Diario
+import royalnet.commands as rc
+import royalnet.utils as ru
 from sqlalchemy import func
 
+from ..tables import Diario
 
-class DiarioshuffleCommand(Command):
+
+class DiarioshuffleCommand(rc.Command):
     name: str = "diarioshuffle"
 
     description: str = "Cita una riga casuale del diario."
@@ -14,9 +15,9 @@ class DiarioshuffleCommand(Command):
 
     syntax = ""
 
-    async def run(self, args: CommandArgs, data: CommandData) -> None:
+    async def run(self, args: rc.CommandArgs, data: rc.CommandData) -> None:
         DiarioT = self.alchemy.get(Diario)
-        entry: List[Diario] = await asyncify(
+        entry: List[Diario] = await ru.asyncify(
             data.session
                 .query(DiarioT)
                 .order_by(func.random())
@@ -24,5 +25,5 @@ class DiarioshuffleCommand(Command):
                 .one_or_none
         )
         if entry is None:
-            raise CommandError("Nessuna riga del diario trovata.")
+            raise rc.CommandError("Nessuna riga del diario trovata.")
         await data.reply(f"ℹ️ {entry}")

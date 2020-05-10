@@ -1,7 +1,9 @@
-from .play import PlayCommand
-from royalnet.commands import *
+from typing import *
 import aiohttp
 import urllib.parse
+import royalnet.commands as rc
+
+from .play import PlayCommand
 
 
 class FunkwhaleplaylistCommand(PlayCommand):
@@ -23,7 +25,7 @@ class FunkwhaleplaylistCommand(PlayCommand):
                                    f"/api/v1/playlists/?q={search}&ordering=-creation_date&playable=true") as response:
                 j = await response.json()
             if len(j["results"]) < 1:
-                raise UserError("Nessuna playlist trovata con il nome richiesto.")
+                raise rc.UserError("Nessuna playlist trovata con il nome richiesto.")
             playlist = j["results"][0]
             playlist_id = playlist["id"]
             async with session.get(self.config["Funkwhale"]["instance_url"] +

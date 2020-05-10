@@ -6,8 +6,8 @@ import uuid
 import html
 import royalnet.commands as rc
 import royalnet.utils as ru
+import royalnet.backpack.tables as rbt
 from ..tables import TriviaScore
-from royalnet.backpack.tables.users import User
 
 
 class TriviaCommand(rc.Command):
@@ -126,7 +126,7 @@ class TriviaCommand(rc.Command):
         results = f"❗️ Tempo scaduto!\n" \
                   f"La risposta corretta era [b]{answers[correct_index]}[/b]!\n\n"
         for answerer_id in self._answerers[question_id]:
-            answerer = data.session.query(self.alchemy.get(User)).get(answerer_id)
+            answerer = data.session.query(self.alchemy.get(rbt.users.User)).get(answerer_id)
             if answerer.trivia_score is None:
                 ts = self.interface.alchemy.get(TriviaScore)(user=answerer)
                 data.session.add(ts)

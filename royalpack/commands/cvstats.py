@@ -3,7 +3,8 @@ import logging
 import asyncio
 import datetime
 import royalnet.commands as rc
-from royalnet.utils import asyncify
+import royalnet.utils as ru
+
 from ..tables import Cvstats
 
 
@@ -101,7 +102,7 @@ class CvstatsCommand(rc.Command):
 
         log.debug("Saving to database...")
         db_session.add(cvstats)
-        await asyncify(db_session.commit)
+        await ru.asyncify(db_session.commit)
         log.debug("Done!")
 
     async def _updater(self, period: int):

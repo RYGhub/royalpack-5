@@ -1,8 +1,9 @@
+from typing import *
 import random
-from royalnet.commands import *
+import royalnet.commands as rc
 
 
-class EmojifyCommand(Command):
+class EmojifyCommand(rc.Command):
     name: str = "emojify"
 
     description: str = "Converti un messaggio in emoji."
@@ -94,6 +95,6 @@ class EmojifyCommand(Command):
             new_string = new_string.replace(key, selected_emoji)
         return new_string
 
-    async def run(self, args: CommandArgs, data: CommandData) -> None:
+    async def run(self, args: rc.CommandArgs, data: rc.CommandData) -> None:
         string = args.joined(require_at_least=1)
         await data.reply(self._emojify(string))

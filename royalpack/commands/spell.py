@@ -1,19 +1,17 @@
 from typing import *
-from royalnet.commands import *
-from royalnet.utils import *
-from royalnet.backpack.tables import User
-from sqlalchemy import func
+import royalnet.commands as rc
+import royalnet.utils as ru
 import royalspells as rs
 
 
-class SpellCommand(Command):
+class SpellCommand(rc.Command):
     name: str = "spell"
 
     description: str = "Genera casualmente una spell!"
 
     syntax = "{nome_spell}"
 
-    async def run(self, args: CommandArgs, data: CommandData) -> None:
+    async def run(self, args: rc.CommandArgs, data: rc.CommandData) -> None:
         spell_name = args.joined(require_at_least=1)
         spell = rs.Spell(spell_name)
 
@@ -23,7 +21,7 @@ class SpellCommand(Command):
             dmg: rs.DamageComponent = spell.damage_component
             constant_str: str = f"{dmg.constant:+d}" if dmg.constant != 0 else ""
             rows.append(f"Danni: [b]{dmg.dice_number}d{dmg.dice_type}{constant_str}[/b]"
-                        f" {andformat(dmg.damage_types, final=' e ')}")
+                        f" {ru.andformat(dmg.damage_types, final=' e ')}")
             rows.append(f"Precisione: [b]{dmg.miss_chance}%[/b]")
             if dmg.repeat > 1:
                 rows.append(f"Multiattacco: [b]×{dmg.repeat}[/b]")

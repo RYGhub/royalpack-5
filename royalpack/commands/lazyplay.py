@@ -1,11 +1,11 @@
+from typing import *
 import discord
 import asyncio as aio
-from typing import *
-from royalnet.commands import *
-from royalnet.backpack.tables import User, Discord
+import royalnet.commands as rc
+import royalnet.backpack.tables as rbt
 
 
-class LazyplayCommand(Command):
+class LazyplayCommand(rc.Command):
     name: str = "lazyplay"
 
     aliases = ["lp"]
@@ -15,17 +15,17 @@ class LazyplayCommand(Command):
 
     syntax = "{url}"
 
-    async def get_urls(self, args: CommandArgs):
+    async def get_urls(self, args: rc.CommandArgs):
         url = args.joined(require_at_least=1)
         if not (url.startswith("http://") or url.startswith("https://")):
-            raise InvalidInputError(f"L'URL specificato non inizia con il nome di un protocollo supportato"
+            raise rc.InvalidInputError(f"L'URL specificato non inizia con il nome di un protocollo supportato"
                                     f" ([c]http://[/c] o [c]https://[/c]).")
         return [url]
 
     def get_embed_color(self) -> Optional[int]:
         return None
 
-    async def run(self, args: CommandArgs, data: CommandData) -> None:
+    async def run(self, args: rc.CommandArgs, data: rc.CommandData) -> None:
         if self.interface.name == "discord":
             message: discord.Message = data.message
             guild: discord.Guild = message.guild
@@ -36,12 +36,12 @@ class LazyplayCommand(Command):
         else:
             guild_id = None
 
-        user: User = await data.get_author()
+        user: rbt.User = await data.get_author()
         user_str = None
 
         if user is not None:
             try:
-                user_discord: Discord = user.discord[0]
+                user_discord: rbt.Discord = user.discord[0]
             except (AttributeError, IndexError):
                 user_str = str(user)
             else:

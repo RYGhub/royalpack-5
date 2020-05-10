@@ -16,6 +16,7 @@ from royalnet.serf.telegram import TelegramSerf as TelegramBot
 from royalnet.serf.telegram import escape as telegram_escape
 from royalnet.utils import asyncify, sleep_until, sentry_async_wrap
 from royalnet.backpack.tables import User
+
 from ..tables import MMEvent, MMResponse, FiorygiTransaction
 from ..types import MMChoice, MMInterfaceDataTelegram
 

@@ -1,7 +1,9 @@
-from .play import PlayCommand
-from royalnet.commands import *
+from typing import *
+import royalnet.commands as rc
 import aiohttp
 import urllib.parse
+
+from .play import PlayCommand
 
 
 class PeertubeCommand(PlayCommand):
@@ -20,5 +22,5 @@ class PeertubeCommand(PlayCommand):
                                    f"/api/v1/search/videos?search={search}") as response:
                 j = await response.json()
         if j["total"] < 1:
-            raise InvalidInputError("Nessun video trovato.")
+            raise rc.InvalidInputError("Nessun video trovato.")
         return [f'{self.config["Peertube"]["instance_url"]}/videos/watch/{j["data"][0]["uuid"]}']

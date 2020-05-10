@@ -1,9 +1,9 @@
-import typing
+from typing import *
 import random
-from royalnet.commands import *
+import royalnet.commands as rc
 
 
-class RageCommand(Command):
+class RageCommand(rc.Command):
     name: str = "rage"
 
     aliases = ["balurage", "madden"]
@@ -18,5 +18,5 @@ class RageCommand(Command):
         "Fondiamo la RRYG!"
     ]
 
-    async def run(self, args: CommandArgs, data: CommandData) -> None:
+    async def run(self, args: rc.CommandArgs, data: rc.CommandData) -> None:
         await data.reply(f"😠 {random.sample(self._MAD, 1)[0]}")

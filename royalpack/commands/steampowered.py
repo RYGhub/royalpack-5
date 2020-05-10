@@ -1,22 +1,23 @@
 from typing import *
-from royalnet.commands import *
-from royalnet.utils import *
-from ..tables import Steam, FiorygiTransaction
 import steam
 import datetime
+import royalnet.commands as rc
+import royalnet.utils as ru
+
+from ..tables import Steam, FiorygiTransaction
 
 
-class SteampoweredCommand(Command):
+class SteampoweredCommand(rc.Command):
     name: str = "steampowered"
 
     description: str = "Connetti il tuo account di Steam!"
 
     syntax: str = "{profile_url}"
 
-    def __init__(self, interface: CommandInterface):
+    def __init__(self, interface: rc.CommandInterface):
         super().__init__(interface)
         if "Steam" not in self.config or "web_api_key" not in self.config["Steam"]:
-            raise ConfigurationError("[c]Steam.web_api_key[/c] config option is missing!")
+            raise rc.ConfigurationError("[c]Steam.web_api_key[/c] config option is missing!")
         self._api = steam.WebAPI(self.config["Steam"]["web_api_key"])
 
     @staticmethod
@@ -34,9 +35,9 @@ class SteampoweredCommand(Command):
 
     async def _call(self, method, *args, **kwargs):
         try:
-            await asyncify(method, *args, **kwargs)
+            await ru.asyncify(method, *args, **kwargs)
         except Exception as e:
-            raise ExternalError("\n".join(e.args).replace(self.config["Steam"]["web_api_key"], "HIDDEN"))
+            raise rc.ExternalError("\n".join(e.args).replace(self.config["Steam"]["web_api_key"], "HIDDEN"))
 
     async def _update(self, account: Steam):
         # noinspection PyProtectedMember
@@ -48,13 +49,13 @@ class SteampoweredCommand(Command):
         account.primary_clan_id = r["primaryclanid"]
         account.account_creation_date = datetime.datetime.fromtimestamp(r["timecreated"])
 
-    async def run(self, args: CommandArgs, data: CommandData) -> None:
+    async def run(self, args: rc.CommandArgs, data: rc.CommandData) -> None:
         author = await data.get_author()
         if len(args) > 0:
             url = args.joined()
             steamid64 = await self._call(steam.steamid.steam64_from_url, url)
             if steamid64 is None:
-                raise InvalidInputError("Quel link non è associato ad alcun account Steam.")
+                raise rc.InvalidInputError("Quel link non è associato ad alcun account Steam.")
             response = await self._call(self._api.ISteamUser.GetPlayerSummaries_v2, steamids=steamid64)
             r = response["response"]["players"][0]
             steam_account = self.alchemy.get(Steam)(
@@ -74,7 +75,7 @@ class SteampoweredCommand(Command):
         else:
             # Update and display the Steam info for the current account
             if len(author.steam) == 0:
-                raise UserError("Nessun account di Steam trovato.")
+                raise rc.UserError("Nessun account di Steam trovato.")
             message = ""
             for account in author.steam:
                 await self._update(account)

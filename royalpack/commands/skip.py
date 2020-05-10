@@ -1,16 +1,16 @@
-import discord
 from typing import *
-from royalnet.commands import *
+import discord
+import royalnet.commands as rc
 
 
-class SkipCommand(Command):
+class SkipCommand(rc.Command):
     name: str = "skip"
 
     aliases = ["s"]
 
     description: str = "Salta il file attualmente in riproduzione."
 
-    async def run(self, args: CommandArgs, data: CommandData) -> None:
+    async def run(self, args: rc.CommandArgs, data: rc.CommandData) -> None:
         if self.interface.name == "discord":
             message: discord.Message = data.message
             guild: discord.Guild = message.guild
