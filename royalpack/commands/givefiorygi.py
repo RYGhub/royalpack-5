@@ -17,7 +17,6 @@ class GivefiorygiCommand(rc.Command):
 
         user_arg = args[0]
         qty_arg = args[1]
-        reason_arg = " ".join(args[2:])
 
         if user_arg is None:
             raise rc.InvalidInputError("Non hai specificato un destinatario!")
@@ -34,11 +33,8 @@ class GivefiorygiCommand(rc.Command):
         if qty <= 0:
             raise rc.InvalidInputError("La quantità specificata deve essere almeno 1!")
 
-        if reason_arg == "":
-            raise rc.InvalidInputError("Non hai specificato un motivo!")
-
         if author.fiorygi.fiorygi < qty:
             raise rc.InvalidInputError("Non hai abbastanza fiorygi per effettuare la transazione!")
 
-        await FiorygiTransaction.spawn_fiorygi(data, author, -qty, reason_arg)
-        await FiorygiTransaction.spawn_fiorygi(data, user, qty, reason_arg)
+        await FiorygiTransaction.spawn_fiorygi(data, author, -qty, f"aver ceduto fiorygi a {user}")
+        await FiorygiTransaction.spawn_fiorygi(data, user, qty, f"aver ricevuto fiorygi da {user}")

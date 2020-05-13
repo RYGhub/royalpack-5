@@ -14,6 +14,7 @@ from .api_polls_create import ApiPollsCreate
 from .api_polls_get import ApiPollsGet
 from .api_polls_list import ApiPollsList
 from .api_cvstats_latest import ApiCvstatsLatestStar
+from .api_cvstats_avg import ApiCvstatsAvgStar
 
 # Enter the PageStars of your Pack here!
 available_page_stars = [
@@ -32,6 +33,7 @@ available_page_stars = [
     ApiPollsGet,
     ApiPollsList,
     ApiCvstatsLatestStar,
+    ApiCvstatsAvgStar,
 ]
 
 # Don't change this, it should automatically generate __all__
