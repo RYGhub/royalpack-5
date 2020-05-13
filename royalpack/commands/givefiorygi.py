@@ -5,17 +5,15 @@ import royalnet.backpack.tables as rbt
 from ..tables import FiorygiTransaction
 
 
-class MagickfiorygiCommand(rc.Command):
-    name: str = "magickfiorygi"
+class GivefiorygiCommand(rc.Command):
+    name: str = "givefiorygi"
 
-    description: str = "Crea fiorygi dal nulla."
+    description: str = "Cedi fiorygi a un altro utente."
 
     syntax: str = "{destinatario} {quantità} {motivo}"
 
     async def run(self, args: rc.CommandArgs, data: rc.CommandData) -> None:
         author = await data.get_author(error_if_none=True)
-        if "banker" not in author.roles:
-            raise rc.UserError("Non hai permessi sufficienti per eseguire questo comando.")
 
         user_arg = args[0]
         qty_arg = args[1]
@@ -33,8 +31,14 @@ class MagickfiorygiCommand(rc.Command):
             qty = int(qty_arg)
         except ValueError:
             raise rc.InvalidInputError("La quantità specificata non è un numero!")
+        if qty <= 0:
+            raise rc.InvalidInputError("La quantità specificata deve essere almeno 1!")
 
         if reason_arg == "":
             raise rc.InvalidInputError("Non hai specificato un motivo!")
 
+        if author.fiorygi.fiorygi < qty:
+            raise rc.InvalidInputError("Non hai abbastanza fiorygi per effettuare la transazione!")
+
+        await FiorygiTransaction.spawn_fiorygi(data, author, -qty, reason_arg)
         await FiorygiTransaction.spawn_fiorygi(data, user, qty, reason_arg)

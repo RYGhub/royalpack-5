@@ -110,10 +110,10 @@ class MatchmakingCommand(rc.Command):
             if response.choice == MMChoice.LATE_SHORT:
                 td = mmevent.datetime + datetime.timedelta(minutes=10)
                 time_text = f" [{td.strftime('%H:%M')}]"
-            elif response.choice == MMChoice.LATE_SHORT:
+            elif response.choice == MMChoice.LATE_MEDIUM:
                 td = mmevent.datetime + datetime.timedelta(minutes=30)
                 time_text = f" [{td.strftime('%H:%M')}]"
-            elif response.choice == MMChoice.LATE_SHORT:
+            elif response.choice == MMChoice.LATE_LONG:
                 td = mmevent.datetime + datetime.timedelta(minutes=60)
                 time_text = f" [{td.strftime('%H:%M')}+]"
             else:

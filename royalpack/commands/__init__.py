@@ -54,6 +54,8 @@ from .matchmaking import MatchmakingCommand
 from .cvstats import CvstatsCommand
 from .elevatormusic import ElevatormusicCommand
 from .royalpack import RoyalpackCommand
+from .givefiorygi import GivefiorygiCommand
+from .help import HelpCommand
 
 # Enter the commands of your Pack here!
 available_commands = [
@@ -112,6 +114,8 @@ available_commands = [
     CvstatsCommand,
     ElevatormusicCommand,
     RoyalpackCommand,
+    GivefiorygiCommand,
+    HelpCommand,
 ]
 
 # Don't change this, it should automatically generate __all__
