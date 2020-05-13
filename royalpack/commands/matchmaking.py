@@ -185,9 +185,9 @@ class MatchmakingCommand(rc.Command):
 
     def _gen_mm_telegram_delete(self, client, mmid: int):
         async def callback(data: rc.CommandData):
-            author = await data.get_author(error_if_none=True)
+            author: User = await data.get_author(error_if_none=True)
             mmevent: MMEvent = await asyncify(data.session.query(self.alchemy.get(MMEvent)).get, mmid)
-            if author != mmevent.creator:
+            if author != mmevent.creator and "admin" not in author.roles:
                 raise rc.UserError("Non sei il creatore di questo matchmaking!")
             await self.queue[mmid].put(Interrupts.MANUAL_DELETE)
             await data.reply(f"🗑 Evento eliminato!")
@@ -197,7 +197,7 @@ class MatchmakingCommand(rc.Command):
         async def callback(data: rc.CommandData):
             author = await data.get_author(error_if_none=True)
             mmevent: MMEvent = await asyncify(data.session.query(self.alchemy.get(MMEvent)).get, mmid)
-            if author != mmevent.creator:
+            if author != mmevent.creator and "admin" not in author.roles:
                 raise rc.UserError("Non sei il creatore di questo matchmaking!")
             await self.queue[mmid].put(Interrupts.MANUAL_START)
             await data.reply(f"🚩 Evento avviato!")
