@@ -23,6 +23,8 @@ class GivefiorygiCommand(rc.Command):
         user = await rbt.User.find(self.alchemy, data.session, user_arg)
         if user is None:
             raise rc.InvalidInputError("L'utente specificato non esiste!")
+        if user.uid == author.uid:
+            raise rc.InvalidInputError("Non puoi inviare fiorygi a te stesso!")
 
         if qty_arg is None:
             raise rc.InvalidInputError("Non hai specificato una quantità!")
