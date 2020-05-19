@@ -56,6 +56,7 @@ from .elevatormusic import ElevatormusicCommand
 from .royalpack import RoyalpackCommand
 from .givefiorygi import GivefiorygiCommand
 from .help import HelpCommand
+from .pug import PugCommand
 
 # Enter the commands of your Pack here!
 available_commands = [
@@ -116,6 +117,7 @@ available_commands = [
     RoyalpackCommand,
     GivefiorygiCommand,
     HelpCommand,
+    PugCommand,
 ]
 
 # Don't change this, it should automatically generate __all__
