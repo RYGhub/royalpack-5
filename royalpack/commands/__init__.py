@@ -57,6 +57,8 @@ from .royalpack import RoyalpackCommand
 from .givefiorygi import GivefiorygiCommand
 from .help import HelpCommand
 from .pug import PugCommand
+from .createtreasure import CreatetreasureCommand
+from .treasure import TreasureCommand
 
 # Enter the commands of your Pack here!
 available_commands = [
@@ -118,6 +120,8 @@ available_commands = [
     GivefiorygiCommand,
     HelpCommand,
     PugCommand,
+    CreatetreasureCommand,
+    TreasureCommand,
 ]
 
 # Don't change this, it should automatically generate __all__

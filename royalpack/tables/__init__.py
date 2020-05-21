@@ -17,6 +17,7 @@ from .brawlhalladuos import BrawlhallaDuo
 from .mmevents import MMEvent
 from .mmresponse import MMResponse
 from .cvstats import Cvstats
+from .treasure import Treasure
 
 # Enter the tables of your Pack here!
 available_tables = [
@@ -38,6 +39,7 @@ available_tables = [
     MMEvent,
     MMResponse,
     Cvstats,
+    Treasure,
 ]
 
 # Don't change this, it should automatically generate __all__
