@@ -57,7 +57,7 @@ from .royalpack import RoyalpackCommand
 from .givefiorygi import GivefiorygiCommand
 from .help import HelpCommand
 from .pug import PugCommand
-from .createtreasure import CreatetreasureCommand
+from .magicktreasure import CreatetreasureCommand
 from .treasure import TreasureCommand
 
 # Enter the commands of your Pack here!
