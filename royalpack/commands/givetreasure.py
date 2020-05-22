@@ -14,8 +14,6 @@ class GivetreasureCommand(MagicktreasureCommand):
     syntax: str = "{codice} {valore}"
 
     async def _permission_check(self, author, code, value, data):
-        if "banker" not in author.roles:
-            raise rc.UserError("Non hai permessi sufficienti per eseguire questo comando.")
         if author.fiorygi.fiorygi < value:
             raise rc.UserError("Non hai abbastanza fiorygi per creare questo Treasure.")
 
