@@ -73,8 +73,7 @@ class FiorygiTransaction:
         if qty > 0:
             msg = f"💰 [b]{user_str}[/b] ha ottenuto [b]{qty}[/b] fioryg{'i' if qty != 1 else ''} per [i]{reason}[/i]!"
         elif qty == 0:
-            msg = f"❓ [b]{user_str}[/b] ha ottenuto [b]{qty}[/b] fioryg{'i' if qty != 1 else ''}...? " \
-                  f"Per [i]{reason}[/i]...? Cosa?"
+            msg = f"❓ [b]{user_str}[/b] ha mantenuto i suoi fiorygi attuali per [i]{reason}[/i].\nWait, cosa?"
         else:
             msg = f"💸 [b]{user_str}[/b] ha perso [b]{-qty}[/b] fioryg{'i' if qty != -1 else ''} per [i]{reason}[/i]."
 

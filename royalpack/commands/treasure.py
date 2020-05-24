@@ -14,7 +14,7 @@ class TreasureCommand(rc.Command):
 
     async def run(self, args: rc.CommandArgs, data: rc.CommandData) -> None:
         author = await data.get_author(error_if_none=True)
-        code = args[0]
+        code = args[0].lower()
 
         TreasureT = self.alchemy.get(Treasure)
 

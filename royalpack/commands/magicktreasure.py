@@ -36,7 +36,7 @@ class MagicktreasureCommand(rc.Command):
         await data.delete_invoking()
         author = await data.get_author(error_if_none=True)
 
-        code = args[0]
+        code = args[0].lower()
         try:
             value = int(args[1])
         except ValueError:
