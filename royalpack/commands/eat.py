@@ -37,16 +37,28 @@ class EatCommand(Command):
         "maxsensei": "🚹 Hai mangiato {food}.\n[i]Sa di merda.[/i]",
         "steffo": "🚹 Hai mangiato {food}.\n[i]Sa di gelato e di Coca-Cola.[/i]",
 
+        # Sezione in cui mangi i professori dei membri Royal Games
+        "arrigo": "🖍 Hai mangiato {food}!\n[i]Ti scrive F: V→W sulla parete dello stomaco con i gessetti colorati.[/i]",
+        "bonisoli": "🖍 Hai mangiato {food}!\n[i]Ti scrive F: V→W sulla parete dello stomaco con i gessetti colorati.[/i]",
+        "montangero": "📝 Hai mangiato la {food}!\n[i]La digerisci in O(n!).[/i]",
+        "marongiu": "🔧 Hai mangiato {food}!\n[i]Il tuo apparato digerente viene trasformato in una pipeline.[/i]",
+        "mandreoli": "⚠️ Hai mangiato la {food}!\n[c]Error: Segmentation fault (core dumped)[/c]",
+        "la rocca": "📊 Hai mangiato {food}!\n[i]Si distribuisce nel tuo intestino come una Normale.[/i]",
+        "villani": "🐜 Hai mangiato {food}!\n[i]Crea una rete neurale sfruttando i tuoi neuroni e le tue cellule.[/i]",
+        "novellani": "❓Volevi mangiare {food}...\n[i]...ma invece trovi solo Dell'Amico.[/i]",
+        
         # Sezione delle supercazzole
         "antani": "❔ Hai mangiato {food}. \n[i]Con tarapia tapioco o scherziamo? No, mi permetta. Noi siamo in 4.\n"
                   "Come se fosse antani anche per lei soltanto in due, oppure in quattro anche scribàcchi confaldina?\n"
                   "Come antifurto, per esempio.[/i]",
         "indice": "☝️ Hai mangiato l'{food}. \n[i]Ecco, lo alzi. Lo vede, lo vede che stuzzica?[/i]",
 
-        # sezione con piante e anmali
+        # Sezione con piante e animali
         "cactus": "🌵 Hai mangiato un {food}.\n[i]Gli hai tolto le spine prima, vero?[/i]",
         "tango": "🌳 Hai mangiato un {food}, e un albero insieme ad esso.\n[i]Senti le tue ferite curarsi...[/i]",
         "foglia": "🍁 Hai mangiato la {food}.\n[i]A te non la si fa![/i]",
+        "pug": "🐶 Hai provato a mangiare un {food}...\n[i]...Ma Mallllco si è precipitato in soccorso e lo ha salvato![/i]",
+        "carlino": "🐶 Hai provato a mangiare un {food}...\n[i]...Ma Mallllco si è precipitato in soccorso e lo ha salvato![/i]",
         "gatto": "🐱 Vieni fermato prima di poter compiere questo gesto orribile.\n"
                  "[i]Il {food} verrà pettato da tutti per farlo riavere dal trauma.[/i]",
         "3 porcellini": "🐷 Hai mangiato i {food}.\n[i]La casa di mattoni non è bastata a fermarti![/i]",
@@ -83,6 +95,9 @@ class EatCommand(Command):
         "gelato di steffo": "🍨 Hai provato a rubare il {food}...\n[i]...Ma sei arrivato tardi: l'ha già mangiato.[/i]",
         "biscotto": "🍪 Hai mangiato un {food} di contrabbando.\n[i]L'Inquisizione non lo saprà mai![/i]",
         "biscotti": "🍪 Hai mangiato tanti {food} di contrabbando.\n[i]Attento! L'Inquisizione è sulle tue tracce![/i]",
+        "crocchette di pollo": "🍗 Hai mangiato {food]!\n[i]Dio porco maledetto, infame, CAPRA, porca Madonna, Dio cane, "
+                               "HAI PERSO. UN POMERIGGIO PER C- ooh se è questo dio cane, altro che sfondamento dei cieli "
+                               "*roba non capibile*, sfondi tutti dio can li distruggi, non ci rimane più niente.[/i]",
 
         # Sezione delle bevande
         "acqua": "💧 Hai bevuto un po' d'{food}.\n[i]Ti depura e ti fa fare tanta plin plin![/i}",
@@ -147,7 +162,7 @@ class EatCommand(Command):
         "giarone": "🥌 Il {food} che hai mangiato era duro come un {food}.\n[i]Stai soffrendo di indigestione![/i]",
         "sasso": "🥌 Il {food} che hai mangiato era duro come un {food}.\n[i]Stai soffrendo di indigestione![/i]",
         "bomba": "💣 Hai mangiato una {food}. Speriamo fosse solo calorica!\n[i]3... 2... 1...[/i]",
-        "ass": "🕳 Hai mangiato {food}./n[i]Bleah! Lo sai cosa fa quel coso per sopravvivere?[/i]",
+        "ass": "🕳 Hai mangiato {food}.\n[i]Bleah! Lo sai cosa fa quel coso per sopravvivere?[/i]",
         "onion": "🗞 You ate the {food}. Ci sei proprio cascato!\n [i]Hai mai creduto a una notizia di Lercio,"
                  " invece?[/i]",
         "uranio": "☢️ L'{food} che hai mangiato era radioattivo.\n[i]Stai brillando di verde![/i]",
@@ -166,6 +181,9 @@ class EatCommand(Command):
                          "[i]Nessuno, tranne il bot, sa di cosa è fatta esattamente, ma una cosa è certa: è "
                          "buonissima![/i]",
         "angelo": "👼 Oh mio dio! E' un {food}!\n[i]Ora hai un digramma ad onda blu.[/i]",
+        "unicode": "🍗 Hai mangiato {food}!\n๓ค 𝔫𝔬𝔫 [i]è[/i] 𝓼𝓾𝓬𝓬𝓮𝓼𝓼𝓸 𝕟𝕦𝕝𝕝𝕒.",
+        "eco": "🏔 Hai mangiato l'{food} eco eco!\n[i]Ma non è successo nulla ulla ulla.[/i]",
+        "disinfettante": "🧴Hai mangiato {food}!\n[i]Secondo Trump, ora sei molto più sano.[/i]",
 
         "terraria": "🌳 Hai provato a mangiare {food}, ma non ne sei stato all'Altezza (Coniglio).\n[i]Prova a mangiare qualcos'altro...[/i]",
         "cooked fish": "🐟 Hai mangiato {food}.\n[i]Ora sei Well Fed per 20 minuti.[/i]"
