@@ -1,5 +1,6 @@
 from typing import *
-import steam
+import steam.steamid
+import steam.webapi
 import datetime
 import royalnet.commands as rc
 import royalnet.utils as ru
@@ -18,7 +19,7 @@ class SteampoweredCommand(rc.Command):
         super().__init__(interface)
         if "Steam" not in self.config or "web_api_key" not in self.config["Steam"]:
             raise rc.ConfigurationError("[c]Steam.web_api_key[/c] config option is missing!")
-        self._api = steam.WebAPI(self.config["Steam"]["web_api_key"])
+        self._api = steam.webapi.WebAPI(self.config["Steam"]["web_api_key"])
 
     @staticmethod
     def _display(account: Steam):

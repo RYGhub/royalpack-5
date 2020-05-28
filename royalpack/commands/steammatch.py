@@ -1,5 +1,5 @@
 from typing import *
-import steam
+import steam.webapi
 import requests.exceptions
 import royalnet.commands as rc
 import royalnet.utils as ru
@@ -57,7 +57,7 @@ class SteammatchCommand(rc.Command):
         super().__init__(interface)
         if "Steam" not in self.config or "web_api_key" not in self.config["Steam"]:
             raise rc.ConfigurationError("[c]Steam.web_api_key[/c] config option is missing!")
-        self._api = steam.WebAPI(self.config["Steam"]["web_api_key"])
+        self._api = steam.webapi.WebAPI(self.config["Steam"]["web_api_key"])
 
     async def run(self, args: rc.CommandArgs, data: rc.CommandData) -> None:
         users = []
