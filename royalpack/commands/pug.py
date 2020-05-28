@@ -16,6 +16,8 @@ class PugCommand(rc.Command):
     async def run(self, args: rc.CommandArgs, data: rc.CommandData) -> None:
         async with aiohttp.ClientSession() as session:
             async with session.get("https://dog.ceo/api/breed/pug/images/random") as response:
+                if response.status >= 400:
+                    raise rc.ExternalError(f"Request returned {response.status}")
                 result = await response.json()
                 assert "status" in result
                 assert result["status"] == "success"
