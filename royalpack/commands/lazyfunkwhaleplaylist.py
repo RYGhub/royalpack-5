@@ -21,6 +21,8 @@ class LazyfunkwhaleplaylistCommand(LazyplayCommand):
         async with aiohttp.ClientSession() as session:
             async with session.get(self.config["Funkwhale"]["instance_url"] +
                                    f"/api/v1/playlists/?q={search}&ordering=-creation_date&playable=true") as response:
+                if response.status >= 400:
+                    raise rc.ExternalError(f"Request returned {response.status}")
                 j = await response.json()
             if len(j["results"]) < 1:
                 raise rc.UserError("Nessuna playlist trovata con il nome richiesto.")
@@ -28,5 +30,7 @@ class LazyfunkwhaleplaylistCommand(LazyplayCommand):
             playlist_id = playlist["id"]
             async with session.get(self.config["Funkwhale"]["instance_url"] +
                                    f"/api/v1/playlists/{playlist_id}/tracks") as response:
+                if response.status >= 400:
+                    raise rc.ExternalError(f"Request returned {response.status}")
                 j = await response.json()
         return list(map(lambda t: f'{self.config["Funkwhale"]["instance_url"]}{t["track"]["listen_url"]}', j["results"]))
