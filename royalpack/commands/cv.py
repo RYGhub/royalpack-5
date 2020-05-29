@@ -77,8 +77,15 @@ class CvCommand(Command):
                 activity += f" | 📺 {mact['name']}"
             # Custom Status
             elif mact["type"] == 4:
-                if "state" in activity:
-                    activity += f" | ❓ {mact['state']}"
+                if "emoji" in mact:
+                    emoji = f"{mact['emoji']['name']}"
+                else:
+                    emoji = f"❓"
+                if "state" in mact:
+                    state = f" {mact['state']}"
+                else:
+                    state = ""
+                activity += f" | {emoji}{state}"
             else:
                 raise ExternalError(f"Unknown Discord activity type: {mact['type']}")
 
