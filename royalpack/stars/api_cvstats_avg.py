@@ -63,9 +63,7 @@ JOIN
                          AVG(c.members_total)            members_total,
                          AVG(c.users_total)              users_total
                   FROM cvstats c
-                  WHERE c.timestamp BETWEEN
-                         NOW()::DATE-EXTRACT(DOW FROM NOW())::INTEGER-7
-                         AND NOW()::DATE-EXTRACT(DOW from NOW())::INTEGER
+                  WHERE c.timestamp > current_timestamp - interval '7 day'
                   GROUP BY h
               ) c
          GROUP BY ph
@@ -92,9 +90,7 @@ JOIN
                          AVG(c.members_total)            members_total,
                          AVG(c.users_total)              users_total
                   FROM cvstats c
-                  WHERE c.timestamp BETWEEN
-                         NOW()::DATE-EXTRACT(DOW FROM NOW())::INTEGER-30
-                         AND NOW()::DATE-EXTRACT(DOW from NOW())::INTEGER
+                  WHERE c.timestamp > current_timestamp - interval '30 day'
                   GROUP BY h
               ) c
          GROUP BY ph
@@ -121,9 +117,7 @@ JOIN
                          AVG(c.members_total)            members_total,
                          AVG(c.users_total)              users_total
                   FROM cvstats c
-                  WHERE c.timestamp BETWEEN
-                         NOW()::DATE-EXTRACT(DOW FROM NOW())::INTEGER-1
-                         AND NOW()::DATE-EXTRACT(DOW from NOW())::INTEGER
+                  WHERE c.timestamp > current_timestamp - interval '1 day'
                   GROUP BY h
               ) c
          GROUP BY ph
