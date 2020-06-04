@@ -187,7 +187,8 @@ class EatCommand(Command):
 
         "terraria": "🌳 Hai provato a mangiare {food}, ma non ne sei stato all'Altezza (Coniglio).\n[i]Prova a mangiare qualcos'altro...[/i]",
         "cooked fish": "🐟 Hai mangiato {food}.\n[i]Ora sei Well Fed per 20 minuti.[/i]",
-        "gestione": "🌐 Hai mangiato {food}, basato su Condivisione.\n[i]Fa ridere di sopra, ma fa anche riflettere di sotto.[/i]",
+        "gestione": "🌐 Hai mangiato {food}, su cui si basa Condivisione.\n[i]Fa ridere di sotto, ma fa anche riflettere di sopra.[/i]",
+        "condivisione": "🌐 Hai mangiato {food}, basato su Gestione.\n[i]Fa ridere di sopra, ma fa anche riflettere di sotto.[/i]",
     }
 
     async def run(self, args: CommandArgs, data: CommandData) -> None:
