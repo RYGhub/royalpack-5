@@ -84,6 +84,7 @@ class SteammatchCommand(rc.Command):
                                                  steamid=steam_account._steamid,
                                                  include_appinfo=True,
                                                  include_played_free_games=True,
+                                                 include_free_sub=True,
                                                  appids_filter=0)
                 except requests.exceptions.HTTPError:
                     raise rc.ExternalError(f"L'account Steam di {user} è privato!")
