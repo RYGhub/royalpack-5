@@ -60,6 +60,7 @@ from .pug import PugCommand
 from .magicktreasure import MagicktreasureCommand
 from .treasure import TreasureCommand
 from .givetreasure import GivetreasureCommand
+from .cat import CatCommand
 
 # Enter the commands of your Pack here!
 available_commands = [
@@ -124,6 +125,7 @@ available_commands = [
     MagicktreasureCommand,
     TreasureCommand,
     GivetreasureCommand,
+    CatCommand,
 ]
 
 # Don't change this, it should automatically generate __all__
