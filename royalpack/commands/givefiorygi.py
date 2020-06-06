@@ -39,4 +39,4 @@ class GivefiorygiCommand(rc.Command):
             raise rc.InvalidInputError("Non hai abbastanza fiorygi per effettuare la transazione!")
 
         await FiorygiTransaction.spawn_fiorygi(data, author, -qty, f"aver ceduto fiorygi a {user}")
-        await FiorygiTransaction.spawn_fiorygi(data, user, qty, f"aver ricevuto fiorygi da {user}")
+        await FiorygiTransaction.spawn_fiorygi(data, user, qty, f"aver ricevuto fiorygi da {author}")
