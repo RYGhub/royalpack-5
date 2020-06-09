@@ -18,7 +18,7 @@ class PlayCommand(rc.Command):
         url = args.joined(require_at_least=1)
         if not (url.startswith("http://") or url.startswith("https://")):
             raise rc.InvalidInputError(f"L'URL specificato non inizia con il nome di un protocollo supportato"
-                                    f" ([c]http://[/c] o [c]https://[/c]).")
+                                       f" ([c]http://[/c] o [c]https://[/c]).")
         return [url]
 
     def get_embed_color(self) -> Optional[int]:
