@@ -331,6 +331,10 @@ class MatchmakingCommand(rc.Command):
             bot.unregister_keyboard_key(f"mm{mmevent.mmid}_DELETE")
             bot.unregister_keyboard_key(f"mm{mmevent.mmid}_START")
 
+            await self.interface.serf.api_call(client.delete_message,
+                                               chat_id=mmevent.interface_data.chat_id,
+                                               message_id=mmevent.interface_data.message_id)
+
             if interrupt == Interrupts.TIME_RAN_OUT or interrupt == Interrupts.MANUAL_START:
                 await asyncify(client.send_message,
                                chat_id=self.config["Telegram"]["main_group_id"],
@@ -364,11 +368,6 @@ class MatchmakingCommand(rc.Command):
                     parse_mode="HTML",
                     disable_webpage_preview=True
                 )
-
-            await self.interface.serf.api_call(client.delete_message,
-                                               chat_id=mmevent.interface_data.chat_id,
-                                               message_id=mmevent.interface_data.message_id)
-
         else:
             raise rc.UnsupportedError()
         # The end!
