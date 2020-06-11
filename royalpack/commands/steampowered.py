@@ -36,7 +36,7 @@ class SteampoweredCommand(rc.Command):
 
     async def _call(self, method, *args, **kwargs):
         try:
-            await ru.asyncify(method, *args, **kwargs)
+            return await ru.asyncify(method, *args, **kwargs)
         except Exception as e:
             raise rc.ExternalError("\n".join(e.args).replace(self.config["Steam"]["web_api_key"], "HIDDEN"))
 
