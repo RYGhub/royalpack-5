@@ -41,7 +41,7 @@ FROM (
               ) c
          GROUP BY ph
 ) all_time
-JOIN
+LEFT JOIN
 (
          SELECT date_part('hour', c.h)   ph,
                 AVG(c.members_connected) members_connected,
@@ -68,7 +68,7 @@ JOIN
               ) c
          GROUP BY ph
 ) last_week ON last_week.ph = all_time.ph
-JOIN
+LEFT JOIN
 (
          SELECT date_part('hour', c.h)   ph,
                 AVG(c.members_connected) members_connected,
@@ -95,7 +95,7 @@ JOIN
               ) c
          GROUP BY ph
 ) last_month ON last_month.ph = all_time.ph
-JOIN
+LEFT JOIN
 (
          SELECT date_part('hour', c.h)   ph,
                 AVG(c.members_connected) members_connected,
