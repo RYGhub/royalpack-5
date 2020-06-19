@@ -29,7 +29,7 @@ class ApiUserGetRygStar(rca.ApiStar):
             raise rca.NotFoundError("No such user.")
         result = {
             **user.json(),
-            "bio": user.bio.json(),
+            "bio": user.bio.json() if user.bio is not None else None,
             "fiorygi": user.fiorygi.fiorygi if user.fiorygi is not None else None,
             "steam": [steam.json() for steam in user.steam],
             "leagueoflegends": [leagueoflegends.json() for leagueoflegends in user.leagueoflegends],
