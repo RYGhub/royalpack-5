@@ -42,5 +42,14 @@ class TriviaScore:
     def score(self) -> float:
         return (self.correct_answers + self.correct_answers * self.correct_rate) * 10
 
+    def json(self):
+        return {
+            "correct": self.correct_answers,
+            "wrong": self.wrong_answers,
+            "total": self.total_answers,
+            "rate": self.correct_rate,
+            "score": self.score
+        }
+
     def __repr__(self):
         return f"<TriviaScore of {self.user}: ({self.correct_answers}|{self.wrong_answers})>"

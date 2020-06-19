@@ -1,7 +1,7 @@
 from sqlalchemy import *
 from sqlalchemy.orm import *
 from sqlalchemy.ext.declarative import declared_attr
-import steam
+import steam.steamid
 from ..types import BrawlhallaRank, BrawlhallaTier, BrawlhallaMetal
 
 
@@ -23,7 +23,7 @@ class Brawlhalla:
 
     @property
     def steamid(self):
-        return steam.SteamID(self._steamid)
+        return steam.steamid.SteamID(self._steamid)
 
     @declared_attr
     def name(self):
@@ -58,31 +58,48 @@ class Brawlhalla:
 
     @property
     def rating_2v2(self):
-        duos = sorted(self.duos, key=lambda d: -d.rating)
+        duos = sorted(self.duos, key=lambda d: -d.rating_2v2)
         if len(duos) == 0:
             return None
         return duos[0].rating_2v2
 
     @property
     def tier_2v2(self):
-        duos = sorted(self.duos, key=lambda d: -d.rating)
+        duos = sorted(self.duos, key=lambda d: -d.rating_2v2)
         if len(duos) == 0:
             return None
         return duos[0].tier_2v2
 
     @property
     def metal_2v2(self):
-        duos = sorted(self.duos, key=lambda d: -d.rating)
+        duos = sorted(self.duos, key=lambda d: -d.rating_2v2)
         if len(duos) == 0:
             return None
         return duos[0].metal_2v2
 
     @property
     def rank_2v2(self):
-        duos = sorted(self.duos, key=lambda d: -d.rating)
+        duos = sorted(self.duos, key=lambda d: -d.rating_2v2)
         if len(duos) == 0:
             return None
         return duos[0].rank_2v2
+
+    def json(self):
+        one_rank = self.rank_1v1
+        two_rank = self.rank_2v2
+        return {
+            "name": self.name,
+            "1v1": {
+                "rating": self.rating_1v1,
+                "metal": one_rank.metal.name,
+                "tier": one_rank.tier.name
+            },
+            "2v2": {
+                "rating": self.rating_2v2,
+                "metal": two_rank.metal.name,
+                "tier": two_rank.tier.name
+            }
+        }
 
     def __repr__(self):
         return f"<Brawlhalla account {self._steamid}>"

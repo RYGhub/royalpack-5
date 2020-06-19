@@ -150,3 +150,16 @@ class LeagueLeague:
             fresh_blood=d["freshBlood"],
             veteran=d["veteran"],
         )
+
+    def json(self):
+        return {
+            "tier": self.tier.name if self.tier is not None else None,
+            "rank": self.rank.name if self.tier is not None else None,
+            "points": self.points,
+            "wins": self.wins,
+            "losses": self.losses,
+            "inactive": self.inactive,
+            "hot_streak": self.hot_streak,
+            "fresh_blood": self.fresh_blood,
+            "veteran": self.veteran,
+        }

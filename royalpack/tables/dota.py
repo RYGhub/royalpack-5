@@ -3,7 +3,7 @@ from sqlalchemy import *
 from sqlalchemy.orm import relationship, backref
 from sqlalchemy.ext.declarative import declared_attr
 from ..types import DotaMedal, DotaStars, DotaRank
-import steam
+import steam.steamid
 
 
 class Dota:
@@ -19,7 +19,7 @@ class Dota:
 
     @property
     def steamid(self):
-        return steam.SteamID(self._steamid)
+        return steam.steamid.SteamID(self._steamid)
 
     @declared_attr
     def _rank_tier(self):
@@ -71,6 +71,19 @@ class Dota:
     @declared_attr
     def losses(self):
         return Column(Integer)
+
+    def json(self):
+        rank = self.rank
+
+        return {
+            "rank": {
+                "raw": self._rank_tier,
+                "medal": rank.medal.name,
+                "rank": rank.stars.name
+            },
+            "wins": self.wins,
+            "losses": self.losses
+        }
 
     def __repr__(self):
         return f"<Dota account {self._steamid}>"

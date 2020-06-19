@@ -249,6 +249,21 @@ class LeagueOfLegends:
     def mastery_score(self):
         return Column(Integer, nullable=False, default=0)
 
+    def json(self):
+        return {
+            "region": self.region,
+            "profile_icon_id": self.profile_icon_id,
+            "summoner_name": self.summoner_name,
+            "puuid": self.puuid,
+            "summoner_level": self.summoner_level,
+            "summoner_id": self.summoner_id,
+            "account_id": self.account_id,
+            "soloq": self.rank_soloq.json() if self.rank_soloq is not None else None,
+            "twtrq": self.rank_twtrq.json() if self.rank_twtrq is not None else None,
+            "flexq": self.rank_flexq.json() if self.rank_flexq is not None else None,
+            "tftq": self.rank_tftq.json() if self.rank_tftq is not None else None,
+        }
+
     def __repr__(self):
         return f"<{self.__class__.__qualname__} {str(self)}>"
 
