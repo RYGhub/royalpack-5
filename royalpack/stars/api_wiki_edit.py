@@ -34,7 +34,7 @@ class ApiWikiEditStar(ApiStar):
         WikiPageT = self.alchemy.get(WikiPage)
 
         user = await data.user()
-        if not (user.role == "Admin" or user.role == "Member" or user.role == "Bot"):
+        if not ("admin" in user.roles or "member" in user.roles or "bot" in user.roles):
             raise ForbiddenError("You do not have sufficient permissions to edit this page.")
 
         if page_id is None:
