@@ -80,7 +80,7 @@ class Dota:
                 "raw": self._rank_tier,
                 "medal": rank.medal.name,
                 "rank": rank.stars.name
-            },
+            } if self._rank_tier is not None else None,
             "wins": self.wins,
             "losses": self.losses
         }

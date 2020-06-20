@@ -43,6 +43,8 @@ class Brawlhalla:
 
     @property
     def rank_1v1(self):
+        if self.metal_1v1 is None:
+            return None
         return BrawlhallaRank(metal=self.metal_1v1, tier=self.tier_1v1)
 
     @rank_1v1.setter
@@ -93,12 +95,12 @@ class Brawlhalla:
                 "rating": self.rating_1v1,
                 "metal": one_rank.metal.name,
                 "tier": one_rank.tier.name
-            },
+            } if one_rank is not None else None,
             "2v2": {
                 "rating": self.rating_2v2,
                 "metal": two_rank.metal.name,
                 "tier": two_rank.tier.name
-            }
+            } if two_rank is not None else None
         }
 
     def __repr__(self):
