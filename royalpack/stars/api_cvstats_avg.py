@@ -7,13 +7,10 @@ from ..tables import Cvstats
 class ApiCvstatsAvgStar(ApiStar):
     path = "/api/cvstats/avg/v1"
 
-    methods = ["GET"]
-
-    summary = "Get some averages on the cvstats."
-
     tags = ["cvstats"]
 
-    async def api(self, data: ApiData) -> ru.JSON:
+    async def get(self, data: ApiData) -> ru.JSON:
+        """Get some averages on the cvstats."""
         results = data.session.execute("""
 SELECT *
 FROM (

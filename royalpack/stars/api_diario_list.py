@@ -4,18 +4,19 @@ from royalnet.utils import *
 from ..tables import *
 
 
-class ApiDiarioListStar(ApiStar):
-    path = "/api/diario/list/v1"
-
-    summary = "Get a list of up to 500 diario entries."
+class ApiDiarioPagesStar(ApiStar):
+    path = "/api/diario/pages/v1"
 
     parameters = {
-        "page": "The diario page you want to get. Can be negative to get the entries in reverse order."
+        "get": {
+            "page": "The diario page you want to get. Can be negative to get the entries in reverse order."
+        }
     }
 
     tags = ["diario"]
 
-    async def api(self, data: ApiData) -> dict:
+    async def get(self, data: ApiData) -> JSON:
+        """Get a diario page made of up to 500 diario entries."""
         page_str = data["page"]
         try:
             page = int(page_str)

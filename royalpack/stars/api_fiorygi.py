@@ -2,23 +2,23 @@ from typing import *
 from royalnet.utils import *
 from royalnet.backpack.tables import *
 from royalnet.constellation.api import *
-from ..utils import find_user_api
-from ..tables import Fiorygi, FiorygiTransaction
+from ..tables import Fiorygi
 
 
-class ApiFiorygiGetStar(ApiStar):
-    path = "/api/user/fiorygi/get/v1"
-
-    summary = "Get the fiorygi of a Royalnet user."
+class ApiFiorygiStar(ApiStar):
+    path = "/api/fiorygi/v2"
 
     parameters = {
-        "id": "The user to get the fiorygi of."
+        "get": {
+            "uid": "The user to get the fiorygi of."
+        }
     }
 
-    tags = ["user"]
+    tags = ["fiorygi"]
 
-    async def api(self, data: ApiData) -> JSON:
-        user: User = await find_user_api(data["id"], self.alchemy, data.session)
+    async def get(self, data: ApiData) -> JSON:
+        """Get fiorygi information about a specific user."""
+        user = await User.find(self.alchemy, data.session, data.int("uid"))
         if user.fiorygi is None:
             return {
                 "fiorygi": 0,

@@ -8,15 +8,16 @@ from sqlalchemy import func
 class ApiDiarioRandomStar(ApiStar):
     path = "/api/diario/random/v1"
 
-    summary = "Get random diario entries."
-
     parameters = {
-        "amount": "The number of diario entries to get."
+        "get": {
+            "amount": "The number of diario entries to get."
+        }
     }
 
     tags = ["diario"]
 
-    async def api(self, data: ApiData) -> JSON:
+    async def get(self, data: ApiData) -> JSON:
+        """Get random diario entries."""
         DiarioT = self.alchemy.get(Diario)
         try:
             amount = int(data["amount"])

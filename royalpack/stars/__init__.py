@@ -1,43 +1,31 @@
 # Imports go here!
-from .api_bio_get import ApiBioGetStar
-from .api_bio_set import ApiBioSetStar
-from .api_diario_get import ApiDiarioGetStar
-from .api_diario_list import ApiDiarioListStar
+from .api_bio import ApiBioSetStar
+from .api_diario import ApiDiarioGetStar
+from .api_diario_list import ApiDiarioPagesStar
 from .api_discord_cv import ApiDiscordCvStar
 from .api_discord_play import ApiDiscordPlayStar
-from .api_wiki_edit import ApiWikiEditStar
-from .api_wiki_get import ApiWikiGetStar
-from .api_wiki_list import ApiWikiListStar
-from .api_fiorygi_get import ApiFiorygiGetStar
+from .api_fiorygi import ApiFiorygiStar
 from .api_diario_random import ApiDiarioRandomStar
-from .api_polls_create import ApiPollsCreate
-from .api_polls_get import ApiPollsGet
-from .api_polls_list import ApiPollsList
+from .api_poll import ApiPollStar
+from .api_poll_list import ApiPollsListStar
 from .api_cvstats_latest import ApiCvstatsLatestStar
 from .api_cvstats_avg import ApiCvstatsAvgStar
-from .api_user_get_ryg import ApiUserGetRygStar
-from .api_user_find_ryg import ApiUserFindRygStar
+from .api_user_ryg import ApiUserRygStar
 
 # Enter the PageStars of your Pack here!
 available_page_stars = [
-    ApiBioGetStar,
     ApiBioSetStar,
     ApiDiarioGetStar,
-    ApiDiarioListStar,
+    ApiDiarioPagesStar,
     ApiDiscordCvStar,
     ApiDiscordPlayStar,
-    ApiWikiEditStar,
-    ApiWikiGetStar,
-    ApiWikiListStar,
-    ApiFiorygiGetStar,
+    ApiFiorygiStar,
     ApiDiarioRandomStar,
-    ApiPollsCreate,
-    ApiPollsGet,
-    ApiPollsList,
+    ApiPollStar,
+    ApiPollsListStar,
     ApiCvstatsLatestStar,
     ApiCvstatsAvgStar,
-    ApiUserGetRygStar,
-    ApiUserFindRygStar,
+    ApiUserRygStar,
 ]
 
 # Don't change this, it should automatically generate __all__

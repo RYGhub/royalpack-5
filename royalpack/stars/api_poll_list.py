@@ -5,16 +5,13 @@ from ..tables import Poll
 import uuid
 
 
-class ApiPollsList(ApiStar):
-    path = "/api/polls/list/v1"
+class ApiPollsListStar(ApiStar):
+    path = "/api/poll/list/v2"
 
-    summary = "Get a list of all polls."
+    tags = ["poll"]
 
-    requires_auth = True
-
-    tags = ["polls"]
-
-    async def api(self, data: ApiData) -> JSON:
+    async def get(self, data: ApiData) -> JSON:
+        """Get a list of all polls."""
         PollT = self.alchemy.get(Poll)
 
         polls: List[Poll] = await asyncify(data.session.query(PollT).all)
