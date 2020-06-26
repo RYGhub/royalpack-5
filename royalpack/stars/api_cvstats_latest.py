@@ -1,15 +1,15 @@
 import royalnet.utils as ru
-from royalnet.backpack.tables import *
-from royalnet.constellation.api import *
+import royalnet.constellation.api as rca
 from ..tables import Cvstats
 
 
-class ApiCvstatsLatestStar(ApiStar):
+class ApiCvstatsLatestStar(rca.ApiStar):
     path = "/api/cvstats/latest/v1"
 
     tags = ["cvstats"]
 
-    async def get(self, data: ApiData) -> ru.JSON:
+    @rca.magic
+    async def get(self, data: rca.ApiData) -> ru.JSON:
         """Get the latest 500 cvstats recorded."""
         CvstatsT = self.alchemy.get(Cvstats)
 

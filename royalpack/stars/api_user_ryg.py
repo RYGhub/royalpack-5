@@ -1,11 +1,8 @@
-import royalnet.constellation.api as rca
-import royalnet.utils as ru
 import royalnet.backpack.tables as rbt
+import royalnet.constellation.api as rca
 
 
 class ApiUserRygStar(rca.ApiStar):
-    methods = ["GET"]
-
     path = "/api/user/ryg/v2"
 
     parameters = {
@@ -33,6 +30,7 @@ class ApiUserRygStar(rca.ApiStar):
 
         return user
 
+    @rca.magic
     async def get(self, data: rca.ApiData) -> dict:
         """Get Royalpack information about a user."""
         user = await self.get_user(data)

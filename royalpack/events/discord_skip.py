@@ -19,7 +19,7 @@ class DiscordSkipEvent(rc.Event):
             if guild_id is None:
                 # TODO: trovare un modo per riprodurre canzoni su più server da Telegram
                 raise rc.InvalidInputError("Non so in che Server riprodurre questo file...\n"
-                                        "Invia il comando su Discord, per favore!")
+                                           "Invia il comando su Discord, per favore!")
             guild: discord.Guild = client.get_guild(guild_id)
             if guild is None:
                 raise rc.InvalidInputError("Impossibile trovare il Server specificato.")

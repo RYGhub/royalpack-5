@@ -1,15 +1,13 @@
 from typing import *
-from royalnet.constellation.api import *
+import royalnet.constellation.api as rca
 import logging
 
 
 log = logging.getLogger(__name__)
 
 
-class ApiDiscordPlayStar(ApiStar):
+class ApiDiscordPlayStar(rca.ApiStar):
     path = "/api/discord/play/v2"
-
-    methods = ["POST"]
 
     parameters = {
         "post": {
@@ -21,7 +19,8 @@ class ApiDiscordPlayStar(ApiStar):
 
     tags = ["discord"]
 
-    async def post(self, data: ApiData) -> dict:
+    @rca.magic
+    async def post(self, data: rca.ApiData) -> dict:
         """Add a audio file to the RoyalQueue of a Discord Guild."""
         url = data["url"]
         user = data.get("user")
@@ -30,7 +29,7 @@ class ApiDiscordPlayStar(ApiStar):
             try:
                 guild_id: Optional[int] = int(guild_id_str)
             except (ValueError, TypeError):
-                raise InvalidParameterError("'guild_id' is not a valid int.")
+                raise rca.InvalidParameterError("'guild_id' is not a valid int.")
         else:
             guild_id = None
         log.info(f"Received request to play {url} on guild_id {guild_id} via web")

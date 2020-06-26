@@ -1,15 +1,14 @@
+import royalnet.constellation.api as rca
 import royalnet.utils as ru
-from royalnet.backpack.tables import *
-from royalnet.constellation.api import *
-from ..tables import Cvstats
 
 
-class ApiCvstatsAvgStar(ApiStar):
+class ApiCvstatsAvgStar(rca.ApiStar):
     path = "/api/cvstats/avg/v1"
 
     tags = ["cvstats"]
 
-    async def get(self, data: ApiData) -> ru.JSON:
+    @rca.magic
+    async def get(self, data: rca.ApiData) -> ru.JSON:
         """Get some averages on the cvstats."""
         results = data.session.execute("""
 SELECT *

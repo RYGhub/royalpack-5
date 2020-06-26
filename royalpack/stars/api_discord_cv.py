@@ -1,13 +1,14 @@
 import royalnet.utils as ru
-from royalnet.constellation.api import *
+import royalnet.constellation.api as rca
 
 
-class ApiDiscordCvStar(ApiStar):
+class ApiDiscordCvStar(rca.ApiStar):
     path = "/api/discord/cv/v1"
 
     tags = ["discord"]
 
-    async def get(self, data: ApiData) -> ru.JSON:
+    @rca.magic
+    async def get(self, data: rca.ApiData) -> ru.JSON:
         """Get the members status of a single Discord guild.
 
         Equivalent to calling /cv in a chat."""

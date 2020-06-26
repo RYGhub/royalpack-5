@@ -1,9 +1,9 @@
-from royalnet.constellation.api import *
-from royalnet.utils import *
+import royalnet.constellation.api as rca
+import royalnet.utils as ru
 from ..tables import *
 
 
-class ApiDiarioGetStar(ApiStar):
+class ApiDiarioGetStar(rca.ApiStar):
     path = "/api/diario/v2"
 
     parameters = {
@@ -14,10 +14,11 @@ class ApiDiarioGetStar(ApiStar):
 
     tags = ["diario"]
 
-    async def get(self, data: ApiData) -> JSON:
+    @rca.magic
+    async def get(self, data: rca.ApiData) -> ru.JSON:
         """Get a specific diario entry."""
         diario_id = data.int("id")
-        entry: Diario = await asyncify(data.session.query(self.alchemy.get(Diario)).get, diario_id)
+        entry: Diario = await ru.asyncify(data.session.query(self.alchemy.get(Diario)).get, diario_id)
         if entry is None:
-            raise NotFoundError("No such diario entry.")
+            raise rca.NotFoundError("No such diario entry.")
         return entry.json()

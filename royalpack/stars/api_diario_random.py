@@ -1,11 +1,11 @@
 from typing import *
-from royalnet.constellation.api import *
-from royalnet.utils import *
+import royalnet.constellation.api as rca
+import royalnet.utils as ru
 from ..tables import *
 from sqlalchemy import func
 
 
-class ApiDiarioRandomStar(ApiStar):
+class ApiDiarioRandomStar(rca.ApiStar):
     path = "/api/diario/random/v1"
 
     parameters = {
@@ -16,14 +16,15 @@ class ApiDiarioRandomStar(ApiStar):
 
     tags = ["diario"]
 
-    async def get(self, data: ApiData) -> JSON:
+    @rca.magic
+    async def get(self, data: rca.ApiData) -> ru.JSON:
         """Get random diario entries."""
         DiarioT = self.alchemy.get(Diario)
         try:
             amount = int(data["amount"])
         except ValueError:
-            raise InvalidParameterError("'amount' is not a valid int.")
-        entries: List[Diario] = await asyncify(
+            raise rca.InvalidParameterError("'amount' is not a valid int.")
+        entries: List[Diario] = await ru.asyncify(
             data.session
                 .query(DiarioT)
                 .order_by(func.random())
@@ -31,5 +32,5 @@ class ApiDiarioRandomStar(ApiStar):
                 .all
         )
         if len(entries) < amount:
-            raise NotFoundError("Not enough diario entries.")
+            raise rca.NotFoundError("Not enough diario entries.")
         return list(map(lambda e: e.json(), entries))

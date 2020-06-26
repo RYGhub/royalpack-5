@@ -1,11 +1,11 @@
 from typing import *
-from royalnet.utils import *
-from royalnet.backpack.tables import *
-from royalnet.constellation.api import *
+import royalnet.utils as ru
+import royalnet.backpack.tables as rbt
+import royalnet.constellation.api as rca
 from ..tables import Fiorygi
 
 
-class ApiFiorygiStar(ApiStar):
+class ApiFiorygiStar(rca.ApiStar):
     path = "/api/fiorygi/v2"
 
     parameters = {
@@ -16,9 +16,10 @@ class ApiFiorygiStar(ApiStar):
 
     tags = ["fiorygi"]
 
-    async def get(self, data: ApiData) -> JSON:
+    @rca.magic
+    async def get(self, data: rca.ApiData) -> ru.JSON:
         """Get fiorygi information about a specific user."""
-        user = await User.find(self.alchemy, data.session, data.int("uid"))
+        user = await rbt.User.find(self.alchemy, data.session, data.int("uid"))
         if user.fiorygi is None:
             return {
                 "fiorygi": 0,
@@ -26,7 +27,7 @@ class ApiFiorygiStar(ApiStar):
                 "warning": "No associated fiorygi table"
             }
         fiorygi: Fiorygi = user.fiorygi
-        transactions: JSON = sorted(fiorygi.transactions, key=lambda t: -t.id)
+        transactions: ru.JSON = sorted(fiorygi.transactions, key=lambda t: -t.id)
         return {
             "fiorygi": fiorygi.fiorygi,
             "transactions": list(map(lambda t: {

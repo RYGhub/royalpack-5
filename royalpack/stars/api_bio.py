@@ -1,13 +1,11 @@
 import royalnet.utils as ru
-from royalnet.backpack.tables import *
-from royalnet.constellation.api import *
+import royalnet.backpack.tables as rbt
+import royalnet.constellation.api as rca
 from ..tables import Bio
 
 
-class ApiBioSetStar(ApiStar):
+class ApiBioSetStar(rca.ApiStar):
     path = "/api/bio/v2"
-
-    methods = ["GET", "PUT"]
 
     parameters = {
         "get": {
@@ -25,12 +23,14 @@ class ApiBioSetStar(ApiStar):
 
     tags = ["bio"]
 
-    async def get(self, data: ApiData) -> ru.JSON:
+    @rca.magic
+    async def get(self, data: rca.ApiData) -> ru.JSON:
         """Get the bio of a specific user."""
-        user = await User.find(self.alchemy, data.session, data.int("uid"))
+        user = await rbt.User.find(self.alchemy, data.session, data.int("uid"))
         return user.bio.json() if user.bio else None
 
-    async def put(self, data: ApiData) -> ru.JSON:
+    @rca.magic
+    async def put(self, data: rca.ApiData) -> ru.JSON:
         """Set the bio of current user."""
         contents = data["contents"]
         BioT = self.alchemy.get(Bio)

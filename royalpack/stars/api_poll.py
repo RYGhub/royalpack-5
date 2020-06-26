@@ -1,12 +1,12 @@
 from typing import *
 import datetime
 import uuid
-from royalnet.utils import *
-from royalnet.constellation.api import *
+import royalnet.utils as ru
+import royalnet.constellation.api as rca
 from ..tables import Poll
 
 
-class ApiPollStar(ApiStar):
+class ApiPollStar(rca.ApiStar):
     path = "/api/poll/v2"
 
     parameters = {
@@ -25,26 +25,26 @@ class ApiPollStar(ApiStar):
         "post": True
     }
 
-    methods = ["GET", "POST"]
-
     tags = ["poll"]
 
-    async def get(self, data: ApiData) -> JSON:
+    @rca.magic
+    async def get(self, data: rca.ApiData) -> ru.JSON:
         """Get a specific poll."""
         PollT = self.alchemy.get(Poll)
 
         try:
             pid = uuid.UUID(data["uuid"])
         except (ValueError, AttributeError, TypeError):
-            raise InvalidParameterError("'uuid' is not a valid UUID.")
+            raise rca.InvalidParameterError("'uuid' is not a valid UUID.")
 
-        poll: Poll = await asyncify(data.session.query(PollT).get, pid)
+        poll: Poll = await ru.asyncify(data.session.query(PollT).get, pid)
         if poll is None:
-            raise NotFoundError("No such page.")
+            raise rca.NotFoundError("No such page.")
 
         return poll.json()
 
-    async def post(self, data: ApiData) -> JSON:
+    @rca.magic
+    async def post(self, data: rca.ApiData) -> ru.JSON:
         """Create a new poll."""
         PollT = self.alchemy.get(Poll)
 

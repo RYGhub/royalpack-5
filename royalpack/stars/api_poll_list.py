@@ -1,20 +1,20 @@
 from typing import *
-from royalnet.utils import *
-from royalnet.constellation.api import *
+import royalnet.constellation.api as rca
+import royalnet.utils as ru
 from ..tables import Poll
-import uuid
 
 
-class ApiPollsListStar(ApiStar):
+class ApiPollsListStar(rca.ApiStar):
     path = "/api/poll/list/v2"
 
     tags = ["poll"]
 
-    async def get(self, data: ApiData) -> JSON:
+    @rca.magic
+    async def get(self, data: rca.ApiData) -> ru.JSON:
         """Get a list of all polls."""
         PollT = self.alchemy.get(Poll)
 
-        polls: List[Poll] = await asyncify(data.session.query(PollT).all)
+        polls: List[Poll] = await ru.asyncify(data.session.query(PollT).all)
 
         return list(map(lambda p: {
             "id": p.id,
