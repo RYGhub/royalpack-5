@@ -95,7 +95,7 @@ class EatCommand(Command):
         "gelato di steffo": "🍨 Hai provato a rubare il {food}...\n[i]...Ma sei arrivato tardi: l'ha già mangiato.[/i]",
         "biscotto": "🍪 Hai mangiato un {food} di contrabbando.\n[i]L'Inquisizione non lo saprà mai![/i]",
         "biscotti": "🍪 Hai mangiato tanti {food} di contrabbando.\n[i]Attento! L'Inquisizione è sulle tue tracce![/i]",
-        "crocchette di pollo": "🍗 Hai mangiato {food]!\n[i]Dio porco maledetto, infame, CAPRA, porca Madonna, Dio cane, "
+        "crocchette di pollo": "🍗 Hai mangiato {food}!\n[i]Dio porco maledetto, infame, CAPRA, porca Madonna, Dio cane, "
                                "HAI PERSO. UN POMERIGGIO PER C- ooh se è questo dio cane, altro che sfondamento dei cieli "
                                "*roba non capibile*, sfondi tutti dio can li distruggi, non ci rimane più niente.[/i]",
 
