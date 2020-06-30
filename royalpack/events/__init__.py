@@ -8,6 +8,7 @@ from .discord_pause import DiscordPauseEvent
 from .discord_playable import DiscordPlaymodeEvent
 from .discord_lazy_play import DiscordLazyPlayEvent
 from .telegram_message import TelegramMessageEvent
+from .pong import PongEvent
 
 # Enter the commands of your Pack here!
 available_events = [
@@ -20,6 +21,7 @@ available_events = [
     DiscordPlaymodeEvent,
     DiscordLazyPlayEvent,
     TelegramMessageEvent,
+    PongEvent,
 ]
 
 # Don't change this, it should automatically generate __all__
