@@ -11,45 +11,26 @@ class PingCommand(rc.Command):
 
     syntax: str = ""
 
+    _targets = ["telegram", "discord", "matrix", "constellation"]
+
     async def run(self, args: rc.CommandArgs, data: rc.CommandData) -> None:
         await data.reply("📶 Ping...")
 
-        telegram_c = self.interface.call_herald_event("telegram", "pong")
-        discord_c = self.interface.call_herald_event("discord", "pong")
-        constellation_c = self.interface.call_herald_event("constellation", "pong")
+        tasks = {}
 
-        telegram_t = self.loop.create_task(telegram_c)
-        discord_t = self.loop.create_task(discord_c)
-        constellation_t = self.loop.create_task(constellation_c)
+        for target in self._targets:
+            tasks[target] = self.loop.create_task(self.interface.call_herald_event(target, "pong"))
 
         await asyncio.sleep(10)
 
-        try:
-            telegram_r = telegram_t.result()
-        except (asyncio.CancelledError, asyncio.InvalidStateError):
-            telegram_r = None
-        try:
-            discord_r = discord_t.result()
-        except (asyncio.CancelledError, asyncio.InvalidStateError):
-            discord_r = None
-        try:
-            constellation_r = constellation_t.result()
-        except (asyncio.CancelledError, asyncio.InvalidStateError):
-            constellation_r = None
-
         lines = ["📶 [b]Pong![/b]", ""]
 
-        if telegram_r:
-            lines.append("🔵 Telegram")
-        else:
-            lines.append("🔴 Telegram")
-        if discord_r:
-            lines.append("🔵 Discord")
-        else:
-            lines.append("🔴 Discord")
-        if constellation_r:
-            lines.append("🔵 Constellation")
-        else:
-            lines.append("🔴 Constellation")
+        for name, task in tasks.items():
+            try:
+                print(task.result())
+            except (asyncio.CancelledError, asyncio.InvalidStateError):
+                lines.append(f"🔴 [c]{name}[/c]")
+            else:
+                lines.append(f"🔵 [c]{name}[/c]")
 
         await data.reply("\n".join(lines))
