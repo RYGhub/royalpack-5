@@ -1,3 +1,4 @@
+import datetime
 import asyncio
 from typing import *
 import royalnet
@@ -18,6 +19,7 @@ class PingCommand(rc.Command):
 
         tasks = {}
 
+        start = datetime.datetime.now()
         for target in self._targets:
             tasks[target] = self.loop.create_task(self.interface.call_herald_event(target, "pong"))
 
@@ -27,10 +29,13 @@ class PingCommand(rc.Command):
 
         for name, task in tasks.items():
             try:
-                print(task.result())
+                d = task.result()
             except (asyncio.CancelledError, asyncio.InvalidStateError):
                 lines.append(f"🔴 [c]{name}[/c]")
             else:
-                lines.append(f"🔵 [c]{name}[/c]")
+                end = datetime.datetime.fromtimestamp(d["timestamp"])
+                delta = end - start
+
+                lines.append(f"🔵 [c]{name}[/c] ({delta.microseconds // 1000} ms)")
 
         await data.reply("\n".join(lines))
