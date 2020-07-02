@@ -55,7 +55,12 @@ class MMTask:
     def is_running(self):
         return self.task is not None
 
+    def sync(self):
+        self._session.refresh(self._mmevent)
+
     def get_response_line(self, response: MMResponse):
+        self.sync()
+
         # noinspection PyListCreation
         line = []
 
@@ -90,6 +95,8 @@ class MMTask:
 
     @property
     def channel_text(self) -> str:
+        self.sync()
+
         # noinspection PyListCreation
         text = []
 
@@ -116,6 +123,8 @@ class MMTask:
 
     @property
     def start_text(self) -> str:
+        self.sync()
+
         # noinspection PyListCreation
         text = []
 
@@ -373,6 +382,7 @@ class MMTask:
         self.unregister_telegram_keyboard(inkm)
 
     async def telegram_channel_message_update(self):
+        log.debug(f"Updating message for: {self.mmid}")
         try:
             await asyncify(
                 self.command.interface.serf.client.edit_message_text,
