@@ -374,7 +374,7 @@ class MMTask:
 
     async def telegram_channel_message_update(self):
         try:
-            await self.command.interface.serf.api_call(
+            await asyncify(
                 self.command.interface.serf.client.edit_message_text,
                 chat_id=self._mmevent.interface_data.chat_id,
                 text=telegram_escape(self.channel_text),
