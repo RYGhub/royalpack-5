@@ -5,7 +5,7 @@ from ..version import semantic
 
 
 class RoyalpackCommand(rc.Command):
-    name: str = "royalpack"
+    name: str = "royalpackversion"
 
     description: str = "Visualizza la versione attuale di Royalpack."
 

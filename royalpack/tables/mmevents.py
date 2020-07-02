@@ -21,7 +21,7 @@ class MMEvent:
 
     @declared_attr
     def datetime(self):
-        return Column(DateTime, nullable=False)
+        return Column(DateTime)
 
     @declared_attr
     def title(self):

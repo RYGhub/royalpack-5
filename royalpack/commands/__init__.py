@@ -53,7 +53,7 @@ from .lazyfunkwhalealbum import LazyfunkwhalealbumCommand
 from .matchmaking import MatchmakingCommand
 from .cvstats import CvstatsCommand
 from .elevatormusic import ElevatormusicCommand
-from .royalpack import RoyalpackCommand
+from .royalpackversion import RoyalpackCommand
 from .givefiorygi import GivefiorygiCommand
 from .help import HelpCommand
 from .pug import PugCommand

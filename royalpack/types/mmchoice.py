@@ -6,5 +6,5 @@ class MMChoice(enum.Enum):
     LATE_SHORT = "🕐"
     LATE_MEDIUM = "🕒"
     LATE_LONG = "🕗"
-    MAYBE = "❓"
+    MAYBE = "❔"
     NO = "❌"
