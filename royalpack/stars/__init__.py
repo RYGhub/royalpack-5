@@ -12,6 +12,7 @@ from .api_cvstats_latest import ApiCvstatsLatestStar
 from .api_cvstats_avg import ApiCvstatsAvgStar
 from .api_user_ryg import ApiUserRygStar
 from .api_user_ryg_list import ApiUserRygListStar
+from .api_user_avatar import ApiUserAvatarStar
 
 # Enter the PageStars of your Pack here!
 available_page_stars = [
@@ -28,6 +29,7 @@ available_page_stars = [
     ApiCvstatsAvgStar,
     ApiUserRygStar,
     ApiUserRygListStar,
+    ApiUserAvatarStar,
 ]
 
 # Don't change this, it should automatically generate __all__
