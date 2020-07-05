@@ -442,7 +442,7 @@ class MMTask:
 
             # Mark the event as interrupted
             self._mmevent.interrupted = True
-            await self._session.commit()
+            self._session.commit()
 
         # Send a group notification if the MMEvent wasn't deleted
         if interrupt != Interrupts.MANUAL_DELETE:
