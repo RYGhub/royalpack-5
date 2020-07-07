@@ -45,7 +45,10 @@ class Steam:
 
     def json(self):
         return {
-            "steamid": self._steamid,
+            "steamid2": self.steamid.as_steam2,
+            "steamid3": self.steamid.as_steam3,
+            "steamid32": self.steamid.as_32,
+            "steamid64": self.steamid.as_64,
             "persona_name": self.persona_name,
             "profile_url": self.profile_url,
             "avatar": self.avatar,
