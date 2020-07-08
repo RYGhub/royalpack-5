@@ -24,9 +24,10 @@ class LeagueoflegendsCommand(rc.Command):
 
     def __init__(self, interface: rc.CommandInterface):
         super().__init__(interface)
-        self._riotwatcher = riotwatcher.RiotWatcher(api_key=self.config["Lol"]["token"])
-        if self.interface.name == "telegram" and self.config["Lol"]["updater"]:
-            self.loop.create_task(self._updater(7200))
+        self._riotwatcher: Optional[riotwatcher.RiotWatcher] = None
+        if self.interface.name == "telegram" and self.config["Lol"]["updater"]["enabled"]:
+            self._riotwatcher = riotwatcher.RiotWatcher(api_key=self.config["Lol"]["token"])
+            self.loop.create_task(self._updater(int(self.config["Lol"]["updater"]["delay"])))
 
     async def _send(self, message):
         client = self.serf.client

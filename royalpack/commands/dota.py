@@ -24,8 +24,8 @@ class DotaCommand(rc.Command):
 
     def __init__(self, interface: rc.CommandInterface):
         super().__init__(interface)
-        if self.interface.name == "telegram" and self.config["Dota"]["updater"]:
-            self.loop.create_task(self._updater(7200))
+        if self.interface.name == "telegram" and self.config["Dota"]["updater"]["enabled"]:
+            self.loop.create_task(self._updater(int(self.config["Dota"]["updater"]["delay"])))
 
     async def _send(self, message):
         client = self.serf.client

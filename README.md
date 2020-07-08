@@ -18,10 +18,16 @@ Imgur.token = "1234567890abcde"
 Steam.web_api_key = "123567890ABCDEF123567890ABCDEF12"
 
 # Should Royalnet automatically update the Dota ranks of all users?
-Dota.updater = false
+Dota.updater.enabled = false
+
+# How many seconds should there be between two Dota updates?
+Dota.updater.delay = 86400
 
 # Should Royalnet automatically update the League of Legends ranks of all users?
-Lol.updater = false
+Lol.updater.enabled = false
+
+# How many seconds should there be between two League of Legends updates?
+Lol.updater.delay = 86400
 
 # A League of Legends API token (https://developer.riotgames.com/)
 Lol.token = "RGAPI-aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa"
@@ -30,7 +36,10 @@ Lol.token = "RGAPI-aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa"
 Lol.region = "euw1"
 
 # Should Royalnet automatically update the Brawlhalla ranks of all users?
-Brawlhalla.updater = false
+Brawlhalla.updater.enabled = false
+
+# How many seconds should there be between two League of Legends updates?
+Brawlhalla.updater.delay = 86400
 
 # A Brawlhalla API key (https://dev.brawlhalla.com/)
 Brawlhalla.api_key = "AAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
