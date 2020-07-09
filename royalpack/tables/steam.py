@@ -43,6 +43,22 @@ class Steam:
     def account_creation_date(self):
         return Column(DateTime)
 
+    @declared_attr
+    def account_level(self):
+        return Column(Integer, nullable=False, default=0)
+
+    @declared_attr
+    def owned_games_count(self):
+        return Column(Integer, nullable=False, default=0)
+
+    @declared_attr
+    def most_played_game_2weeks(self):
+        return Column(Integer, nullable=False, default=753)
+
+    @declared_attr
+    def most_played_game_forever(self):
+        return Column(Integer, nullable=False, default=753)
+
     def json(self):
         return {
             "steamid2": self.steamid.as_steam2,

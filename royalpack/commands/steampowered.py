@@ -23,8 +23,12 @@ class SteampoweredCommand(rc.Command):
 
     @staticmethod
     def _display(account: Steam):
-        string = f"ℹ️ [b]{account.persona_name}[/b]\n" \
-                 f"{account.profile_url}\n" \
+        string = f"ℹ️ [url={account.profile_url}]{account.persona_name}[/url]\n" \
+                 f"[b]Level {account.account_level}[/b]\n" \
+                 f"\n" \
+                 f"Owned games: [b]{account.owned_games_count}[/b]\n" \
+                 f"Most played 2 weeks: [url=https://store.steampowered.com/app/{account.most_played_game_2weeks}]{account.most_played_game_2weeks}[/url]\n" \
+                 f"Most played forever: [url=https://store.steampowered.com/app/{account.most_played_game_forever}]{account.most_played_game_forever}[/url]\n" \
                  f"\n" \
                  f"SteamID: [c]{account.steamid.as_32}[/c]\n" \
                  f"SteamID2: [c]{account.steamid.as_steam2}[/c]\n" \
@@ -49,6 +53,22 @@ class SteampoweredCommand(rc.Command):
         account.avatar = r["avatar"]
         account.primary_clan_id = r["primaryclanid"]
         account.account_creation_date = datetime.datetime.fromtimestamp(r["timecreated"])
+
+        # noinspection PyProtectedMember
+        response = await self._call(self._api.IPlayerService.GetSteamLevel_v1, steamid=account._steamid)
+        account.account_level = response["response"]["player_level"]
+
+        # noinspection PyProtectedMember
+        response = await self._call(self._api.IPlayerService.GetOwnedGames_v1,
+                                    steamid=account._steamid,
+                                    include_appinfo=False,
+                                    include_played_free_games=True,
+                                    include_free_sub=False,
+                                    appids_filter=None)
+        account.owned_games_count = response["response"]["game_count"]
+        if response["response"]["game_count"] >= 0:
+            account.most_played_game_2weeks = sorted(response["response"]["games"], key=lambda g: -g.get("playtime_2weeks", 0))[0]["appid"]
+            account.most_played_game_forever = sorted(response["response"]["games"], key=lambda g: -g.get("playtime_forever", 0))[0]["appid"]
 
     async def run(self, args: rc.CommandArgs, data: rc.CommandData) -> None:
         author = await data.get_author()
