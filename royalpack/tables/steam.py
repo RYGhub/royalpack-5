@@ -70,6 +70,10 @@ class Steam:
             "avatar": self.avatar,
             "primary_clan_id": self.primary_clan_id,
             "account_creation_date": self.account_creation_date.isoformat(),
+            "account_level": self.account_level,
+            "owned_games_count": self.owned_games_count,
+            "most_played_game_2weeks": self.most_played_game_2weeks,
+            "most_played_game_forever": self.most_played_game_forever,
 
             "dota": self.dota.json() if self.dota is not None else None,
             "brawlhalla": self.brawlhalla.json() if self.brawlhalla is not None else None
