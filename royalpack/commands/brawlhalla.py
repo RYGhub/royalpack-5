@@ -26,7 +26,7 @@ class BrawlhallaCommand(LinkerCommand):
     syntax: str = ""
 
     def token(self):
-        return self.config['Brawlhalla']['token']
+        return self.config['brawlhalla']['token']
 
     async def get_updatables_of_user(self, session, user: rbt.User) -> List[Brawlhalla]:
         return user.steam
