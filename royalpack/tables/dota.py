@@ -2,11 +2,11 @@ from typing import *
 from sqlalchemy import *
 from sqlalchemy.orm import relationship, backref
 from sqlalchemy.ext.declarative import declared_attr
-from ..types import DotaMedal, DotaStars, DotaRank
+from ..types import DotaMedal, DotaStars, DotaRank, Updatable
 import steam.steamid
 
 
-class Dota:
+class Dota(Updatable):
     __tablename__ = "dota"
 
     @declared_attr

@@ -2,11 +2,11 @@ from sqlalchemy import *
 from sqlalchemy.orm import *
 from sqlalchemy.ext.declarative import declared_attr
 import steam.steamid
-from ..types import BrawlhallaRank, BrawlhallaTier, BrawlhallaMetal
+from ..types import BrawlhallaRank, BrawlhallaTier, BrawlhallaMetal, Updatable
 
 
 # noinspection PyAttributeOutsideInit
-class Brawlhalla:
+class Brawlhalla(Updatable):
     __tablename__ = "brawlhalla"
 
     @declared_attr

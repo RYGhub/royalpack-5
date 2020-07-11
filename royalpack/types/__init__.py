@@ -10,6 +10,7 @@ from .brawlhallatier import BrawlhallaTier
 from .brawlhallametal import BrawlhallaMetal
 from .brawlhallarank import BrawlhallaRank
 from .pollmood import PollMood
+from .updatable import Updatable
 
 
 __all__ = [
@@ -26,4 +27,5 @@ __all__ = [
     "BrawlhallaRank",
     "BrawlhallaTier",
     "PollMood",
+    "Updatable",
 ]

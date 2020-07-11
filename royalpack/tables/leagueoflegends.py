@@ -1,10 +1,10 @@
 from sqlalchemy import *
 from sqlalchemy.orm import relationship, composite
 from sqlalchemy.ext.declarative import declared_attr
-from ..types import LeagueRank, LeagueTier, LeagueLeague
+from ..types import LeagueRank, LeagueTier, LeagueLeague, Updatable
 
 
-class LeagueOfLegends:
+class LeagueOfLegends(Updatable):
     __tablename__ = "leagueoflegends"
 
     @declared_attr
