@@ -25,6 +25,9 @@ class BrawlhallaCommand(LinkerCommand):
 
     syntax: str = ""
 
+    def token(self):
+        return self.config['Brawlhalla']['token']
+
     async def get_updatables_of_user(self, session, user: rbt.User) -> List[Brawlhalla]:
         return user.steam
 
@@ -42,7 +45,7 @@ class BrawlhallaCommand(LinkerCommand):
             bh: Brawlhalla = obj.brawlhalla
             if bh is None:
                 log.debug(f"Checking if player has an account...")
-                async with hcs.get(f"https://api.brawlhalla.com/search?steamid={obj.steamid.as_64}&api_key={self.config['Brawlhalla']['api_key']}") as response:
+                async with hcs.get(f"https://api.brawlhalla.com/search?steamid={obj.steamid.as_64}&api_key={self.token()}") as response:
                     if response.status != 200:
                         raise ExternalError(f"Brawlhalla API /search returned {response.status}!")
                     j = await response.json()
@@ -57,7 +60,7 @@ class BrawlhallaCommand(LinkerCommand):
                     session.add(bh)
                     session.flush()
 
-            async with hcs.get(f"https://api.brawlhalla.com/player/{bh.brawlhalla_id}/ranked?api_key={self.config['Brawlhalla']['api_key']}") as response:
+            async with hcs.get(f"https://api.brawlhalla.com/player/{bh.brawlhalla_id}/ranked?api_key={self.token()}") as response:
                 if response.status != 200:
                     raise ExternalError(f"Brawlhalla API /ranked returned {response.status}!")
                 j = await response.json()

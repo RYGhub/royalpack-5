@@ -17,33 +17,6 @@ Imgur.token = "1234567890abcde"
 # A Steam Web API key (https://steamcommunity.com/dev/apikey)
 Steam.web_api_key = "123567890ABCDEF123567890ABCDEF12"
 
-# Should Royalnet automatically update the Dota ranks of all users?
-Dota.updater.enabled = false
-
-# How many seconds should there be between two Dota updates?
-Dota.updater.delay = 86400
-
-# Should Royalnet automatically update the League of Legends ranks of all users?
-Lol.updater.enabled = false
-
-# How many seconds should there be between two League of Legends updates?
-Lol.updater.delay = 86400
-
-# A League of Legends API token (https://developer.riotgames.com/)
-Lol.token = "RGAPI-aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa"
-
-# The region where your players are located
-Lol.region = "euw1"
-
-# Should Royalnet automatically update the Brawlhalla ranks of all users?
-Brawlhalla.updater.enabled = false
-
-# How many seconds should there be between two League of Legends updates?
-Brawlhalla.updater.delay = 86400
-
-# A Brawlhalla API key (https://dev.brawlhalla.com/)
-Brawlhalla.api_key = "AAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
-
 # The Peertube instance you want to use for new video notifications
 Peertube.instance_url = "https://pt.steffo.eu"
 
@@ -61,5 +34,30 @@ Play.max_song_duration = 7230
 
 # The Telegram channel where matchmaking messages should be sent in
 Matchmaking.mm_chat_id = -1001204402796
+
+[Packs."royalpack"."dota".updater]
+enabled = true
+period = 86400
+delay = 1
+target = -1001153723135
+
+[Packs."royalpack"."brawlhalla"]
+token = "1234567890ABCDEFGHJKLMNOPQRST"
+
+[Packs."royalpack"."brawlhalla".updater]
+enabled = true
+period = 86400
+delay = 1
+target = -1001153723135
+
+[Packs."royalpack"."leagueoflegends"]
+token = "RGAPI-AAAAAAAA-AAAA-AAAA-AAAA-AAAAAAAAAAAA"
+region = "euw1"
+
+[Packs."royalpack"."leagueoflegends".updater]
+enabled = true
+period = 86400
+delay = 1
+target = -1001153723135
 
 ```
