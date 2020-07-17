@@ -155,7 +155,7 @@ class BrawlhallaCommand(LinkerCommand):
         if len(bh.duos) != 0:
             string.append(f"👥 [b]2v2[/b]")
 
-        for duo in bh.duos:
+        for duo in sorted(bh.duos, key=lambda d: -d.rating_2v2):
             other = duo.other(bh)
             string.append(f"Con [b]{other.steam.user}[/b]: [b]{duo.rank_2v2}[/b] ({duo.rating_2v2} MMR)")
 
