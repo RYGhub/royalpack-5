@@ -43,7 +43,7 @@ from .ping import PingCommand
 from .play import PlayCommand
 from .playmode import PlaymodeCommand
 from .pmots import PmotsCommand
-from .pug import PugCommand
+from .dog import DogCommand
 from .queue import QueueCommand
 from .rage import RageCommand
 from .reminder import ReminderCommand
@@ -110,7 +110,7 @@ available_commands = [
     PlayCommand,
     PlaymodeCommand,
     PmotsCommand,
-    PugCommand,
+    DogCommand,
     QueueCommand,
     RageCommand,
     ReminderCommand,
