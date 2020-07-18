@@ -27,15 +27,15 @@ class LeagueoflegendsCommand(LinkerCommand):
     queue_names = {
         "rank_soloq": "Solo/Duo",
         "rank_flexq": "Flex",
-        "rank_twtrq": "3v3",
-        "rank_tftq": "TFT"
     }
 
     def __init__(self, interface: rc.CommandInterface):
         super().__init__(interface)
-        self._riotwatcher: Optional[riotwatcher.RiotWatcher] = None
-        if self.interface.name == "telegram" and self.enabled():
-            self._riotwatcher = riotwatcher.RiotWatcher(api_key=self.token())
+        self._lolwatcher: Optional[riotwatcher.RiotWatcher] = None
+        self._tftwatcher: Optional[riotwatcher.RiotWatcher] = None
+        if self.enabled():
+            self._lolwatcher = riotwatcher.LolWatcher(api_key=self.token())
+            self._tftwatcher = riotwatcher.TftWatcher(api_key=self.token())
 
     def token(self):
         return self.config["leagueoflegends"]["token"]
@@ -52,10 +52,6 @@ class LeagueoflegendsCommand(LinkerCommand):
             string += f"Solo: {obj.rank_soloq}\n"
         if obj.rank_flexq:
             string += f"Flex: {obj.rank_flexq}\n"
-        if obj.rank_twtrq:
-            string += f"3v3: {obj.rank_twtrq}\n"
-        if obj.rank_tftq:
-            string += f"TFT: {obj.rank_tftq}\n"
         return string
 
     async def get_updatables_of_user(self, session, user: rbt.User) -> List[LeagueOfLegends]:
@@ -69,7 +65,7 @@ class LeagueoflegendsCommand(LinkerCommand):
 
         # Connect a new League of Legends account to Royalnet
         log.debug(f"Searching for: {name}")
-        summoner = self._riotwatcher.summoner.by_name(region=self.region(), summoner_name=name)
+        summoner = self._lolwatcher.summoner.by_name(region=self.region(), summoner_name=name)
         # Ensure the account isn't already connected to something else
         leagueoflegends = await ru.asyncify(
             session.query(self.alchemy.get(LeagueOfLegends)).filter_by(summoner_id=summoner["id"]).one_or_none)
@@ -77,8 +73,8 @@ class LeagueoflegendsCommand(LinkerCommand):
             raise rc.CommandError(f"L'account {leagueoflegends} è già registrato su Royalnet.")
         # Get rank information
         log.debug(f"Getting leagues data: {name}")
-        leagues = self._riotwatcher.league.by_summoner(region=self.region(),
-                                                       encrypted_summoner_id=summoner["id"])
+        leagues = self._lolwatcher.league.by_summoner(region=self.region(),
+                                                      encrypted_summoner_id=summoner["id"])
         soloq = LeagueLeague()
         flexq = LeagueLeague()
         twtrq = LeagueLeague()
@@ -94,8 +90,8 @@ class LeagueoflegendsCommand(LinkerCommand):
                 tftq = LeagueLeague.from_dict(league)
         # Get mastery score
         log.debug(f"Getting mastery data: {name}")
-        mastery = self._riotwatcher.champion_mastery.scores_by_summoner(region=self.region(),
-                                                                        encrypted_summoner_id=summoner["id"])
+        mastery = self._lolwatcher.champion_mastery.scores_by_summoner(region=self.region(),
+                                                                       encrypted_summoner_id=summoner["id"])
         # Create database row
         leagueoflegends = self.alchemy.get(LeagueOfLegends)(
             region=self.region(),
@@ -117,7 +113,7 @@ class LeagueoflegendsCommand(LinkerCommand):
 
     async def update(self, session, obj: LeagueOfLegends, change: Callable[[str, Any], Awaitable[None]]):
         log.debug(f"Getting summoner data: {obj}")
-        summoner = await ru.asyncify(self._riotwatcher.summoner.by_id, region=self.region(),
+        summoner = await ru.asyncify(self._lolwatcher.summoner.by_id, region=self.region(),
                                      encrypted_summoner_id=obj.summoner_id)
         await change("profile_icon_id", summoner["profileIconId"])
         await change("summoner_name", summoner["name"])
@@ -126,27 +122,19 @@ class LeagueoflegendsCommand(LinkerCommand):
         await change("summoner_id", summoner["id"])
         await change("account_id", summoner["accountId"])
         log.debug(f"Getting leagues data: {obj}")
-        leagues = await ru.asyncify(self._riotwatcher.league.by_summoner, region=self.region(),
+        leagues = await ru.asyncify(self._lolwatcher.league.by_summoner, region=self.region(),
                                     encrypted_summoner_id=obj.summoner_id)
         soloq = LeagueLeague()
         flexq = LeagueLeague()
-        twtrq = LeagueLeague()
-        tftq = LeagueLeague()
         for league in leagues:
             if league["queueType"] == "RANKED_SOLO_5x5":
                 soloq = LeagueLeague.from_dict(league)
             if league["queueType"] == "RANKED_FLEX_SR":
                 flexq = LeagueLeague.from_dict(league)
-            if league["queueType"] == "RANKED_FLEX_TT":
-                twtrq = LeagueLeague.from_dict(league)
-            if league["queueType"] == "RANKED_TFT":
-                tftq = LeagueLeague.from_dict(league)
         await change("rank_soloq", soloq)
         await change("rank_flexq", flexq)
-        await change("rank_twtrq", twtrq)
-        await change("rank_tftq", tftq)
         log.debug(f"Getting mastery data: {obj}")
-        mastery = await ru.asyncify(self._riotwatcher.champion_mastery.scores_by_summoner,
+        mastery = await ru.asyncify(self._lolwatcher.champion_mastery.scores_by_summoner,
                                     region=self.region(),
                                     encrypted_summoner_id=obj.summoner_id)
         await change("mastery_score", mastery)

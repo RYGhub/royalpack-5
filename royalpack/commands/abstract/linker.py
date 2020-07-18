@@ -19,9 +19,7 @@ class LinkerCommand(rc.Command, metaclass=abc.ABCMeta):
 
         self.updater_task = None
         if self.enabled():
-            # Run updaters only on Telegram
-            if self.interface.name == "telegram":
-                self.updater_task = self.loop.create_task(self.run_updater())
+            self.updater_task = self.loop.create_task(self.run_updater())
 
     async def run(self, args: rc.CommandArgs, data: rc.CommandData) -> None:
         author = await data.get_author(error_if_none=True)
@@ -139,7 +137,7 @@ class LinkerCommand(rc.Command, metaclass=abc.ABCMeta):
 
     def enabled(self) -> bool:
         """Whether the updater is enabled or not."""
-        return self.config[self.name]["updater"]["enabled"]
+        return self.config[self.name]["updater"]["enabled"] and self.interface.name == "telegram"
 
     def period(self) -> int:
         """The time between two updater cycles."""
@@ -147,7 +145,7 @@ class LinkerCommand(rc.Command, metaclass=abc.ABCMeta):
 
     def delay(self) -> int:
         """The time between two object updates."""
-        return self.config[self.name]["updater"]["rate"]
+        return self.config[self.name]["updater"]["delay"]
 
     def target(self) -> int:
         """The id of the Telegram chat where notifications should be sent."""
