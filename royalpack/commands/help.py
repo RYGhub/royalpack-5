@@ -11,17 +11,27 @@ class HelpCommand(rc.Command):
     syntax: str = "{comando}"
 
     async def run(self, args: rc.CommandArgs, data: rc.CommandData) -> None:
-        name: str = args[0].lstrip(self.interface.prefix)
+        if len(args) == 0:
+            message = [
+                "ℹ️ Comandi disponibili:"
+            ]
 
-        try:
-            command: rc.Command = self.serf.commands[f"{self.interface.prefix}{name}"]
-        except KeyError:
-            raise rc.InvalidInputError("Il comando richiesto non esiste.")
+            for command in sorted(list(set(self.serf.commands.values())), key=lambda c: c.name):
+                message.append(f"- [c]{self.interface.prefix}{command.name}[/c]")
 
-        message = [
-            f"[c]{self.interface.prefix}{command.name} {command.syntax}[/c]",
-            "",
-            f"{command.description}"
-        ]
+            await data.reply("\n".join(message))
+        else:
+            name: str = args[0].lstrip(self.interface.prefix)
 
-        await data.reply("\n".join(message))
+            try:
+                command: rc.Command = self.serf.commands[f"{self.interface.prefix}{name}"]
+            except KeyError:
+                raise rc.InvalidInputError("Il comando richiesto non esiste.")
+
+            message = [
+                f"ℹ️ [c]{self.interface.prefix}{command.name} {command.syntax}[/c]",
+                "",
+                f"{command.description}"
+            ]
+
+            await data.reply("\n".join(message))
