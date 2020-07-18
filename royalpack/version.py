@@ -1,1 +1,3 @@
-semantic = "5.12.2"
+import pkg_resources
+
+semantic = pkg_resources.get_distribution("royalpack").version
