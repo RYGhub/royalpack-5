@@ -1,133 +1,135 @@
 # Imports go here!
+from .ahnonlosoio import AhnonlosoioCommand
+from .brawlhalla import BrawlhallaCommand
+from .cat import CatCommand
 from .ciaoruozi import CiaoruoziCommand
 from .color import ColorCommand
 from .cv import CvCommand
+from .cvstats import CvstatsCommand
 from .diario import DiarioCommand
-from .rage import RageCommand
-from .reminder import ReminderCommand
-from .ship import ShipCommand
-from .smecds import SmecdsCommand
-from .videochannel import VideochannelCommand
-from .pause import PauseCommand
-from .play import PlayCommand
-from .queue import QueueCommand
-from .skip import SkipCommand
-from .summon import SummonCommand
-from .youtube import YoutubeCommand
-from .soundcloud import SoundcloudCommand
-from .emojify import EmojifyCommand
-from .leagueoflegends import LeagueoflegendsCommand
 from .diarioquote import DiarioquoteCommand
-from .peertubeupdates import PeertubeUpdatesCommand
-from .googlevideo import GooglevideoCommand
-from .yahoovideo import YahoovideoCommand
-from .userinfo import UserinfoCommand
-from .spell import SpellCommand
-from .ahnonlosoio import AhnonlosoioCommand
+from .diarioshuffle import DiarioshuffleCommand
+from .dota import DotaCommand
 from .eat import EatCommand
-from .pmots import PmotsCommand
-from .peertube import PeertubeCommand
-from .funkwhale import FunkwhaleCommand
+from .elevatormusic import ElevatormusicCommand
+from .emojify import EmojifyCommand
 from .eval import EvalCommand
 from .exec import ExecCommand
-from .trivia import TriviaCommand
-from .steampowered import SteampoweredCommand
-from .steammatch import SteammatchCommand
-from .dota import DotaCommand
-from .magickfiorygi import MagickfiorygiCommand
-from .brawlhalla import BrawlhallaCommand
-from .diarioshuffle import DiarioshuffleCommand
+from .fortune import FortuneCommand
+from .funkwhale import FunkwhaleCommand
+from .funkwhalealbum import FunkwhalealbumCommand
 from .funkwhaleplaylist import FunkwhaleplaylistCommand
-from .voicestatus import VoicestatusCommand
-from .playmode import PlaymodeCommand
-from .lazyplay import LazyplayCommand
+from .givefiorygi import GivefiorygiCommand
+from .givetreasure import GivetreasureCommand
+from .googlevideo import GooglevideoCommand
+from .help import HelpCommand
 from .lazyfunkwhale import LazyfunkwhaleCommand
+from .lazyfunkwhalealbum import LazyfunkwhalealbumCommand
 from .lazyfunkwhaleplaylist import LazyfunkwhaleplaylistCommand
 from .lazygooglevideo import LazygooglevideoCommand
 from .lazypeertube import LazypeertubeCommand
+from .lazyplay import LazyplayCommand
 from .lazysoundcloud import LazysoundcloudCommand
 from .lazyyahoovideo import LazyyahoovideoCommand
 from .lazyyoutube import LazyyoutubeCommand
-from .funkwhalealbum import FunkwhalealbumCommand
-from .lazyfunkwhalealbum import LazyfunkwhalealbumCommand
-from .matchmaking import MatchmakingCommand
-from .cvstats import CvstatsCommand
-from .elevatormusic import ElevatormusicCommand
-from .royalpackversion import RoyalpackCommand
-from .givefiorygi import GivefiorygiCommand
-from .help import HelpCommand
-from .pug import PugCommand
+from .leagueoflegends import LeagueoflegendsCommand
+from .magickfiorygi import MagickfiorygiCommand
 from .magicktreasure import MagicktreasureCommand
-from .treasure import TreasureCommand
-from .givetreasure import GivetreasureCommand
-from .cat import CatCommand
+from .matchmaking import MatchmakingCommand
+from .pause import PauseCommand
+from .peertube import PeertubeCommand
+from .peertubeupdates import PeertubeUpdatesCommand
 from .ping import PingCommand
+from .play import PlayCommand
+from .playmode import PlaymodeCommand
+from .pmots import PmotsCommand
+from .pug import PugCommand
+from .queue import QueueCommand
+from .rage import RageCommand
+from .reminder import ReminderCommand
+from .royalpackversion import RoyalpackCommand
+from .ship import ShipCommand
+from .skip import SkipCommand
+from .smecds import SmecdsCommand
+from .soundcloud import SoundcloudCommand
+from .spell import SpellCommand
+from .steammatch import SteammatchCommand
+from .steampowered import SteampoweredCommand
+from .summon import SummonCommand
+from .treasure import TreasureCommand
+from .trivia import TriviaCommand
+from .userinfo import UserinfoCommand
+from .videochannel import VideochannelCommand
+from .voicestatus import VoicestatusCommand
+from .yahoovideo import YahoovideoCommand
+from .youtube import YoutubeCommand
 
 # Enter the commands of your Pack here!
 available_commands = [
+    AhnonlosoioCommand,
+    BrawlhallaCommand,
+    CatCommand,
     CiaoruoziCommand,
     ColorCommand,
     CvCommand,
+    CvstatsCommand,
     DiarioCommand,
-    RageCommand,
-    ReminderCommand,
-    ShipCommand,
-    SmecdsCommand,
-    VideochannelCommand,
-    PauseCommand,
-    PlayCommand,
-    QueueCommand,
-    SkipCommand,
-    SummonCommand,
-    YoutubeCommand,
-    SoundcloudCommand,
-    EmojifyCommand,
-    LeagueoflegendsCommand,
     DiarioquoteCommand,
-    PeertubeUpdatesCommand,
-    GooglevideoCommand,
-    YahoovideoCommand,
-    UserinfoCommand,
-    SpellCommand,
-    AhnonlosoioCommand,
+    DiarioshuffleCommand,
+    DotaCommand,
     EatCommand,
-    PmotsCommand,
-    PeertubeCommand,
+    ElevatormusicCommand,
+    EmojifyCommand,
     EvalCommand,
     ExecCommand,
+    FortuneCommand,
+    FunkwhalealbumCommand,
     FunkwhaleCommand,
-    TriviaCommand,
-    SteampoweredCommand,
-    SteammatchCommand,
-    DotaCommand,
-    MagickfiorygiCommand,
-    BrawlhallaCommand,
-    DiarioshuffleCommand,
     FunkwhaleplaylistCommand,
-    VoicestatusCommand,
-    PlaymodeCommand,
-    LazyplayCommand,
+    GivefiorygiCommand,
+    GivetreasureCommand,
+    GooglevideoCommand,
+    HelpCommand,
+    LazyfunkwhalealbumCommand,
     LazyfunkwhaleCommand,
     LazyfunkwhaleplaylistCommand,
     LazygooglevideoCommand,
     LazypeertubeCommand,
+    LazyplayCommand,
     LazysoundcloudCommand,
     LazyyahoovideoCommand,
     LazyyoutubeCommand,
-    FunkwhalealbumCommand,
-    LazyfunkwhalealbumCommand,
-    MatchmakingCommand,
-    CvstatsCommand,
-    ElevatormusicCommand,
-    RoyalpackCommand,
-    GivefiorygiCommand,
-    HelpCommand,
-    PugCommand,
+    LeagueoflegendsCommand,
+    MagickfiorygiCommand,
     MagicktreasureCommand,
-    TreasureCommand,
-    GivetreasureCommand,
-    CatCommand,
+    MatchmakingCommand,
+    PauseCommand,
+    PeertubeCommand,
+    PeertubeUpdatesCommand,
     PingCommand,
+    PlayCommand,
+    PlaymodeCommand,
+    PmotsCommand,
+    PugCommand,
+    QueueCommand,
+    RageCommand,
+    ReminderCommand,
+    RoyalpackCommand,
+    ShipCommand,
+    SkipCommand,
+    SmecdsCommand,
+    SoundcloudCommand,
+    SpellCommand,
+    SteammatchCommand,
+    SteampoweredCommand,
+    SummonCommand,
+    TreasureCommand,
+    TriviaCommand,
+    UserinfoCommand,
+    VideochannelCommand,
+    VoicestatusCommand,
+    YahoovideoCommand,
+    YoutubeCommand,
 ]
 
 # Don't change this, it should automatically generate __all__
