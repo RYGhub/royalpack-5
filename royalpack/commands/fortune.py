@@ -22,6 +22,8 @@ class FortuneCommand(rc.Command):
         "🐱 Oggi vedrai più gatti del solito su Internet!",
         "🐶 Oggi vedrai più cani del solito su Internet!",
         "🐦 Oggi vedrai più uccelli del solito su Internet!",
+        "🔥 Oggi vedrai più flame del solito su Internet!",
+        "🤬 Oggi vedrai più discorsi politici del solito su Internet!",
         "🐌 Oggi incontrerai una chiocciola sperduta!",
         "🎁 Oggi i dispenser di regali in centro funzioneranno senza problemi!",
         "🥕 Oggi il tuo raccolto avrà qualità Iridium Star!",
@@ -29,7 +31,14 @@ class FortuneCommand(rc.Command):
         "✨ Oggi farai molti più multicast!",
         "♦️ Oggi troverai una Leggendaria Dorata!",
         "⭐️ Oggi la stella della RYG ti sembrerà un pochino più dritta!",
+        "⭐️ Oggi la stella della RYG ti sembrerà anche più storta del solito!",
         "💎 Oggi i tuoi avversari non riusciranno a deflettere i tuoi Emerald Splash!",
+        "⁉️ Oggi le tue supercazzole prematureranno un po' più a sinistra!",
+        "🌅 Oggi sarà il giorno dopo ieri e il giorno prima di domani!",
+        "🤖 Oggi il Royal Bot ti dirà qualcosa di molto utile!",
+        "💤 Oggi rischierai di addormentarti più volte!",
+        "🥪 Oggi ti verrà fame fuori orario!",
+        "😓 Oggi dirai molte stupidaggini!",
     ]
 
     async def run(self, args: rc.CommandArgs, data: rc.CommandData) -> None:
