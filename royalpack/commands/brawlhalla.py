@@ -38,7 +38,7 @@ class BrawlhallaCommand(LinkerCommand):
                      session,
                      user: rbt.User,
                      args: rc.CommandArgs,
-                     data: Optional[rc.CommandData] = None) -> Brawlhalla:
+                     data: Optional[rc.CommandData] = None) -> Optional[Brawlhalla]:
         raise rc.InvalidInputError("Brawlhalla accounts are automatically linked from Steam.")
 
     async def update(self, session, obj, change: Callable[[str, Any], Awaitable[None]]):

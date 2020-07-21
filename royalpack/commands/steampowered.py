@@ -39,7 +39,7 @@ class SteampoweredCommand(LinkerCommand):
                      session,
                      user: rbt.User,
                      args: rc.CommandArgs,
-                     data: Optional[rc.CommandData] = None) -> Steam:
+                     data: Optional[rc.CommandData] = None) -> Optional[Steam]:
         url = args.joined()
         steamid64 = await self._call(steam.steamid.steam64_from_url, url)
         if steamid64 is None:

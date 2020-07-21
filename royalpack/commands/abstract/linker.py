@@ -40,11 +40,11 @@ class LinkerCommand(rc.Command, metaclass=abc.ABCMeta):
             await data.session_commit()
             await data.reply("\n".join(message))
         else:
-            message = ["🔗 Account collegato!\n"]
             created = await self.create(session=data.session, user=author, args=args, data=data)
-            message.append(self.describe(created))
             await data.session_commit()
-            await data.reply("\n".join(message))
+            if created is not None:
+                message = ["🔗 Account collegato!", "", self.describe(created)]
+                await data.reply("\n".join(message))
 
     def describe(self, obj: Updatable) -> str:
         """The text that should be appended to the report message for a given Updatable."""
@@ -65,7 +65,7 @@ class LinkerCommand(rc.Command, metaclass=abc.ABCMeta):
                      session,
                      user: rbt.User,
                      args: rc.CommandArgs,
-                     data: Optional[rc.CommandData] = None) -> Updatable:
+                     data: Optional[rc.CommandData] = None) -> Optional[Updatable]:
         """Create a new updatable object for a user.
 
         This function is responsible for adding the object to the session."""

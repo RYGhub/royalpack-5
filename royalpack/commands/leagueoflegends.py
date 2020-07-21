@@ -60,7 +60,11 @@ class LeagueoflegendsCommand(LinkerCommand):
     async def get_updatables(self, session) -> List[LeagueOfLegends]:
         return await ru.asyncify(session.query(self.alchemy.get(LeagueOfLegends)).all)
 
-    async def create(self, session, user: rbt.User, args: rc.CommandArgs, data: Optional[rc.CommandData] = None) -> LeagueOfLegends:
+    async def create(self,
+                     session,
+                     user: rbt.User,
+                     args: rc.CommandArgs,
+                     data: Optional[rc.CommandData] = None) -> Optional[LeagueOfLegends]:
         name = args.joined()
 
         # Connect a new League of Legends account to Royalnet
