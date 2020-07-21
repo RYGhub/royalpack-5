@@ -5,8 +5,8 @@ import logging
 import aiohttp
 
 from royalnet.backpack import tables as rbt
-from royalnet.commands import *
-from royalnet.utils import *
+import royalnet.commands as rc
+import royalnet.utils as ru
 from sqlalchemy import or_, and_
 
 from .abstract.linker import LinkerCommand
@@ -32,10 +32,14 @@ class BrawlhallaCommand(LinkerCommand):
         return user.steam
 
     async def get_updatables(self, session) -> List[Brawlhalla]:
-        return await asyncify(session.query(self.alchemy.get(Steam)).all)
+        return await ru.asyncify(session.query(self.alchemy.get(Steam)).all)
 
-    async def create(self, session, user: rbt.User, args) -> Updatable:
-        raise InvalidInputError("Brawlhalla accounts are automatically linked from Steam.")
+    async def create(self,
+                     session,
+                     user: rbt.User,
+                     args: rc.CommandArgs,
+                     data: Optional[rc.CommandData] = None) -> Brawlhalla:
+        raise rc.InvalidInputError("Brawlhalla accounts are automatically linked from Steam.")
 
     async def update(self, session, obj, change: Callable[[str, Any], Awaitable[None]]):
         BrawlhallaT = self.alchemy.get(Brawlhalla)
@@ -47,7 +51,7 @@ class BrawlhallaCommand(LinkerCommand):
                 log.debug(f"Checking if player has an account...")
                 async with hcs.get(f"https://api.brawlhalla.com/search?steamid={obj.steamid.as_64}&api_key={self.token()}") as response:
                     if response.status != 200:
-                        raise ExternalError(f"Brawlhalla API /search returned {response.status}!")
+                        raise rc.ExternalError(f"Brawlhalla API /search returned {response.status}!")
                     j = await response.json()
                     if j == {} or j == []:
                         log.debug("No account found.")
@@ -62,7 +66,7 @@ class BrawlhallaCommand(LinkerCommand):
 
             async with hcs.get(f"https://api.brawlhalla.com/player/{bh.brawlhalla_id}/ranked?api_key={self.token()}") as response:
                 if response.status != 200:
-                    raise ExternalError(f"Brawlhalla API /ranked returned {response.status}!")
+                    raise rc.ExternalError(f"Brawlhalla API /ranked returned {response.status}!")
                 j = await response.json()
                 if j == {} or j == []:
                     log.debug("No ranked info found.")
@@ -75,7 +79,7 @@ class BrawlhallaCommand(LinkerCommand):
                     await self._change(session=session, obj=bh, attribute="rank_1v1", new=rank)
 
                     for jduo in j.get("2v2", []):
-                        bhduo: Optional[BrawlhallaDuo] = await asyncify(
+                        bhduo: Optional[BrawlhallaDuo] = await ru.asyncify(
                             session.query(DuoT)
                                 .filter(
                                     or_(
@@ -93,11 +97,11 @@ class BrawlhallaCommand(LinkerCommand):
                         )
                         if bhduo is None:
                             if bh.brawlhalla_id == jduo["brawlhalla_id_one"]:
-                                otherbh: Optional[Brawlhalla] = await asyncify(
+                                otherbh: Optional[Brawlhalla] = await ru.asyncify(
                                     session.query(BrawlhallaT).get, jduo["brawlhalla_id_two"]
                                 )
                             else:
-                                otherbh: Optional[Brawlhalla] = await asyncify(
+                                otherbh: Optional[Brawlhalla] = await ru.asyncify(
                                     session.query(BrawlhallaT).get, jduo["brawlhalla_id_one"]
                                 )
                             if otherbh is None:

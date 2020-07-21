@@ -35,7 +35,11 @@ class SteampoweredCommand(LinkerCommand):
     async def get_updatables(self, session) -> List[Steam]:
         return await ru.asyncify(session.query(self.alchemy.get(Steam)).all)
 
-    async def create(self, session, user: rbt.User, args) -> Steam:
+    async def create(self,
+                     session,
+                     user: rbt.User,
+                     args: rc.CommandArgs,
+                     data: Optional[rc.CommandData] = None) -> Steam:
         url = args.joined()
         steamid64 = await self._call(steam.steamid.steam64_from_url, url)
         if steamid64 is None:
@@ -51,8 +55,15 @@ class SteampoweredCommand(LinkerCommand):
             primary_clan_id=r["primaryclanid"],
             account_creation_date=datetime.datetime.fromtimestamp(r["timecreated"])
         )
+
+        await FiorygiTransaction.spawn_fiorygi(
+            data=data,
+            user=user,
+            qty=1,
+            reason="aver collegato a Royalnet il proprio account di League of Legends"
+        )
+
         session.add(steam_account)
-        await ru.asyncify(session.commit)
         return steam_account
 
     async def update(self, session, obj: Steam, change: Callable[[str, Any], Awaitable[None]]):

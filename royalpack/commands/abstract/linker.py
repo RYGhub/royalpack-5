@@ -41,7 +41,7 @@ class LinkerCommand(rc.Command, metaclass=abc.ABCMeta):
             await data.reply("\n".join(message))
         else:
             message = ["🔗 Account collegato!\n"]
-            created = await self.create(session=data.session, user=author, args=args)
+            created = await self.create(session=data.session, user=author, args=args, data=data)
             message.append(self.describe(created))
             await data.session_commit()
             await data.reply("\n".join(message))
@@ -61,8 +61,14 @@ class LinkerCommand(rc.Command, metaclass=abc.ABCMeta):
         ...
 
     @abc.abstractmethod
-    async def create(self, session, user: rbt.User, args) -> Updatable:
-        """Create a new updatable object for a user."""
+    async def create(self,
+                     session,
+                     user: rbt.User,
+                     args: rc.CommandArgs,
+                     data: Optional[rc.CommandData] = None) -> Updatable:
+        """Create a new updatable object for a user.
+
+        This function is responsible for adding the object to the session."""
         ...
 
     @abc.abstractmethod

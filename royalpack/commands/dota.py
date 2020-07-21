@@ -37,7 +37,7 @@ class DotaCommand(LinkerCommand):
     async def get_updatables(self, session) -> List[Dota]:
         return await ru.asyncify(session.query(self.alchemy.get(Steam)).all)
 
-    async def create(self, session, user: rbt.User, args):
+    async def create(self, session, user: rbt.User, args: rc.CommandArgs, data: Optional[rc.CommandData] = None):
         raise rc.InvalidInputError("Dota accounts are automatically linked from Steam.")
 
     async def update(self, session, obj: Steam, change: Callable[[str, Any], Awaitable[None]]):
