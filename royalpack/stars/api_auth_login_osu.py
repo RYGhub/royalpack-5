@@ -91,9 +91,12 @@ class ApiAuthLoginOsuStar(rca.ApiStar):
                 raise rcae.ForbiddenError("Unknown osu! account")
             user = osu.user
 
-        token: rbt.Token = TokenT.generate(alchemy=self.alchemy, user=user, expiration_delta=datetime.timedelta(days=7))
+        if self.config["osu"]["login"]["enabled"]:
+            token: rbt.Token = TokenT.generate(alchemy=self.alchemy, user=user, expiration_delta=datetime.timedelta(days=7))
+            data.session.add(token)
+            await data.session_commit()
 
-        data.session.add(token)
-        await data.session_commit()
-
-        return token.json()
+            return token.json()
+        else:
+            raise rcae.ForbiddenError("Account linked successfully; cannot use this account to generate a Royalnet"
+                                      " login token, as osu! login is currently disabled on this Royalnet instance.")
