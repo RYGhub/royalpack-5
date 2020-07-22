@@ -35,6 +35,15 @@ Play.max_song_duration = 7230
 # The Telegram channel where matchmaking messages should be sent in
 Matchmaking.mm_chat_id = -1001204402796
 
+[Packs."royalpack"."steampowered"]
+token = "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
+
+[Packs."royalpack"."steampowered".updater]
+enabled = false
+period = 86400
+delay = 1
+target = -1001153723135
+
 [Packs."royalpack"."dota".updater]
 enabled = true
 period = 86400
@@ -60,4 +69,16 @@ period = 86400
 delay = 1
 target = -1001153723135
 
+[Packs."royalpack"."osu"]
+client_id = 123456789
+client_secret = "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+
+[Packs."royalpack"."osu".login]
+enabled = false
+
+[Packs."royalpack"."osu".updater]
+enabled = true
+period = 86400
+delay = 5
+target = -1001153723135
 ```
