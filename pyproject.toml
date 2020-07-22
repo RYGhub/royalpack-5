@@ -2,7 +2,7 @@
 
 [tool.poetry]
     name = "royalpack"
-    version = "5.13.0"
+    version = "5.13.1"
     description = "A Royalnet command pack for the Royal Games community"
     authors = ["Stefano Pigozzi <ste.pigozzi@gmail.com>"]
     license = "AGPL-3.0+"
@@ -23,6 +23,8 @@
     riotwatcher = "^3.0.0"
     royalspells = "^3.2"
     steam = "*"
+    sqlalchemy = "^1.3.18"
+    bcrypt = "^3.1.7"
 
     [tool.poetry.dependencies.royalnet]
         version = "~5.10.4"

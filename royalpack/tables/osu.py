@@ -38,7 +38,27 @@ class Osu(Updatable):
 
     @declared_attr
     def username(self):
-        return Column(String)
+        return Column(String, nullable=False)
+
+    @declared_attr
+    def avatar_url(self):
+        return Column(String, nullable=False)
+
+    @declared_attr
+    def standard_pp(self):
+        return Column(Float)
+
+    @declared_attr
+    def taiko_pp(self):
+        return Column(Float)
+
+    @declared_attr
+    def catch_pp(self):
+        return Column(Float)
+
+    @declared_attr
+    def mania_pp(self):
+        return Column(Float)
 
     async def refresh(self, *, client_id, client_secret, base_url, path):
         j = await oauth_refresh(url="https://osu.ppy.sh/oauth/token",
@@ -53,3 +73,22 @@ class Osu(Updatable):
     async def refresh_if_expired(self, *, client_id, client_secret, base_url, path):
         if datetime.datetime.now() >= self.expiration_date:
             await self.refresh(client_id=client_id, client_secret=client_secret, base_url=base_url, path=path)
+
+    def json(self) -> dict:
+        return {
+            "osu_id": self.osu_id,
+            "username": self.username,
+            "avatar_url": self.avatar_url,
+            "standard": {
+                "pp": self.standard_pp,
+            },
+            "taiko": {
+                "pp": self.taiko_pp,
+            },
+            "catch": {
+                "pp": self.catch_pp,
+            },
+            "mania": {
+                "pp": self.mania_pp,
+            },
+        }

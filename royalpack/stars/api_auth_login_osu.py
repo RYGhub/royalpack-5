@@ -1,6 +1,7 @@
 import royalnet.utils as ru
 import royalnet.backpack.tables as rbt
 import royalnet.constellation.api as rca
+import royalnet.constellation.api.apierrors as rcae
 import itsdangerous
 import aiohttp
 import aiohttp.client_exceptions
@@ -46,6 +47,7 @@ class ApiAuthLoginOsuStar(rca.ApiStar):
     async def get(self, data: rca.ApiData) -> ru.JSON:
         """Login to Royalnet with your osu! account."""
         OsuT = self.alchemy.get(Osu)
+        TokenT = self.alchemy.get(rbt.Token)
 
         code = data.str("code")
         state = data.str("state", optional=True)
@@ -81,6 +83,17 @@ class ApiAuthLoginOsuStar(rca.ApiStar):
             )
 
             data.session.add(osu)
-            await data.session_commit()
+        else:
+            osu = await ru.asyncify(
+                data.session.query(OsuT).filter_by(osu_id=m["id"]).all
+            )
+            if osu is None:
+                raise rcae.ForbiddenError("Unknown osu! account")
+            user = osu.user
 
-        raise rca.MethodNotImplementedError()
+        token: rbt.Token = TokenT.generate(alchemy=self.alchemy, user=user, expiration_delta=datetime.timedelta(days=7))
+
+        data.session.add(token)
+        await data.session_commit()
+
+        return token.json()
