@@ -11,6 +11,7 @@ from .brawlhallametal import BrawlhallaMetal
 from .brawlhallarank import BrawlhallaRank
 from .pollmood import PollMood
 from .updatable import Updatable
+from .oauth_refresh import oauth_refresh
 
 
 __all__ = [
@@ -28,4 +29,5 @@ __all__ = [
     "BrawlhallaTier",
     "PollMood",
     "Updatable",
+    "oauth_refresh",
 ]
