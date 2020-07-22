@@ -1,5 +1,6 @@
 # Imports go here!
 from .ahnonlosoio import AhnonlosoioCommand
+from .answer import AnswerCommand
 from .brawlhalla import BrawlhallaCommand
 from .cat import CatCommand
 from .ciaoruozi import CiaoruoziCommand
@@ -67,6 +68,7 @@ from .youtube import YoutubeCommand
 # Enter the commands of your Pack here!
 available_commands = [
     AhnonlosoioCommand,
+    AnswerCommand,
     BrawlhallaCommand,
     CatCommand,
     CiaoruoziCommand,
