@@ -52,7 +52,7 @@ class OsuCommand(LinkerCommand):
                          f"&redirect_uri={self.base_url}{ApiAuthLoginOsuStar.path}"
                          f"&response_type=code"
                          f"&state={serializer.dumps(user.uid)}]"
-                         f"Connetti osu! all'account {user.username}"
+                         f"Connetti account di osu! a {user.username}"
                          f"[/url]")
         return None
 
