@@ -98,5 +98,6 @@ class ApiAuthLoginOsuStar(rca.ApiStar):
 
             return token.json()
         else:
+            await data.session_commit()
             raise rcae.ForbiddenError("Account linked successfully; cannot use this account to generate a Royalnet"
                                       " login token, as osu! login is currently disabled on this Royalnet instance.")
