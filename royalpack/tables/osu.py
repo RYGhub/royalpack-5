@@ -42,7 +42,7 @@ class Osu(Updatable):
 
     @declared_attr
     def avatar_url(self):
-        return Column(String, nullable=False)
+        return Column(String)
 
     @declared_attr
     def standard_pp(self):
