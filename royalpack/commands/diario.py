@@ -26,7 +26,7 @@ async def to_imgur(imgur_api_key, photosizes: List[telegram.PhotoSize], caption=
     }) as request:
         response = await request.json()
         if not response["success"]:
-            raise rc.CommandError("Imgur returned an error in the image upload.")
+            raise rc.CommandError(f"Imgur returned an error in the image upload: {response}")
         return response["data"]["link"]
 
 
