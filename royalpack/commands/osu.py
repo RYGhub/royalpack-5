@@ -123,3 +123,13 @@ class OsuCommand(LinkerCommand):
             await self.notify(f"⬜️ [b]{obj.user}[/b] non è più classificato su [i]osu!catch[/i].")
         elif attribute == "mania_pp":
             await self.notify(f"⬜️ [b]{obj.user}[/b] non è più classificato su [i]osu!mania[/i].")
+
+    def describe(self, obj: Osu) -> str:
+        message = [
+            f"ℹ️ [url=https://osu.ppy.sh/users/{obj.osu_id}]{obj.username}[/url]",
+            f"osu!: [b]{obj.standard_pp:.0f}pp[/b]",
+            f"osu!taiko: [b]{obj.taiko_pp:.0f}pp[/b]",
+            f"osu!catch: [b]{obj.catch_pp:.0f}pp[/b]",
+            f"osu!mania: [b]{obj.mania_pp:.0f}pp[/b]",
+        ]
+        return "\n".join(message)
