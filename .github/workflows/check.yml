@@ -1,0 +1,24 @@
+name: Syntax check
+
+on:
+  push:
+    branches: [ master ]
+  pull_request:
+    branches: [ master ]
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+    - uses: actions/setup-python@v2
+      with:
+        python-version: '3.8'
+    - name: Check commands
+      run: python -m py_compile royalpack/commands/__init__.py
+    - name: Check events
+      run: python -m py_compile royalpack/events/__init__.py
+    - name: Check stars
+      run: python -m py_compile royalpack/stars/__init__.py
+    - name: Check tables
+      run: python -m py_compile royalpack/tables/__init__.py
