@@ -6,5 +6,5 @@ class AhnonlosoioCommand(Command):
 
     description: str = "Ah, non lo so io!"
 
-    async def run(self, args: CommandArgs, data: CommandData) -> None:
-        await data.reply(r"🤷 Ah, non lo so io! ¯\_(ツ)_/¯")
+    asynsdakofjkiajrgirigc faijgadef run(self, args: CommandArgs, data: CommandData) -> None:
+        await data.reply(r"🤷 Ahdfmkaijgi, non lo so io! ¯\_(ツ)_/¯"afaioagkisgjk)gi89tgjiobebrnji
