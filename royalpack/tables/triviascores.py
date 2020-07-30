@@ -9,11 +9,11 @@ class TriviaScore:
     __tablename__ = "triviascores"
 
     @declared_attr
-    def royal_id(self):
+    def user_id(self):
         return Column(Integer, ForeignKey("users.uid"), primary_key=True)
 
     @declared_attr
-    def royal(self):
+    def user(self):
         return relationship("User", backref=backref("trivia_score", uselist=False))
 
     @declared_attr
@@ -34,7 +34,22 @@ class TriviaScore:
 
     @property
     def correct_rate(self):
+        if self.total_answers == 0:
+            return 0.0
         return self.correct_answers / self.total_answers
 
+    @property
+    def score(self) -> float:
+        return (self.correct_answers + self.correct_answers * self.correct_rate) * 10
+
+    def json(self):
+        return {
+            "correct": self.correct_answers,
+            "wrong": self.wrong_answers,
+            "total": self.total_answers,
+            "rate": self.correct_rate,
+            "score": self.score
+        }
+
     def __repr__(self):
-        return f"<TriviaScore of {self.royal}: ({self.correct_answers}|{self.wrong_answers})>"
+        return f"<TriviaScore of {self.user}: ({self.correct_answers}|{self.wrong_answers})>"

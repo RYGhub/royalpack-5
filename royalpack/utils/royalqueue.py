@@ -1,6 +1,6 @@
 import logging
 from typing import Optional, List, AsyncGenerator, Tuple, Any, Dict
-from royalnet.bard import YtdlDiscord
+from royalnet.bard.discord import YtdlDiscord
 from royalnet.serf.discord import Playable
 import discord
 
@@ -43,3 +43,20 @@ class RoyalQueue(Playable):
             log.debug(f"Deleting: {self.now_playing.ytdl_file}")
             await self.now_playing.ytdl_file.delete_asap()
             log.debug(f"Deleted successfully!")
+            self.now_playing = None
+
+    async def destroy(self):
+        if self.now_playing is not None:
+            log.debug(f"Deleting: {self.now_playing}")
+            await self.now_playing.delete_asap()
+            log.debug(f"Deleting: {self.now_playing.ytdl_file}")
+            await self.now_playing.ytdl_file.delete_asap()
+            log.debug(f"Deleted successfully!")
+            self.now_playing = None
+        for file in self.contents:
+            log.debug(f"Deleting: {file}")
+            await file.delete_asap()
+            log.debug(f"Deleting: {file.ytdl_file}")
+            await file.ytdl_file.delete_asap()
+            log.debug(f"Deleted successfully!")
+        self.contents = []

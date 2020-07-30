@@ -1,67 +1,87 @@
 # Imports go here!
+from .ahnonlosoio import AhnonlosoioCommand
+from .answer import AnswerCommand
+from .brawlhalla import BrawlhallaCommand
+from .cat import CatCommand
 from .ciaoruozi import CiaoruoziCommand
 from .color import ColorCommand
 from .cv import CvCommand
+from .cvstats import CvstatsCommand
 from .diario import DiarioCommand
-from .rage import RageCommand
-from .reminder import ReminderCommand
-from .ship import ShipCommand
-from .smecds import SmecdsCommand
-from .videochannel import VideochannelCommand
-from .pause import PauseCommand
-from .play import PlayCommand
-from .queue import QueueCommand
-from .skip import SkipCommand
-from .summon import SummonCommand
-from .youtube import YoutubeCommand
-from .soundcloud import SoundcloudCommand
-from .emojify import EmojifyCommand
-from .leagueoflegends import LeagueoflegendsCommand
 from .diarioquote import DiarioquoteCommand
-from .peertubeupdates import PeertubeUpdatesCommand
-from .googlevideo import GooglevideoCommand
-from .yahoovideo import YahoovideoCommand
-from .userinfo import UserinfoCommand
-from .spell import SpellCommand
-from .ahnonlosoio import AhnonlosoioCommand
+from .diarioshuffle import DiarioshuffleCommand
+from .dota import DotaCommand
 from .eat import EatCommand
-from .pmots import PmotsCommand
-from .peertube import PeertubeCommand
+from .emojify import EmojifyCommand
 from .eval import EvalCommand
 from .exec import ExecCommand
+from .fortune import FortuneCommand
+from .givefiorygi import GivefiorygiCommand
+from .givetreasure import GivetreasureCommand
+from .help import HelpCommand
+from .leagueoflegends import LeagueoflegendsCommand
+from .magickfiorygi import MagickfiorygiCommand
+from .magicktreasure import MagicktreasureCommand
+from .matchmaking import MatchmakingCommand
+from .peertubeupdates import PeertubeUpdatesCommand
+from .ping import PingCommand
+from .pmots import PmotsCommand
+from .dog import DogCommand
+from .rage import RageCommand
+from .reminder import ReminderCommand
+from .royalpackversion import RoyalpackCommand
+from .ship import ShipCommand
+from .smecds import SmecdsCommand
+from .spell import SpellCommand
+from .steammatch import SteammatchCommand
+from .steampowered import SteampoweredCommand
+from .treasure import TreasureCommand
+from .trivia import TriviaCommand
+from .userinfo import UserinfoCommand
+from .osu import OsuCommand
 
 # Enter the commands of your Pack here!
 available_commands = [
+    AhnonlosoioCommand,
+    AnswerCommand,
+    BrawlhallaCommand,
+    CatCommand,
     CiaoruoziCommand,
     ColorCommand,
     CvCommand,
+    CvstatsCommand,
     DiarioCommand,
-    RageCommand,
-    ReminderCommand,
-    ShipCommand,
-    SmecdsCommand,
-    VideochannelCommand,
-    PauseCommand,
-    PlayCommand,
-    QueueCommand,
-    SkipCommand,
-    SummonCommand,
-    YoutubeCommand,
-    SoundcloudCommand,
-    EmojifyCommand,
-    LeagueoflegendsCommand,
     DiarioquoteCommand,
-    PeertubeUpdatesCommand,
-    GooglevideoCommand,
-    YahoovideoCommand,
-    UserinfoCommand,
-    SpellCommand,
-    AhnonlosoioCommand,
+    DiarioshuffleCommand,
+    DotaCommand,
     EatCommand,
-    PmotsCommand,
-    PeertubeCommand,
+    EmojifyCommand,
     EvalCommand,
     ExecCommand,
+    FortuneCommand,
+    GivefiorygiCommand,
+    GivetreasureCommand,
+    HelpCommand,
+    LeagueoflegendsCommand,
+    MagickfiorygiCommand,
+    MagicktreasureCommand,
+    MatchmakingCommand,
+    PeertubeUpdatesCommand,
+    PingCommand,
+    PmotsCommand,
+    DogCommand,
+    RageCommand,
+    ReminderCommand,
+    RoyalpackCommand,
+    ShipCommand,
+    SmecdsCommand,
+    SpellCommand,
+    SteammatchCommand,
+    SteampoweredCommand,
+    TreasureCommand,
+    TriviaCommand,
+    UserinfoCommand,
+    OsuCommand,
 ]
 
 # Don't change this, it should automatically generate __all__

@@ -1,27 +1,38 @@
 # Imports go here!
-from .api_user_list import ApiUserListStar
-from .api_user_get import ApiUserGetStar
-from .api_diario_list import ApiDiarioListStar
-from .api_diario_get import ApiDiarioGetStar
+from .api_bio import ApiBioSetStar
+from .api_diario import ApiDiarioGetStar
+from .api_diario_list import ApiDiarioPagesStar
 from .api_discord_cv import ApiDiscordCvStar
-from .api_wiki_get import ApiWikiGetStar
-from .api_wiki_list import ApiUserListStar
+from .api_discord_play import ApiDiscordPlayStar
+from .api_fiorygi import ApiFiorygiStar
+from .api_diario_random import ApiDiarioRandomStar
+from .api_poll import ApiPollStar
+from .api_poll_list import ApiPollsListStar
+from .api_cvstats_latest import ApiCvstatsLatestStar
+from .api_cvstats_avg import ApiCvstatsAvgStar
+from .api_user_ryg import ApiUserRygStar
+from .api_user_ryg_list import ApiUserRygListStar
+from .api_user_avatar import ApiUserAvatarStar
+from .api_auth_login_osu import ApiAuthLoginOsuStar
 
 # Enter the PageStars of your Pack here!
 available_page_stars = [
-    ApiUserListStar,
-    ApiUserGetStar,
-    ApiDiarioListStar,
+    ApiBioSetStar,
     ApiDiarioGetStar,
+    ApiDiarioPagesStar,
     ApiDiscordCvStar,
-    ApiWikiGetStar,
-    ApiUserListStar,
-]
-
-# Enter the ExceptionStars of your Pack here!
-available_exception_stars = [
-
+    ApiDiscordPlayStar,
+    ApiFiorygiStar,
+    ApiDiarioRandomStar,
+    ApiPollStar,
+    ApiPollsListStar,
+    ApiCvstatsLatestStar,
+    ApiCvstatsAvgStar,
+    ApiUserRygStar,
+    ApiUserRygListStar,
+    ApiUserAvatarStar,
+    ApiAuthLoginOsuStar,
 ]
 
 # Don't change this, it should automatically generate __all__
-__all__ = [star.__name__ for star in [*available_page_stars, *available_exception_stars]]
+__all__ = [star.__name__ for star in available_page_stars]

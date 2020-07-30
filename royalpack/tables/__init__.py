@@ -1,29 +1,47 @@
 # Imports go here!
 from .diario import Diario
-from .aliases import Alias
 from .wikipages import WikiPage
-from .wikirevisions import WikiRevision
 from .bios import Bio
 from .reminders import Reminder
 from .triviascores import TriviaScore
-from .mmevents import MMEvent
-from .mmresponse import MMResponse
 from .leagueoflegends import LeagueOfLegends
 from .fiorygi import Fiorygi
+from .steam import Steam
+from .dota import Dota
+from .fiorygitransactions import FiorygiTransaction
+from .brawlhalla import Brawlhalla
+from .polls import Poll
+from .pollcomments import PollComment
+from .pollvotes import PollVote
+from .brawlhalladuos import BrawlhallaDuo
+from .mmevents import MMEvent
+from .mmresponse import MMResponse
+from .cvstats import Cvstats
+from .treasure import Treasure
+from .osu import Osu
 
 # Enter the tables of your Pack here!
 available_tables = [
     Diario,
-    Alias,
     WikiPage,
-    WikiRevision,
     Bio,
     Reminder,
     TriviaScore,
-    MMEvent,
-    MMResponse,
     LeagueOfLegends,
     Fiorygi,
+    Steam,
+    Dota,
+    FiorygiTransaction,
+    Brawlhalla,
+    Poll,
+    PollComment,
+    PollVote,
+    BrawlhallaDuo,
+    MMEvent,
+    MMResponse,
+    Cvstats,
+    Treasure,
+    Osu,
 ]
 
 # Don't change this, it should automatically generate __all__

@@ -60,6 +60,12 @@ class DiscordSummonEvent(Event):
         # Connect to the channel
         try:
             await vp.connect(channel)
+        except OpusNotLoadedError:
+            raise ConfigurationError("libopus non è disponibile sul sistema in cui sta venendo eseguito questo bot,"
+                                     " pertanto non è possibile con")
+        except DiscordTimeoutError:
+            raise ExternalError("Timeout durante la connessione al canale."
+                                " Forse il bot non ha i permessi per entrarci?")
         except GuildAlreadyConnectedError:
             raise UserError("Il bot è già connesso in un canale vocale nel Server!\n"
                             "Spostalo manualmente, o disconnettilo e riinvoca [c]summon[/c]!")

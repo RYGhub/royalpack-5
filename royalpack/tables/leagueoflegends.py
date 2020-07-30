@@ -1,10 +1,10 @@
 from sqlalchemy import *
 from sqlalchemy.orm import relationship, composite
 from sqlalchemy.ext.declarative import declared_attr
-from ..utils import LeagueRank, LeagueTier, LeagueLeague
+from ..types import LeagueRank, LeagueTier, LeagueLeague, Updatable
 
 
-class LeagueOfLegends:
+class LeagueOfLegends(Updatable):
     __tablename__ = "leagueoflegends"
 
     @declared_attr
@@ -148,106 +148,22 @@ class LeagueOfLegends:
                          self.rank_flexq_veteran)
 
     @declared_attr
-    def rank_twtrq_tier(self):
-        return Column(Enum(LeagueTier))
-
-    @declared_attr
-    def rank_twtrq_rank(self):
-        return Column(Enum(LeagueRank))
-
-    @declared_attr
-    def rank_twtrq_points(self):
-        return Column(Integer)
-
-    @declared_attr
-    def rank_twtrq_wins(self):
-        return Column(Integer)
-
-    @declared_attr
-    def rank_twtrq_losses(self):
-        return Column(Integer)
-
-    @declared_attr
-    def rank_twtrq_inactive(self):
-        return Column(Boolean)
-
-    @declared_attr
-    def rank_twtrq_hot_streak(self):
-        return Column(Boolean)
-
-    @declared_attr
-    def rank_twtrq_fresh_blood(self):
-        return Column(Boolean)
-
-    @declared_attr
-    def rank_twtrq_veteran(self):
-        return Column(Boolean)
-
-    @declared_attr
-    def rank_twtrq(self):
-        return composite(LeagueLeague,
-                         self.rank_twtrq_tier,
-                         self.rank_twtrq_rank,
-                         self.rank_twtrq_points,
-                         self.rank_twtrq_wins,
-                         self.rank_twtrq_losses,
-                         self.rank_twtrq_inactive,
-                         self.rank_twtrq_hot_streak,
-                         self.rank_twtrq_fresh_blood,
-                         self.rank_twtrq_veteran)
-
-    @declared_attr
-    def rank_tftq_tier(self):
-        return Column(Enum(LeagueTier))
-
-    @declared_attr
-    def rank_tftq_rank(self):
-        return Column(Enum(LeagueRank))
-
-    @declared_attr
-    def rank_tftq_points(self):
-        return Column(Integer)
-
-    @declared_attr
-    def rank_tftq_wins(self):
-        return Column(Integer)
-
-    @declared_attr
-    def rank_tftq_losses(self):
-        return Column(Integer)
-
-    @declared_attr
-    def rank_tftq_inactive(self):
-        return Column(Boolean)
-
-    @declared_attr
-    def rank_tftq_hot_streak(self):
-        return Column(Boolean)
-
-    @declared_attr
-    def rank_tftq_fresh_blood(self):
-        return Column(Boolean)
-
-    @declared_attr
-    def rank_tftq_veteran(self):
-        return Column(Boolean)
-
-    @declared_attr
-    def rank_tftq(self):
-        return composite(LeagueLeague,
-                         self.rank_tftq_tier,
-                         self.rank_tftq_rank,
-                         self.rank_tftq_points,
-                         self.rank_tftq_wins,
-                         self.rank_tftq_losses,
-                         self.rank_tftq_inactive,
-                         self.rank_tftq_hot_streak,
-                         self.rank_tftq_fresh_blood,
-                         self.rank_tftq_veteran)
-
-    @declared_attr
     def mastery_score(self):
         return Column(Integer, nullable=False, default=0)
+
+    def json(self):
+        return {
+            "region": self.region,
+            "profile_icon_id": self.profile_icon_id,
+            "summoner_name": self.summoner_name,
+            "puuid": self.puuid,
+            "summoner_level": self.summoner_level,
+            "summoner_id": self.summoner_id,
+            "account_id": self.account_id,
+            "soloq": self.rank_soloq.json() if self.rank_soloq is not None else None,
+            "flexq": self.rank_flexq.json() if self.rank_flexq is not None else None,
+            "mastery_score": self.mastery_score,
+        }
 
     def __repr__(self):
         return f"<{self.__class__.__qualname__} {str(self)}>"

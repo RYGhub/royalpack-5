@@ -31,7 +31,7 @@ class WikiPage:
 
     @declared_attr
     def theme(self):
-        return Column(String)
+        return Column(String, nullable=False, default="default")
 
     @property
     def page_short_id(self):

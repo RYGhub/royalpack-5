@@ -1,16 +1,17 @@
+from typing import *
 import aiohttp
 import asyncio
 import datetime
 import logging
 import dateparser
-from royalnet.commands import *
-from royalnet.serf.telegram.escape import escape
+import royalnet.commands as rc
+import royalnet.serf.telegram as rst
 
 
 log = logging.getLogger(__name__)
 
 
-class PeertubeUpdatesCommand(Command):
+class PeertubeUpdatesCommand(rc.Command):
     name: str = "peertubeupdates"
 
     description: str = "Guarda quando è uscito l'ultimo video su PeerTube."
@@ -21,7 +22,7 @@ class PeertubeUpdatesCommand(Command):
 
     _latest_date: datetime.datetime = None
 
-    def __init__(self, interface: CommandInterface):
+    def __init__(self, interface: rc.CommandInterface):
         super().__init__(interface)
         if self.interface.name == "telegram":
             self.loop.create_task(self._ready_up())
@@ -33,6 +34,8 @@ class PeertubeUpdatesCommand(Command):
             async with session.get(self.config["Peertube"]["instance_url"] +
                                    "/feeds/videos.json?sort=-publishedAt&filter=local") as response:
                 log.debug("Parsing jsonfeed")
+                if response.status != 200:
+                    raise rc.ExternalError("Peertube is unavailable")
                 j = await response.json()
                 log.debug("Jsonfeed parsed successfully")
         return j
@@ -41,14 +44,14 @@ class PeertubeUpdatesCommand(Command):
         client = self.interface.bot.client
         await self.interface.bot.safe_api_call(client.send_message,
                                                chat_id=self.config["Telegram"]["main_group_id"],
-                                               text=escape(message),
+                                               text=rst.escape(message),
                                                parse_mode="HTML",
                                                disable_webpage_preview=True)
 
     async def _ready_up(self):
         j = await self._get_json()
         if j["version"] != "https://jsonfeed.org/version/1":
-            raise ConfigurationError("url is not a jsonfeed")
+            raise rc.ConfigurationError("url is not a jsonfeed")
         videos = j["items"]
         for video in reversed(videos):
             date_modified = dateparser.parse(video["date_modified"])
@@ -72,7 +75,7 @@ class PeertubeUpdatesCommand(Command):
                                      f"{video['url']}")
             await asyncio.sleep(self.config["Peertube"]["feed_update_timeout"])
 
-    async def run(self, args: CommandArgs, data: CommandData) -> None:
+    async def run(self, args: rc.CommandArgs, data: rc.CommandData) -> None:
         if self.interface.name != "telegram":
-            raise UnsupportedError()
+            raise rc.UnsupportedError()
         await data.reply(f"ℹ️ Ultimo video caricato il: [b]{self._latest_date.isoformat()}[/b]")

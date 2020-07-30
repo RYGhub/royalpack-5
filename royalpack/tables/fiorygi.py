@@ -19,7 +19,7 @@ class Fiorygi:
         return Column(Integer, nullable=False, default=0)
 
     def __repr__(self):
-        return f"<Fiorygi di {self.royal}: {self.fiorygi}>"
+        return f"<{self.__class__.__name__} di {self.user}: {self.fiorygi}>"
 
     def __str__(self):
         return f"{self.fiorygi} fioryg" + ("i" if self.fiorygi != 1 else "")

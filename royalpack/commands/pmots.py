@@ -1,11 +1,11 @@
 from typing import *
-from royalnet.commands import *
+import royalnet.commands as rc
 
 
-class PmotsCommand(Command):
+class PmotsCommand(rc.Command):
     name: str = "pmots"
 
     description: str = "Confondi Proto!"
 
-    async def run(self, args: CommandArgs, data: CommandData) -> None:
+    async def run(self, args: rc.CommandArgs, data: rc.CommandData) -> None:
         await data.reply("👣 pmots pmots")

@@ -1,12 +1,16 @@
-from starlette.requests import Request
-from starlette.responses import *
-from royalnet.constellation import *
-from royalnet.utils import *
+import royalnet.utils as ru
+import royalnet.constellation.api as rca
 
 
-class ApiDiscordCvStar(PageStar):
-    path = "/api/discord/cv"
+class ApiDiscordCvStar(rca.ApiStar):
+    path = "/api/discord/cv/v1"
 
-    async def page(self, request: Request) -> JSONResponse:
+    tags = ["discord"]
+
+    @rca.magic
+    async def get(self, data: rca.ApiData) -> ru.JSON:
+        """Get the members status of a single Discord guild.
+
+        Equivalent to calling /cv in a chat."""
         response = await self.interface.call_herald_event("discord", "discord_cv")
-        return JSONResponse(response)
+        return response

@@ -1,7 +1,7 @@
 from sqlalchemy import *
 from sqlalchemy.orm import relationship
 from sqlalchemy.ext.declarative import declared_attr
-from ..utils import MMChoice
+from ..types import MMChoice
 
 
 class MMResponse:
