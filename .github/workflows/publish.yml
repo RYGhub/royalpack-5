@@ -1,0 +1,24 @@
+name: Publish to PyPI
+
+on:
+  release:
+    types: [created]
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout the repository
+      uses: actions/checkout@v2
+    - name: Setup Python and Poetry
+      uses: abatilo/actions-poetry@v1.5.0
+      with:
+        python_version: 3.8
+        poetry_version: 1.0
+        args: install
+    - name: Build
+      run: poetry build
+    - name: Publish
+      env:
+        POETRY_PYPI_TOKEN_PYPI: ${{ secrets.PYPI_USERNAME }}
+      run: poetry publish
