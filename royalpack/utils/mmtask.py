@@ -5,6 +5,7 @@ import logging
 import datetime
 import enum
 import asyncio as aio
+import psycopg2
 
 from telegram import InlineKeyboardMarkup as InKM
 from telegram import InlineKeyboardButton as InKB
@@ -179,7 +180,10 @@ class MMTask:
             else:
                 # Change their response
                 mmresponse.choice = choice
-            await data.session_commit()
+            try:
+                await data.session_commit()
+            except psycopg2.Error:
+                raise rc.UserError("Hai già risposto nello stesso modo a questo matchmaking.")
 
             await self.telegram_channel_message_update()
 
