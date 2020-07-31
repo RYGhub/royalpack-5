@@ -33,12 +33,19 @@ class FortuneCommand(rc.Command):
         "⭐️ Oggi la stella della RYG ti sembrerà un pochino più dritta!",
         "⭐️ Oggi la stella della RYG ti sembrerà anche più storta del solito!",
         "💎 Oggi i tuoi avversari non riusciranno a deflettere i tuoi Emerald Splash!",
+        "⁉️ Oggi le tue supercazzole prematureranno un po' più a destra!",
         "⁉️ Oggi le tue supercazzole prematureranno un po' più a sinistra!",
         "🌅 Oggi sarà il giorno dopo ieri e il giorno prima di domani!",
         "🤖 Oggi il Royal Bot ti dirà qualcosa di molto utile!",
         "💤 Oggi rischierai di addormentarti più volte!",
         "🥪 Oggi ti verrà fame fuori orario!",
         "😓 Oggi dirai molte stupidaggini!",
+        "🏠 Oggi qualcuno si autoinviterà a casa tua!",
+        "📵 Oggi passerai una bella giornata tranquilla senza che nessuno ti chiami!",
+        "🎶 Oggi scoprirai un vero [url=https://www.urbandictionary.com/define.php?term=banger]banger[/url]!",
+        "🕸 Oggi cadrai trappola di una ragnatela! [i]O ti arriverà in faccia.[/i]",
+        "🧻 Oggi fai attenzione alla carta igienica: potrebbe finire!",
+        "🔮 Oggi chiederai a @royalgamesbot di dirti la tua /fortune!"
     ]
 
     async def run(self, args: rc.CommandArgs, data: rc.CommandData) -> None:
