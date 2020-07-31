@@ -45,7 +45,8 @@ class FortuneCommand(rc.Command):
         "🎶 Oggi scoprirai un vero [url=https://www.urbandictionary.com/define.php?term=banger]banger[/url]!",
         "🕸 Oggi cadrai trappola di una ragnatela! [i]O ti arriverà in faccia.[/i]",
         "🧻 Oggi fai attenzione alla carta igienica: potrebbe finire!",
-        "🔮 Oggi chiederai a @royalgamesbot di dirti la tua /fortune!"
+        "🔮 Oggi chiederai a @royalgamesbot di dirti la tua /fortune!",
+        "🧨 Oggi calpesterai delle [url=https://www.youtube.com/watch?v=Zyef3NU3wqk&t=57]mine di Techies[/url]!",
     ]
 
     async def run(self, args: rc.CommandArgs, data: rc.CommandData) -> None:
