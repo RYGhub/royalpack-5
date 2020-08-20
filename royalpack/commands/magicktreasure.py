@@ -12,15 +12,15 @@ class MagicktreasureCommand(rc.Command):
 
     syntax: str = "{codice} {valore}"
 
-    async def _permission_check(self, author, code, value, data):
+    async def _permission_check(self, author, code, value, data, session):
         if "banker" not in author.roles:
             raise rc.UserError("Non hai permessi sufficienti per eseguire questo comando.")
         return author
 
-    async def _create_treasure(self, author, code, value, data):
+    async def _create_treasure(self, author, code, value, data, session):
         TreasureT = self.alchemy.get(Treasure)
 
-        treasure = await ru.asyncify(data.session.query(TreasureT).get, code)
+        treasure = await ru.asyncify(session.query(TreasureT).get, code)
         if treasure is not None:
             raise rc.UserError("Esiste già un Treasure con quel codice.")
 
@@ -44,10 +44,10 @@ class MagicktreasureCommand(rc.Command):
         if value < 0:
             raise rc.InvalidInputError("Il valore deve essere maggiore o uguale a 0.")
 
-        await self._permission_check(author, code, value, data)
-        treasure = await self._create_treasure(author, code, value, data)
-
-        data.session.add(treasure)
-        await data.session_commit()
+        async with data.session_acm() as session:
+            await self._permission_check(author, code, value, data, session)
+            treasure = await self._create_treasure(author, code, value, data, session)
+            session.add(treasure)
+            await ru.asyncify(session.commit)
 
         await data.reply("✅ Treasure creato!")

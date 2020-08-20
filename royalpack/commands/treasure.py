@@ -16,16 +16,17 @@ class TreasureCommand(rc.Command):
         author = await data.get_author(error_if_none=True)
         code = args[0].lower()
 
-        TreasureT = self.alchemy.get(Treasure)
+        async with data.session_acm() as session:
+            TreasureT = self.alchemy.get(Treasure)
 
-        treasure = await ru.asyncify(data.session.query(TreasureT).get, code)
-        if treasure is None:
-            raise rc.UserError("Non esiste nessun Treasure con quel codice.")
-        if treasure.redeemed_by is not None:
-            raise rc.UserError(f"Quel tesoro è già stato riscattato da {treasure.redeemed_by}.")
+            treasure = await ru.asyncify(session.query(TreasureT).get, code)
+            if treasure is None:
+                raise rc.UserError("Non esiste nessun Treasure con quel codice.")
+            if treasure.redeemed_by is not None:
+                raise rc.UserError(f"Quel tesoro è già stato riscattato da {treasure.redeemed_by}.")
 
-        treasure.redeemed_by = author
-        await data.session_commit()
+            treasure.redeemed_by = author
+            await ru.asyncify(session.commit)
         await FiorygiTransaction.spawn_fiorygi(data,
                                                author,
                                                treasure.value,

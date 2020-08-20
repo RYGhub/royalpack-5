@@ -29,8 +29,8 @@ class LeagueoflegendsCommand(LinkerCommand):
         "rank_flexq": "Flex",
     }
 
-    def __init__(self, interface: rc.CommandInterface):
-        super().__init__(interface)
+    def __init__(self, serf, config):
+        super().__init__(serf, config)
         self._lolwatcher: Optional[riotwatcher.RiotWatcher] = None
         self._tftwatcher: Optional[riotwatcher.RiotWatcher] = None
         if self.enabled():

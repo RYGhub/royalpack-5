@@ -3,7 +3,9 @@ import datetime
 import re
 import dateparser
 import typing
+import royalnet.utils as ru
 import royalnet.commands as rc
+import royalnet.serf.telegram as rst
 
 from ..tables import MMEvent
 from ..utils import MMTask
@@ -18,20 +20,20 @@ class MatchmakingCommand(rc.Command):
 
     aliases = ["mm", "lfg"]
 
-    def __init__(self, interface: rc.CommandInterface):
-        super().__init__(interface)
+    def __init__(self, serf, config):
+        super().__init__(serf, config)
 
         # Find all active MMEvents and run the tasks for them
         session = self.alchemy.Session()
 
         # Create a new MMEvent and run it
-        if self.interface.name == "telegram":
+        if isinstance(self.serf, rst.TelegramSerf):
             MMEventT = self.alchemy.get(MMEvent)
             active_mmevents = (
                 session
                 .query(MMEventT)
                 .filter(
-                    MMEventT.interface == self.interface.name,
+                    MMEventT.interface == self.serf.interface_name,
                     MMEventT.interrupted == False
                 )
                 .all()
@@ -74,13 +76,14 @@ class MatchmakingCommand(rc.Command):
         dt, title, description = self._parse_args(args)
 
         # Add the MMEvent to the database
-        mmevent: MMEvent = self.alchemy.get(MMEvent)(creator=author,
-                                                     datetime=dt,
-                                                     title=title,
-                                                     description=description,
-                                                     interface=self.interface.name)
-        data.session.add(mmevent)
-        await data.session_commit()
+        async with data.session_acm() as session:
+            mmevent: MMEvent = self.alchemy.get(MMEvent)(creator=author,
+                                                         datetime=dt,
+                                                         title=title,
+                                                         description=description,
+                                                         interface=self.serf.interface_name)
+            session.add(mmevent)
+            await ru.asyncify(session.commit)
 
         # Create and run a task for the newly created MMEvent
         task = MMTask(mmevent.mmid, command=self)

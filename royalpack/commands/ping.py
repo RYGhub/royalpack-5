@@ -12,7 +12,7 @@ class PingCommand(rc.Command):
 
     syntax: str = ""
 
-    _targets = ["telegram", "discord", "matrix", "constellation"]
+    _targets = ["telegram", "discord", "constellation"]
 
     async def run(self, args: rc.CommandArgs, data: rc.CommandData) -> None:
         await data.reply("📶 Ping...")
@@ -21,7 +21,7 @@ class PingCommand(rc.Command):
 
         start = datetime.datetime.now()
         for target in self._targets:
-            tasks[target] = self.loop.create_task(self.interface.call_herald_event(target, "pong"))
+            tasks[target] = self.loop.create_task(self.serf.call_herald_event(target, "pong"))
 
         await asyncio.sleep(10)
 

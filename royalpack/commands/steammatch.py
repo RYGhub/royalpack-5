@@ -53,8 +53,8 @@ class SteammatchCommand(rc.Command):
 
     syntax: str = "{royalnet_username}+"
 
-    def __init__(self, interface: rc.CommandInterface):
-        super().__init__(interface)
+    def __init__(self, serf, config):
+        super().__init__(serf, config)
         self._api = steam.webapi.WebAPI(self.config["steampowered"]["token"])
 
     async def run(self, args: rc.CommandArgs, data: rc.CommandData) -> None:
@@ -64,7 +64,8 @@ class SteammatchCommand(rc.Command):
         users.append(author)
 
         for arg in args:
-            user = await rbt.User.find(self.alchemy, data.session, arg)
+            async with data.session_acm() as session:
+                user = await rbt.User.find(self.alchemy, session, arg)
             users.append(user)
 
         if len(users) < 2:

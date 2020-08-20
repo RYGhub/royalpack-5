@@ -14,37 +14,37 @@ log = logging.getLogger(__name__)
 
 class LinkerCommand(rc.Command, metaclass=abc.ABCMeta):
 
-    def __init__(self, interface: rc.CommandInterface):
-        super().__init__(interface)
-
+    def __init__(self, serf, config):
+        super().__init__(serf, config)
         self.updater_task = None
         if self.enabled():
             self.updater_task = self.loop.create_task(self.run_updater())
 
     async def run(self, args: rc.CommandArgs, data: rc.CommandData) -> None:
         author = await data.get_author(error_if_none=True)
-        if len(args) == 0:
-            message = []
-            for obj in await self.get_updatables_of_user(session=data.session, user=author):
-                async def change(attribute: str, value: Any):
-                    """A shortcut for self.__change."""
-                    await self._change(session=data.session,
-                                       obj=obj,
-                                       attribute=attribute,
-                                       new=value)
+        async with data.session_acm() as session:
+            if len(args) == 0:
+                message = []
+                for obj in await self.get_updatables_of_user(session=session, user=author):
+                    async def change(attribute: str, value: Any):
+                        """A shortcut for self.__change."""
+                        await self._change(session=session,
+                                           obj=obj,
+                                           attribute=attribute,
+                                           new=value)
 
-                await self.update(session=data.session, obj=obj, change=change)
-                message.append(self.describe(obj))
-            if len(message) == 0:
-                raise rc.UserError("Nessun account connesso.")
-            await data.session_commit()
-            await data.reply("\n".join(message))
-        else:
-            created = await self.create(session=data.session, user=author, args=args, data=data)
-            await data.session_commit()
-            if created is not None:
-                message = ["🔗 Account collegato!", "", self.describe(created)]
+                    await self.update(session=session, obj=obj, change=change)
+                    message.append(self.describe(obj))
+                if len(message) == 0:
+                    raise rc.UserError("Nessun account connesso.")
+                await ru.asyncify(session.commit)
                 await data.reply("\n".join(message))
+            else:
+                created = await self.create(session=session, user=author, args=args, data=data)
+                await ru.asyncify(session.commit)
+                if created is not None:
+                    message = ["🔗 Account collegato!", "", self.describe(created)]
+                    await data.reply("\n".join(message))
 
     def describe(self, obj: Updatable) -> str:
         """The text that should be appended to the report message for a given Updatable."""
@@ -143,7 +143,7 @@ class LinkerCommand(rc.Command, metaclass=abc.ABCMeta):
 
     def enabled(self) -> bool:
         """Whether the updater is enabled or not."""
-        return self.config[self.name]["updater"]["enabled"] and self.interface.name == "telegram"
+        return self.config[self.name]["updater"]["enabled"] and isinstance(self.serf, rst.TelegramSerf)
 
     def period(self) -> int:
         """The time between two updater cycles."""

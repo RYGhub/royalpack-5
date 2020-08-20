@@ -23,7 +23,6 @@ from .leagueoflegends import LeagueoflegendsCommand
 from .magickfiorygi import MagickfiorygiCommand
 from .magicktreasure import MagicktreasureCommand
 from .matchmaking import MatchmakingCommand
-from .peertubeupdates import PeertubeUpdatesCommand
 from .ping import PingCommand
 from .pmots import PmotsCommand
 from .dog import DogCommand
@@ -37,7 +36,6 @@ from .steammatch import SteammatchCommand
 from .steampowered import SteampoweredCommand
 from .treasure import TreasureCommand
 from .trivia import TriviaCommand
-from .userinfo import UserinfoCommand
 from .osu import OsuCommand
 
 # Enter the commands of your Pack here!
@@ -66,7 +64,6 @@ available_commands = [
     MagickfiorygiCommand,
     MagicktreasureCommand,
     MatchmakingCommand,
-    PeertubeUpdatesCommand,
     PingCommand,
     PmotsCommand,
     DogCommand,
@@ -80,7 +77,6 @@ available_commands = [
     SteampoweredCommand,
     TreasureCommand,
     TriviaCommand,
-    UserinfoCommand,
     OsuCommand,
 ]
 

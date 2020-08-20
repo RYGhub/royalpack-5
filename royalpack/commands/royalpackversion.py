@@ -16,10 +16,7 @@ class RoyalpackCommand(rc.Command):
         return pkg_resources.get_distribution("royalpack").version
 
     async def run(self, args: rc.CommandArgs, data: rc.CommandData) -> None:
-        if __debug__:
-            message = f"ℹ️ Royalpack [url=https://github.com/Steffo99/royalpack/]Unreleased[/url]\n"
-        else:
-            message = f"ℹ️ Royalpack [url=https://github.com/Steffo99/royalpack/releases/tag/{self.royalpack_version}]{self.royalpack_version}[/url]\n"
+        message = f"ℹ️ Royalpack [url=https://github.com/Steffo99/royalpack/releases/tag/{self.royalpack_version}]{self.royalpack_version}[/url]\n"
         if "69" in self.royalpack_version:
             message += "(Nice.)"
         await data.reply(message)

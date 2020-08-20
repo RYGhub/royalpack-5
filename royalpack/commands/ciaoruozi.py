@@ -1,15 +1,16 @@
 from typing import *
 import telegram
-from royalnet.commands import *
+import royalnet.commands as rc
+import royalnet.serf.telegram as rst
 
 
-class CiaoruoziCommand(Command):
+class CiaoruoziCommand(rc.Command):
     name: str = "ciaoruozi"
 
     description: str = "Saluta Ruozi, un leggendario essere che è tornato in Royal Games."
 
-    async def run(self, args: CommandArgs, data: CommandData) -> None:
-        if self.interface.name == "telegram":
+    async def run(self, args: rc.CommandArgs, data: rc.CommandData) -> None:
+        if isinstance(self.serf, rst.TelegramSerf):
             user: telegram.User = data.message.from_user
             # Se sei Ruozi, salutati da solo!
             if user.id == 112437036:

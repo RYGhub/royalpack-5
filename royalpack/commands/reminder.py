@@ -7,8 +7,8 @@ import discord
 from sqlalchemy import and_
 import royalnet.commands as rc
 import royalnet.utils as ru
-from royalnet.serf.telegram import escape as telegram_escape
-from royalnet.serf.discord import escape as discord_escape
+import royalnet.serf.telegram as rst
+import royalnet.serf.discord as rsd
 
 from ..tables import Reminder
 
@@ -22,34 +22,35 @@ class ReminderCommand(rc.Command):
 
     syntax: str = "[ {data} ] {messaggio}"
 
-    def __init__(self, interface: rc.CommandInterface):
-        super().__init__(interface)
-        session = interface.alchemy.Session()
+    def __init__(self, serf, config):
+        super().__init__(serf, config)
+
+        session = self.alchemy.Session()
         reminders = (
-            session.query(interface.alchemy.get(Reminder))
+            session.query(self.alchemy.get(Reminder))
                    .filter(and_(
-                       interface.alchemy.get(Reminder).datetime >= datetime.datetime.now(),
-                       interface.alchemy.get(Reminder).interface_name == interface.name))
+                       self.alchemy.get(Reminder).datetime >= datetime.datetime.now(),
+                       self.alchemy.get(Reminder).interface_name == self.serf.interface_name))
                    .all()
         )
         for reminder in reminders:
-            interface.loop.create_task(self._remind(reminder))
+            self.loop.create_task(self._remind(reminder))
 
     async def _remind(self, reminder):
         await ru.sleep_until(reminder.datetime)
-        if self.interface.name == "telegram":
+        if isinstance(self.serf, rst.TelegramSerf):
             chat_id: int = pickle.loads(reminder.interface_data)
             client: telegram.Bot = self.serf.client
             await self.serf.api_call(client.send_message,
                                      chat_id=chat_id,
-                                     text=telegram_escape(f"❗️ {reminder.message}"),
+                                     text=rst.escape(f"❗️ {reminder.message}"),
                                      parse_mode="HTML",
                                      disable_web_page_preview=True)
-        elif self.interface.name == "discord":
+        elif isinstance(self.serf, rsd.DiscordSerf):
             channel_id: int = pickle.loads(reminder.interface_data)
             client: discord.Client = self.serf.client
             channel = client.get_channel(channel_id)
-            await channel.send(discord_escape(f"❗️ {reminder.message}"))
+            await channel.send(rsd.escape(f"❗️ {reminder.message}"))
 
     async def run(self, args: rc.CommandArgs, data: rc.CommandData) -> None:
         try:
@@ -70,18 +71,19 @@ class ReminderCommand(rc.Command):
             await data.reply("⚠️ La data che hai specificato è nel passato.")
             return
         await data.reply(f"✅ Promemoria impostato per [b]{date.strftime('%Y-%m-%d %H:%M:%S')}[/b]")
-        if self.interface.name == "telegram":
+        if isinstance(self.serf, rst.TelegramSerf):
             interface_data = pickle.dumps(data.message.chat.id)
-        elif self.interface.name == "discord":
+        elif isinstance(self.serf, rsd.DiscordSerf):
             interface_data = pickle.dumps(data.message.channel.id)
         else:
             raise rc.UnsupportedError("This command does not support the current interface.")
         creator = await data.get_author()
-        reminder = self.interface.alchemy.get(Reminder)(creator=creator,
-                                                        interface_name=self.interface.name,
-                                                        interface_data=interface_data,
-                                                        datetime=date,
-                                                        message=reminder_text)
-        self.interface.loop.create_task(self._remind(reminder))
-        data.session.add(reminder)
-        await ru.asyncify(data.session.commit)
+        async with data.session_acm() as session:
+            reminder = self.alchemy.get(Reminder)(creator=creator,
+                                                  interface_name=self.serf.interface_name,
+                                                  interface_data=interface_data,
+                                                  datetime=date,
+                                                  message=reminder_text)
+            self.loop.create_task(self._remind(reminder))
+            session.add(reminder)
+            await ru.asyncify(session.commit)

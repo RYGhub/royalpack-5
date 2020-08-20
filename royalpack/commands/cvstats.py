@@ -4,6 +4,7 @@ import asyncio
 import datetime
 import royalnet.commands as rc
 import royalnet.utils as ru
+import royalnet.serf.discord as rsd
 
 from ..tables import Cvstats
 
@@ -18,14 +19,14 @@ class CvstatsCommand(rc.Command):
 
     syntax: str = ""
 
-    def __init__(self, interface: rc.CommandInterface):
-        super().__init__(interface)
-        if self.interface.name == "discord":
+    def __init__(self, serf, config):
+        super().__init__(serf=serf, config=config)
+        if isinstance(self.serf, rsd.DiscordSerf):
             self.loop.create_task(self._updater(1800))
 
     def _is_ryg_member(self, member: dict):
         for role in member["roles"]:
-            if role["id"] == self.interface.config["Cv"]["displayed_role_id"]:
+            if role["id"] == self.config["Cv"]["displayed_role_id"]:
                 return True
         return False
 
@@ -33,7 +34,7 @@ class CvstatsCommand(rc.Command):
         log.info(f"Gathering Cvstats...")
         while True:
             try:
-                response: Dict[str, Any] = await self.interface.call_herald_event("discord", "discord_cv")
+                response: Dict[str, Any] = await self.serf.call_herald_event("discord", "discord_cv")
             except rc.ConfigurationError:
                 await asyncio.sleep(10)
                 continue
@@ -118,7 +119,8 @@ class CvstatsCommand(rc.Command):
     async def run(self, args: rc.CommandArgs, data: rc.CommandData) -> None:
         CvstatsT = self.alchemy.get(Cvstats)
 
-        cvstats = data.session.query(CvstatsT).order_by(CvstatsT.timestamp.desc()).first()
+        async with data.session_acm() as session:
+            cvstats = session.query(CvstatsT).order_by(CvstatsT.timestamp.desc()).first()
 
         message = [
             f"ℹ️ [b]Statistiche[/b]",

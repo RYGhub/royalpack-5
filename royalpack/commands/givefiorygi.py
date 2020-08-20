@@ -20,7 +20,8 @@ class GivefiorygiCommand(rc.Command):
 
         if user_arg is None:
             raise rc.InvalidInputError("Non hai specificato un destinatario!")
-        user = await rbt.User.find(self.alchemy, data.session, user_arg)
+        async with data.session_acm() as session:
+            user = await rbt.User.find(self.alchemy, session, user_arg)
         if user is None:
             raise rc.InvalidInputError("L'utente specificato non esiste!")
         if user.uid == author.uid:

@@ -9,9 +9,6 @@ class CvCommand(Command):
 
     syntax: str = "[a][o][n][d][h]"
 
-    def __init__(self, interface: CommandInterface):
-        super().__init__(interface)
-
     def _render_member(self,
                        member,
                        display_nick: bool,
@@ -92,7 +89,7 @@ class CvCommand(Command):
         return f"{status}{voice} {name}{activity}\n"
 
     async def run(self, args: CommandArgs, data: CommandData) -> None:
-        response: Dict[str, Any] = await self.interface.call_herald_event("discord", "discord_cv")
+        response: Dict[str, Any] = await self.serf.call_herald_event("discord", "discord_cv")
 
         flags = args.optional(0, default="")
         display_nicks = "n" in flags

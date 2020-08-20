@@ -7,7 +7,6 @@ import royalnet.commands as rc
 import royalnet.utils as ru
 
 from .abstract.linker import LinkerCommand
-from ..types import Updatable
 from ..tables import Osu
 from ..stars.api_auth_login_osu import ApiAuthLoginOsuStar
 

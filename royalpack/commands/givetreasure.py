@@ -13,14 +13,14 @@ class GivetreasureCommand(MagicktreasureCommand):
 
     syntax: str = "{codice} {valore}"
 
-    async def _permission_check(self, author, code, value, data):
+    async def _permission_check(self, author, code, value, data, session):
         if author.fiorygi.fiorygi < value:
             raise rc.UserError("Non hai abbastanza fiorygi per creare questo Treasure.")
 
-    async def _create_treasure(self, author, code, value, data):
+    async def _create_treasure(self, author, code, value, data, session):
         TreasureT = self.alchemy.get(Treasure)
 
-        treasure = await ru.asyncify(data.session.query(TreasureT).get, code)
+        treasure = await ru.asyncify(session.query(TreasureT).get, code)
         if treasure is not None:
             raise rc.UserError("Esiste già un Treasure con quel codice.")
 

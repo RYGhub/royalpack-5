@@ -17,19 +17,19 @@ class HelpCommand(rc.Command):
             ]
 
             for command in sorted(list(set(self.serf.commands.values())), key=lambda c: c.name):
-                message.append(f"- [c]{self.interface.prefix}{command.name}[/c]")
+                message.append(f"- [c]{self.serf.prefix}{command.name}[/c]")
 
             await data.reply("\n".join(message))
         else:
-            name: str = args[0].lstrip(self.interface.prefix)
+            name: str = args[0].lstrip(self.serf.prefix)
 
             try:
-                command: rc.Command = self.serf.commands[f"{self.interface.prefix}{name}"]
+                command: rc.Command = self.serf.commands[f"{self.serf.prefix}{name}"]
             except KeyError:
                 raise rc.InvalidInputError("Il comando richiesto non esiste.")
 
             message = [
-                f"ℹ️ [c]{self.interface.prefix}{command.name} {command.syntax}[/c]",
+                f"ℹ️ [c]{self.serf.prefix}{command.name} {command.syntax}[/c]",
                 "",
                 f"{command.description}"
             ]

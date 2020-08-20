@@ -15,7 +15,7 @@ class EvalCommand(rc.Command):
         user: rbt.User = await data.get_author(error_if_none=True)
         if "admin" not in user.roles:
             raise rc.CommandError("Non sei autorizzato a eseguire codice arbitrario!\n"
-                               "(Sarebbe un po' pericoloso se te lo lasciassi eseguire, non trovi?)")
+                                  "(Sarebbe un po' pericoloso se te lo lasciassi eseguire, non trovi?)")
         try:
             result = eval(args.joined(require_at_least=1))
         except Exception as e:

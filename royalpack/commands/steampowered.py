@@ -22,8 +22,8 @@ class SteampoweredCommand(LinkerCommand):
 
     syntax: str = "{url_profilo}"
 
-    def __init__(self, interface: rc.CommandInterface):
-        super().__init__(interface)
+    def __init__(self, serf, config):
+        super().__init__(serf, config)
         self._api = steam.webapi.WebAPI(self.token())
 
     def token(self):
