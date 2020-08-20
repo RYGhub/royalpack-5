@@ -13,10 +13,10 @@ class AnswerCommand(rc.Command):
     syntax: str = ""
 
     _answers = [
-        #Cerchiamo di tenere bilanciate le tre colonne, o almeno le prime due.
-        #Se avete un'idea ma metterebbe troppe opzioni in un'unica categoria, mettetela sotto commento.
+        # Cerchiamo di tenere bilanciate le tre colonne, o almeno le prime due.
+        # Se avete un'idea ma metterebbe troppe opzioni in un'unica categoria, mettetela sotto commento.
 
-        #risposte "sì"
+        # risposte "sì"
         "Sì.",
         "Decisamente sì!",
         "Uhm, secondo me sì.",
@@ -34,7 +34,7 @@ class AnswerCommand(rc.Command):
         "Questa domanda ha risposta affermativa.",
         "Hell yeah.",
 
-        #risposte "no"
+        # risposte "no"
         "No.",
         "Decisamente no!",
         "Uhm, secondo me sì.",
@@ -52,7 +52,7 @@ class AnswerCommand(rc.Command):
         "Questa domanda ha risposta negativa.",
         "Hell no.",
 
-        #risposte "boh"
+        # risposte "boh"
         "Boh.",
         "E io che ne so?!",
         "Non so proprio rispondere",
@@ -71,12 +71,9 @@ class AnswerCommand(rc.Command):
     ]
 
     async def run(self, args: rc.CommandArgs, data: rc.CommandData) -> None:
-
         h = hash(datetime.datetime.now())
 
         r = random.Random(x=h)
 
         message = r.sample(self._answers, 1)[0]
         await data.reply(message)
-
-
