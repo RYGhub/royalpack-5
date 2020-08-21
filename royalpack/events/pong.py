@@ -4,7 +4,7 @@ import royalnet.commands as rc
 import datetime
 
 
-class PongEvent(rc.Event):
+class PongEvent(rc.HeraldEvent):
     name = "pong"
 
     async def run(self, **kwargs) -> dict:

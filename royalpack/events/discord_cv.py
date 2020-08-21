@@ -1,27 +1,27 @@
 import discord
 from typing import *
 from royalnet.serf.discord.discordserf import DiscordSerf
-from royalnet.commands import *
+import royalnet.commands as rc
 
 
-class DiscordCvEvent(Event):
+class DiscordCvEvent(rc.HeraldEvent):
     name = "discord_cv"
 
     async def run(self, guild_id: Optional[int] = None, **kwargs) -> dict:
-        if not self.interface.name == "discord":
-            raise UnsupportedError()
+        if not isinstance(self.parent, DiscordSerf):
+            raise rc.UnsupportedError()
 
         # noinspection PyTypeChecker
-        serf: DiscordSerf = self.interface.serf
+        serf: DiscordSerf = self.parent
 
         client: discord.Client = serf.client
 
         if guild_id is None:
             guilds: List[discord.Guild] = client.guilds
             if len(guilds) == 0:
-                raise ConfigurationError("Il bot non è in nessun Server.")
+                raise rc.ConfigurationError("Il bot non è in nessun Server.")
             elif len(guilds) > 1:
-                raise UserError("Non hai specificato di quale Server vuoi vedere le informazioni!")
+                raise rc.UserError("Non hai specificato di quale Server vuoi vedere le informazioni!")
             else:
                 guild = guilds[0]
         else:

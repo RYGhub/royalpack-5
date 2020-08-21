@@ -53,12 +53,12 @@ class LinkerCommand(rc.Command, metaclass=abc.ABCMeta):
     @abc.abstractmethod
     async def get_updatables_of_user(self, session, user: rbt.User) -> List[Updatable]:
         """Get the updatables of a specific user."""
-        ...
+        raise NotImplementedError()
 
     @abc.abstractmethod
     async def get_updatables(self, session) -> List[Updatable]:
         """Return a list of all objects that should be updated at this updater cycle."""
-        ...
+        raise NotImplementedError()
 
     @abc.abstractmethod
     async def create(self,
@@ -69,37 +69,37 @@ class LinkerCommand(rc.Command, metaclass=abc.ABCMeta):
         """Create a new updatable object for a user.
 
         This function is responsible for adding the object to the session."""
-        ...
+        raise NotImplementedError()
 
     @abc.abstractmethod
     async def update(self, session, obj, change: Callable[[str, Any], Awaitable[None]]):
         """Update a single updatable object. Use the change method to change values on the object!"""
-        ...
+        raise NotImplementedError()
 
     @abc.abstractmethod
     async def on_increase(self, session, obj: Updatable, attribute: str, old: Any, new: Any) -> None:
         """Called when the attribute has increased from the old value."""
-        ...
+        raise NotImplementedError()
 
     @abc.abstractmethod
     async def on_unchanged(self, session, obj: Updatable, attribute: str, old: Any, new: Any) -> None:
         """Called when the attribute stayed the same as the old value."""
-        ...
+        raise NotImplementedError()
 
     @abc.abstractmethod
     async def on_decrease(self, session, obj: Updatable, attribute: str, old: Any, new: Any) -> None:
         """Called when the attribute has decreased from the old value."""
-        ...
+        raise NotImplementedError()
 
     @abc.abstractmethod
     async def on_first(self, session, obj: Updatable, attribute: str, old: None, new: Any) -> None:
         """Called when the attribute changed from None."""
-        ...
+        raise NotImplementedError()
 
     @abc.abstractmethod
     async def on_reset(self, session, obj: Updatable, attribute: str, old: Any, new: None) -> None:
         """Called when the attribute changed to None."""
-        ...
+        raise NotImplementedError()
 
     async def _change(self,
                       session,
