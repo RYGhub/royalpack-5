@@ -159,7 +159,7 @@ class DogCommand(rc.Command):
         breed = args.joined()
         if breed:
             if breed == "list":
-                await data.reply("\n".join(["ℹ️ Razze disponibili:", [f"[c]{breed}[/c]" for breed in self._breeds]]))
+                await data.reply("\n".join(["ℹ️ Razze disponibili:", *[f"[c]{breed}[/c]" for breed in self._breeds]]))
             if breed in self._breeds:
                 url = f"https://dog.ceo/api/breed/{breed}/images/random"
             else:

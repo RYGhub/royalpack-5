@@ -1,5 +1,6 @@
 from typing import *
 
+import functools
 import pkg_resources
 import royalnet.commands as rc
 
@@ -12,7 +13,8 @@ class RoyalpackCommand(rc.Command):
     syntax: str = ""
 
     @property
-    def royalpack_version(self):
+    @functools.lru_cache(1)
+    def royalpack_version(self) -> str:
         return pkg_resources.get_distribution("royalpack").version
 
     async def run(self, args: rc.CommandArgs, data: rc.CommandData) -> None:
