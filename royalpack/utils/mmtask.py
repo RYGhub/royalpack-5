@@ -162,28 +162,30 @@ class MMTask:
             user = await data.get_author(error_if_none=True)
 
             # Get the related MMEvent
-            mmevent: MMEvent = await ru.asyncify(data.session.query(self._EventT).get, self.mmid)
+            async with data.session_acm() as session:
+                mmevent: MMEvent = await ru.asyncify(session.query(self._EventT).get, self.mmid)
 
-            # Check if the user had already responded
-            mmresponse: MMResponse = await ru.asyncify(
-                data.session.query(self._ResponseT).filter_by(user=user, mmevent=mmevent).one_or_none
-            )
+                # Check if the user had already responded
+                mmresponse: MMResponse = await ru.asyncify(
+                    session.query(self._ResponseT).filter_by(user=user, mmevent=mmevent).one_or_none
+                )
 
-            if mmresponse is None:
-                # If they didn't respond, create a new MMResponse
-                mmresponse = self._ResponseT(user=user, mmevent=mmevent, choice=choice)
-                data.session.add(mmresponse)
+                if mmresponse is None:
+                    # If they didn't respond, create a new MMResponse
+                    # noinspection PyArgumentList
+                    mmresponse = self._ResponseT(user=user, mmevent=mmevent, choice=choice)
+                    session.add(mmresponse)
 
-                # Drop fiorygi
-                if random.randrange(100) < self.command.config["Matchmaking"]["fiorygi_award_chance"]:
-                    await FiorygiTransaction.spawn_fiorygi(data, user, 1, "aver risposto a un matchmaking")
-            else:
-                # Change their response
-                mmresponse.choice = choice
-            try:
-                await data.session_commit()
-            except psycopg2.Error:
-                raise rc.UserError("Hai già risposto nello stesso modo a questo matchmaking.")
+                    # Drop fiorygi
+                    if random.randrange(100) < self.command.config["Matchmaking"]["fiorygi_award_chance"]:
+                        await FiorygiTransaction.spawn_fiorygi(data, user, 1, "aver risposto a un matchmaking")
+                else:
+                    # Change their response
+                    mmresponse.choice = choice
+                try:
+                    await ru.asyncify(session.commit)
+                except psycopg2.Error:
+                    raise rc.UserError("Hai già risposto nello stesso modo a questo matchmaking.")
 
             await self.telegram_channel_message_update()
 
@@ -196,7 +198,8 @@ class MMTask:
             user = await data.get_author(error_if_none=True)
 
             # Get the related MMEvent
-            mmevent: MMEvent = await ru.asyncify(data.session.query(self._EventT).get, self.mmid)
+            async with data.session_acm() as session:
+                mmevent: MMEvent = await ru.asyncify(session.query(self._EventT).get, self.mmid)
 
             # Ensure the user has the required roles to start the matchmaking
             if user != mmevent.creator and "admin" not in user.roles:
@@ -214,7 +217,8 @@ class MMTask:
             user = await data.get_author(error_if_none=True)
 
             # Get the related MMEvent
-            mmevent: MMEvent = await ru.asyncify(data.session.query(self._EventT).get, self.mmid)
+            async with data.session_acm() as session:
+                mmevent: MMEvent = await ru.asyncify(session.query(self._EventT).get, self.mmid)
 
             # Ensure the user has the required roles to start the matchmaking
             if user != mmevent.creator and "admin" not in user.roles:
@@ -233,19 +237,16 @@ class MMTask:
 
         rows.append([
             rc.KeyboardKey(
-                interface=self.command.interface,
                 short=f"{MMChoice.YES.value}",
                 text="Ci sarò!",
                 callback=self.get_answer_callback(MMChoice.YES)
             ),
             rc.KeyboardKey(
-                interface=self.command.interface,
                 short=f"{MMChoice.MAYBE.value}",
                 text="Forse...",
                 callback=self.get_answer_callback(MMChoice.MAYBE)
             ),
             rc.KeyboardKey(
-                interface=self.command.interface,
                 short=f"{MMChoice.NO.value}",
                 text="Non mi interessa.",
                 callback=self.get_answer_callback(MMChoice.NO)
@@ -255,19 +256,16 @@ class MMTask:
         if self._mmevent.datetime is not None:
             rows.append([
                 rc.KeyboardKey(
-                    interface=self.command.interface,
                     short=f"{MMChoice.LATE_SHORT.value}",
                     text="10 min",
                     callback=self.get_answer_callback(MMChoice.LATE_SHORT)
                 ),
                 rc.KeyboardKey(
-                    interface=self.command.interface,
                     short=f"{MMChoice.LATE_MEDIUM.value}",
                     text="30 min",
                     callback=self.get_answer_callback(MMChoice.LATE_MEDIUM)
                 ),
                 rc.KeyboardKey(
-                    interface=self.command.interface,
                     short=f"{MMChoice.LATE_LONG.value}",
                     text="60 min",
                     callback=self.get_answer_callback(MMChoice.LATE_LONG)
@@ -276,13 +274,11 @@ class MMTask:
 
         rows.append([
             rc.KeyboardKey(
-                interface=self.command.interface,
                 short=f"🗑",
                 text="Elimina",
                 callback=self.get_delete_callback()
             ),
             rc.KeyboardKey(
-                interface=self.command.interface,
                 short=f"🚩",
                 text="Inizia",
                 callback=self.get_start_callback()
@@ -319,13 +315,13 @@ class MMTask:
         for x, row in enumerate(inkm.inline_keyboard):
             for y, key in enumerate(row):
                 key: InKB
-                self.command.interface.serf.register_keyboard_key(key.callback_data, key=royalnet_keyboard[x][y])
+                self.command.serf.register_keyboard_key(key.callback_data, key=royalnet_keyboard[x][y])
 
     def unregister_telegram_keyboard(self, inkm: InKM):
         for row in inkm.inline_keyboard:
             for key in row:
                 key: InKB
-                self.command.interface.serf.unregister_keyboard_key(key.callback_data)
+                self.command.serf.unregister_keyboard_key(key.callback_data)
 
     async def wait_until_due(self):
         """When the event is due, interrupt the MMTask with the TIME_RAN_OUT reason."""
@@ -356,8 +352,8 @@ class MMTask:
         if self._mmevent.interface_data is None:
             # Send the channel message
             log.debug(f"Sending message for: {self.mmid}")
-            message: PTBMessage = await self.command.interface.serf.api_call(
-                self.command.interface.serf.client.send_message,
+            message: PTBMessage = await self.command.serf.api_call(
+                self.command.serf.client.send_message,
                 chat_id=self.telegram_channel_id,
                 text=rst.escape(self.channel_text),
                 parse_mode="HTML",
@@ -377,8 +373,8 @@ class MMTask:
 
         # Delete the channel message
         log.debug(f"Deleting message for: {self.mmid}")
-        await self.command.interface.serf.api_call(
-            self.command.interface.serf.client.delete_message,
+        await self.command.serf.api_call(
+            self.command.serf.client.delete_message,
             chat_id=self._mmevent.interface_data.chat_id,
             message_id=self._mmevent.interface_data.message_id
         )
@@ -391,7 +387,7 @@ class MMTask:
         log.debug(f"Updating message for: {self.mmid}")
         try:
             await ru.asyncify(
-                self.command.interface.serf.client.edit_message_text,
+                self.command.serf.client.edit_message_text,
                 chat_id=self._mmevent.interface_data.chat_id,
                 text=rst.escape(self.channel_text),
                 message_id=self._mmevent.interface_data.message_id,
@@ -403,8 +399,8 @@ class MMTask:
             log.warning(f"TelegramError during update: {e}")
 
     async def telegram_group_message_start(self):
-        await self.command.interface.serf.api_call(
-            self.command.interface.serf.client.send_message,
+        await self.command.serf.api_call(
+            self.command.serf.client.send_message,
             chat_id=self.telegram_group_id,
             text=rst.escape(self.start_text),
             parse_mode="HTML",
@@ -412,8 +408,8 @@ class MMTask:
         )
 
     async def telegram_group_message_delete(self):
-        await self.command.interface.serf.api_call(
-            self.command.interface.serf.client.send_message,
+        await self.command.serf.api_call(
+            self.command.serf.client.send_message,
             chat_id=self.telegram_group_id,
             text=rst.escape(self.delete_text),
             parse_mode="HTML",

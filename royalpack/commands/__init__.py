@@ -22,7 +22,7 @@ from .help import HelpCommand
 from .leagueoflegends import LeagueoflegendsCommand
 from .magickfiorygi import MagickfiorygiCommand
 from .magicktreasure import MagicktreasureCommand
-from .matchmaking import MatchmakingCommand
+# from .matchmaking import MatchmakingCommand
 from .ping import PingCommand
 from .pmots import PmotsCommand
 from .dog import DogCommand
@@ -63,7 +63,7 @@ available_commands = [
     LeagueoflegendsCommand,
     MagickfiorygiCommand,
     MagicktreasureCommand,
-    MatchmakingCommand,
+    # MatchmakingCommand,
     PingCommand,
     PmotsCommand,
     DogCommand,
