@@ -158,11 +158,11 @@ class MMTask:
 
     def get_answer_callback(self, choice: MMChoice):
         async def callback(data: rc.CommandData):
-            # Find the user who clicked on the button
-            user = await data.get_author(error_if_none=True)
-
-            # Get the related MMEvent
             async with data.session_acm() as session:
+                # Find the user who clicked on the button
+                user = await data.find_author(session=session, required=True)
+
+                # Get the related MMEvent
                 mmevent: MMEvent = await ru.asyncify(session.query(self._EventT).get, self.mmid)
 
                 # Check if the user had already responded
@@ -178,7 +178,7 @@ class MMTask:
 
                     # Drop fiorygi
                     if random.randrange(100) < self.command.config["Matchmaking"]["fiorygi_award_chance"]:
-                        await FiorygiTransaction.spawn_fiorygi(data, user, 1, "aver risposto a un matchmaking")
+                        await FiorygiTransaction.spawn_fiorygi(user, 1, "aver risposto a un matchmaking", data=data, session=session)
                 else:
                     # Change their response
                     mmresponse.choice = choice
@@ -187,37 +187,37 @@ class MMTask:
                 except psycopg2.Error:
                     raise rc.UserError("Hai già risposto nello stesso modo a questo matchmaking.")
 
-            await self.telegram_channel_message_update()
+                await self.telegram_channel_message_update()
 
-            await data.reply(f"{choice.value} Hai risposto al matchmaking!")
+                await data.reply(f"{choice.value} Hai risposto al matchmaking!")
         return callback
 
     def get_delete_callback(self):
         async def callback(data: rc.CommandData):
-            # Find the user who clicked on the button
-            user = await data.get_author(error_if_none=True)
-
-            # Get the related MMEvent
             async with data.session_acm() as session:
+                # Find the user who clicked on the button
+                user = await data.find_author(session=session, required=True)
+
+                # Get the related MMEvent
                 mmevent: MMEvent = await ru.asyncify(session.query(self._EventT).get, self.mmid)
 
-            # Ensure the user has the required roles to start the matchmaking
-            if user != mmevent.creator and "admin" not in user.roles:
-                raise rc.UserError("Non hai i permessi per eliminare questo matchmaking!")
+                # Ensure the user has the required roles to start the matchmaking
+                if user != mmevent.creator and "admin" not in user.roles:
+                    raise rc.UserError("Non hai i permessi per eliminare questo matchmaking!")
 
-            # Interrupt the matchmaking with the MANUAL_DELETE reason
-            await self.queue.put(Interrupts.MANUAL_DELETE)
+                # Interrupt the matchmaking with the MANUAL_DELETE reason
+                await self.queue.put(Interrupts.MANUAL_DELETE)
 
-            await data.reply(f"🗑 Evento eliminato!")
+                await data.reply(f"🗑 Evento eliminato!")
         return callback
 
     def get_start_callback(self):
         async def callback(data: rc.CommandData):
-            # Find the user who clicked on the button
-            user = await data.get_author(error_if_none=True)
-
-            # Get the related MMEvent
             async with data.session_acm() as session:
+                # Find the user who clicked on the button
+                user = await data.find_author(session=session, required=True)
+
+                # Get the related MMEvent
                 mmevent: MMEvent = await ru.asyncify(session.query(self._EventT).get, self.mmid)
 
             # Ensure the user has the required roles to start the matchmaking
