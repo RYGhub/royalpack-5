@@ -43,7 +43,7 @@ class DiarioCommand(rc.Command):
             if isinstance(self.serf, rst.TelegramSerf):
                 message: telegram.Message = data.message
                 reply: telegram.Message = message.reply_to_message
-                creator = await data.get_author()
+                creator = await data.find_author(session=session, required=True)
                 # noinspection PyUnusedLocal
                 quoted: Optional[str]
                 # noinspection PyUnusedLocal
@@ -154,7 +154,7 @@ class DiarioCommand(rc.Command):
                 await data.reply(f"✅ {str(diario)}")
             else:
                 # Find the creator of the quotes
-                creator = await data.get_author(error_if_none=True)
+                creator = await data.find_author(session=session, required=True)
                 # Recreate the full sentence
                 raw_text = " ".join(args)
                 # Pass the sentence through the diario regex
