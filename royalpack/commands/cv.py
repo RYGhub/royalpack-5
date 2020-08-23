@@ -162,7 +162,7 @@ class CvCommand(Command):
                 draw = True
 
                 for role in member["roles"]:
-                    if role["id"] == self.interface.config["Cv"]["displayed_role_id"]:
+                    if role["id"] == self.config["Cv"]["displayed_role_id"]:
                         break
                 else:
                     if display_only_role:
