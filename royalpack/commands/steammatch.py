@@ -60,44 +60,44 @@ class SteammatchCommand(rc.Command):
     async def run(self, args: rc.CommandArgs, data: rc.CommandData) -> None:
         users = []
 
-        author = await data.get_author(error_if_none=True)
-        users.append(author)
+        async with data.session_acm() as session:
+            author = await data.find_author(session=session, required=True)
+            users.append(author)
 
-        for arg in args:
-            async with data.session_acm() as session:
+            for arg in args:
                 user = await rbt.User.find(self.alchemy, session, arg)
-            users.append(user)
+                users.append(user)
 
-        if len(users) < 2:
-            raise rc.InvalidInputError("Devi specificare almeno un altro utente!")
+            if len(users) < 2:
+                raise rc.InvalidInputError("Devi specificare almeno un altro utente!")
 
-        shared_games: Optional[set] = None
-        for user in users:
-            user_games = set()
-            if len(user.steam) == 0:
-                raise rc.UserError(f"{user} non ha un account Steam registrato!")
-            for steam_account in user.steam:
-                steam_account: Steam
-                try:
-                    response = await ru.asyncify(self._api.IPlayerService.GetOwnedGames,
-                                                 steamid=steam_account._steamid,
-                                                 include_appinfo=True,
-                                                 include_played_free_games=True,
-                                                 include_free_sub=True,
-                                                 appids_filter=0)
-                except requests.exceptions.HTTPError:
-                    raise rc.ExternalError(f"L'account Steam di {user} è privato!")
-                games = response["response"]["games"]
-                for game in games:
-                    user_games.add(SteamGame(**game))
-            if shared_games is None:
-                shared_games = user_games
-            else:
-                shared_games = shared_games.intersection(user_games)
+            shared_games: Optional[set] = None
+            for user in users:
+                user_games = set()
+                if len(user.steam) == 0:
+                    raise rc.UserError(f"{user} non ha un account Steam registrato!")
+                for steam_account in user.steam:
+                    steam_account: Steam
+                    try:
+                        response = await ru.asyncify(self._api.IPlayerService.GetOwnedGames,
+                                                     steamid=steam_account._steamid,
+                                                     include_appinfo=True,
+                                                     include_played_free_games=True,
+                                                     include_free_sub=True,
+                                                     appids_filter=0)
+                    except requests.exceptions.HTTPError:
+                        raise rc.ExternalError(f"L'account Steam di {user} è privato!")
+                    games = response["response"]["games"]
+                    for game in games:
+                        user_games.add(SteamGame(**game))
+                if shared_games is None:
+                    shared_games = user_games
+                else:
+                    shared_games = shared_games.intersection(user_games)
 
-        message_rows = [f"🎮 Giochi in comune tra {ru.andformat([str(user) for user in users], final=' e ')}:"]
-        for game in sorted(list(shared_games), key=lambda g: g.name):
-            message_rows.append(f"- {game}")
+            message_rows = [f"🎮 Giochi in comune tra {ru.andformat([str(user) for user in users], final=' e ')}:"]
+            for game in sorted(list(shared_games), key=lambda g: g.name):
+                message_rows.append(f"- {game}")
 
-        message = "\n".join(message_rows)
-        await data.reply(message)
+            message = "\n".join(message_rows)
+            await data.reply(message)

@@ -3,7 +3,7 @@ import royalnet.utils as ru
 import royalnet.constellation.api as rca
 
 
-url_validation = re.compile(r'^(?:http|ftp)s?://'
+url_validation = re.compile(r'^(?:http|ftp)s://'
                             r'(?:(?:[A-Z0-9](?:[A-Z0-9-]{0,61}[A-Z0-9])?\.)+(?:[A-Z]{2,6}\.?|[A-Z0-9-]{2,}\.?)|'
                             r'localhost|'
                             r'\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3})'
@@ -16,7 +16,7 @@ class ApiUserAvatarStar(rca.ApiStar):
 
     parameters = {
         "put": {
-            "avatar_url": "The url that the user wants to set as avatar."
+            "avatar_url": "The url that the user wants to set as avatar. MUST BE HTTPS/FTPS!"
         }
     }
 

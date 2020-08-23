@@ -34,17 +34,18 @@ class MagicktreasureCommand(rc.Command):
 
     async def run(self, args: rc.CommandArgs, data: rc.CommandData) -> None:
         await data.delete_invoking()
-        author = await data.get_author(error_if_none=True)
-
-        code = args[0].lower()
-        try:
-            value = int(args[1])
-        except ValueError:
-            raise rc.InvalidInputError("Il valore deve essere maggiore o uguale a 0.")
-        if value < 0:
-            raise rc.InvalidInputError("Il valore deve essere maggiore o uguale a 0.")
 
         async with data.session_acm() as session:
+            author = await data.find_author(session=session, required=True)
+
+            code = args[0].lower()
+            try:
+                value = int(args[1])
+            except ValueError:
+                raise rc.InvalidInputError("Il valore deve essere maggiore o uguale a 0.")
+            if value < 0:
+                raise rc.InvalidInputError("Il valore deve essere maggiore o uguale a 0.")
+
             await self._permission_check(author, code, value, data, session)
             treasure = await self._create_treasure(author, code, value, data, session)
             session.add(treasure)

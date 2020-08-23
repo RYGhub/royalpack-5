@@ -57,10 +57,12 @@ class SteampoweredCommand(LinkerCommand):
         )
 
         await FiorygiTransaction.spawn_fiorygi(
-            data=data,
             user=user,
             qty=1,
-            reason="aver collegato a Royalnet il proprio account di League of Legends"
+            reason="aver collegato a Royalnet il proprio account di Steam",
+
+            data=data,
+            session=session,
         )
 
         session.add(steam_account)

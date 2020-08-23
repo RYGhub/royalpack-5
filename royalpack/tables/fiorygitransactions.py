@@ -47,40 +47,44 @@ class FiorygiTransaction:
         return f"<{self.__class__.__name__}: {self.change:+} to {self.user.username} for {self.reason}>"
 
     @classmethod
-    async def spawn_fiorygi(cls, data: "CommandData", user, qty: int, reason: str):
+    async def spawn_fiorygi(cls, user, qty: int, reason: str, *, data: "CommandData", session):
+        FiorygiT = data.alchemy.get(cls)
+        FiorygiTransactionT = data.alchemy.get(FiorygiTransaction)
+
         if user.fiorygi is None:
-            async with data.session_acm() as session:
-                session.add(data.alchemy.get(Fiorygi)(
+            session.add(
+                FiorygiT(
                     user_id=user.uid,
                     fiorygi=0
-                ))
-                await ru.asyncify(session.commit)
+                )
+            )
+            await ru.asyncify(session.commit)
 
-        async with data.session_acm() as session:
-            transaction = data.alchemy.get(FiorygiTransaction)(
+        session.add(
+            FiorygiTransactionT(
                 user_id=user.uid,
                 change=qty,
                 reason=reason,
                 timestamp=datetime.datetime.now()
             )
-            session.add(transaction)
+        )
 
-            user.fiorygi.fiorygi += qty
-            await ru.asyncify(session.commit)
+        user.fiorygi.fiorygi += qty
+        await ru.asyncify(session.commit)
 
-            if len(user.telegram) > 0:
-                user_str = user.telegram[0].mention()
-            else:
-                user_str = user.username
+        if len(user.telegram) > 0:
+            user_str = user.telegram[0].mention()
+        else:
+            user_str = user.username
 
-            if qty > 0:
-                msg = f"💰 [b]{user_str}[/b] ha ottenuto [b]{qty}[/b] fioryg{'i' if qty != 1 else ''} per [i]{reason}[/i]!"
-            elif qty == 0:
-                msg = f"❓ [b]{user_str}[/b] ha mantenuto i suoi fiorygi attuali per [i]{reason}[/i].\nWait, cosa?"
-            else:
-                msg = f"💸 [b]{user_str}[/b] ha perso [b]{-qty}[/b] fioryg{'i' if qty != -1 else ''} per [i]{reason}[/i]."
+        if qty > 0:
+            msg = f"💰 [b]{user_str}[/b] ha ottenuto [b]{qty}[/b] fioryg{'i' if qty != 1 else ''} per [i]{reason}[/i]!"
+        elif qty == 0:
+            msg = f"❓ [b]{user_str}[/b] ha mantenuto i suoi fiorygi attuali per [i]{reason}[/i].\nWait, cosa?"
+        else:
+            msg = f"💸 [b]{user_str}[/b] ha perso [b]{-qty}[/b] fioryg{'i' if qty != -1 else ''} per [i]{reason}[/i]."
 
-            await data.command.serf.call_herald_event(
-                "telegram", "telegram_message",
-                chat_id=data.command.config["Telegram"]["main_group_id"],
-                text=msg)
+        await data.command.serf.call_herald_event(
+            "telegram", "telegram_message",
+            chat_id=data.command.config["Telegram"]["main_group_id"],
+            text=msg)

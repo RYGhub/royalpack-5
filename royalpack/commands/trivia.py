@@ -94,7 +94,7 @@ class TriviaCommand(rc.Command):
 
             # Create the correct and wrong functions
             async def correct(data: rc.CommandData):
-                answerer_ = await data.get_author(error_if_none=True)
+                answerer_ = await data.find_author(session=session, required=True)
                 try:
                     self._answerers[question_id][answerer_.uid] = True
                 except KeyError:
@@ -102,7 +102,7 @@ class TriviaCommand(rc.Command):
                 await data.reply("🆗 Hai risposto alla domanda. Ora aspetta un attimo per i risultati!")
 
             async def wrong(data: rc.CommandData):
-                answerer_ = await data.get_author(error_if_none=True)
+                answerer_ = await data.find_author(session=session, required=True)
                 try:
                     self._answerers[question_id][answerer_.uid] = False
                 except KeyError:

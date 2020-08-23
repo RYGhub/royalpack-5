@@ -88,5 +88,6 @@ class DiscordCvEvent(rc.HeraldEvent):
                 "id": guild.id,
                 "name": guild.name,
                 "members": results,
+                "channels": channels,
             }
         }

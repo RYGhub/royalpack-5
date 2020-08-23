@@ -12,5 +12,5 @@ class ApiDiscordCvStar(rca.ApiStar):
         """Get the members status of a single Discord guild.
 
         Equivalent to calling /cv in a chat."""
-        response = await self.interface.call_herald_event("discord", "discord_cv")
+        response = await self.constellation.call_herald_event("discord", "discord_cv")
         return response

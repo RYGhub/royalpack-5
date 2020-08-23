@@ -23,7 +23,7 @@ class PingCommand(rc.Command):
         for target in self._targets:
             tasks[target] = self.loop.create_task(self.serf.call_herald_event(target, "pong"))
 
-        await asyncio.sleep(10)
+        await asyncio.sleep(5)
 
         lines = ["📶 [b]Pong![/b]", ""]
 

@@ -13,11 +13,11 @@ class TreasureCommand(rc.Command):
     syntax: str = "{code}"
 
     async def run(self, args: rc.CommandArgs, data: rc.CommandData) -> None:
-        author = await data.get_author(error_if_none=True)
-        code = args[0].lower()
+        TreasureT = self.alchemy.get(Treasure)
 
         async with data.session_acm() as session:
-            TreasureT = self.alchemy.get(Treasure)
+            author = await data.find_author(session=session, required=True)
+            code = args[0].lower()
 
             treasure = await ru.asyncify(session.query(TreasureT).get, code)
             if treasure is None:

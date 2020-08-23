@@ -30,6 +30,6 @@ class GivetreasureCommand(MagicktreasureCommand):
             redeemed_by=None
         )
 
-        await FiorygiTransaction.spawn_fiorygi(data, author, -value, "aver creato un tesoro")
+        await FiorygiTransaction.spawn_fiorygi(author, -value, "aver creato un tesoro", data=data, session=session)
 
         return treasure

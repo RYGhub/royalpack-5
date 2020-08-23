@@ -117,7 +117,7 @@ class OsuCommand(LinkerCommand):
         if attribute == "standard_pp":
             await self.notify(f"⬜️ [b]{obj.user}[/b] non è più classificato su [i]osu![/i].")
         elif attribute == "taiko_pp":
-            await self.notify(f" ⬜️[b]{obj.user}[/b] non è più classificato su [i]osu!taiko[/i].")
+            await self.notify(f"⬜️ [b]{obj.user}[/b] non è più classificato su [i]osu!taiko[/i].")
         elif attribute == "catch_pp":
             await self.notify(f"⬜️ [b]{obj.user}[/b] non è più classificato su [i]osu!catch[/i].")
         elif attribute == "mania_pp":

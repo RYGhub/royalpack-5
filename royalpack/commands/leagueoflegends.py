@@ -115,6 +115,7 @@ class LeagueoflegendsCommand(LinkerCommand):
 
         await FiorygiTransaction.spawn_fiorygi(
             data=data,
+            session=session,
             user=user,
             qty=1,
             reason="aver collegato a Royalnet il proprio account di League of Legends"

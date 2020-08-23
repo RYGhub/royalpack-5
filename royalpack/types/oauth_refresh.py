@@ -7,8 +7,7 @@ async def oauth_refresh(*, url, client_id, client_secret, redirect_uri, refresh_
             "client_id": client_id,
             "client_secret": client_secret,
             "code": refresh_code,
-            "grant_type": "authorization_code",
-            "redirect_uri": redirect_uri
+            "grant_type": "refresh_token"
         }) as response:
             j = await response.json()
             return j

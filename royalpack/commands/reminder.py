@@ -34,7 +34,7 @@ class ReminderCommand(rc.Command):
                    .all()
         )
         for reminder in reminders:
-            self.loop.create_task(self._remind(reminder))
+            self.serf.tasks.add(self._remind(reminder))
 
     async def _remind(self, reminder):
         await ru.sleep_until(reminder.datetime)
@@ -77,13 +77,13 @@ class ReminderCommand(rc.Command):
             interface_data = pickle.dumps(data.message.channel.id)
         else:
             raise rc.UnsupportedError("This command does not support the current interface.")
-        creator = await data.get_author()
         async with data.session_acm() as session:
+            creator = await data.find_author(session=session)
             reminder = self.alchemy.get(Reminder)(creator=creator,
                                                   interface_name=self.serf.interface_name,
                                                   interface_data=interface_data,
                                                   datetime=date,
                                                   message=reminder_text)
-            self.loop.create_task(self._remind(reminder))
+            self.serf.tasks.add(self._remind(reminder))
             session.add(reminder)
             await ru.asyncify(session.commit)

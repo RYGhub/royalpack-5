@@ -7,7 +7,7 @@ import aiohttp
 import aiohttp.client_exceptions
 import datetime
 from ..types import oauth_refresh
-from ..tables import Osu, FiorygiTransaction
+from ..tables import Osu
 
 
 class ApiAuthLoginOsuStar(rca.ApiStar):

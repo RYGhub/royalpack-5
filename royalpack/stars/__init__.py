@@ -3,7 +3,6 @@ from .api_bio import ApiBioSetStar
 from .api_diario import ApiDiarioGetStar
 from .api_diario_list import ApiDiarioPagesStar
 from .api_discord_cv import ApiDiscordCvStar
-from .api_discord_play import ApiDiscordPlayStar
 from .api_fiorygi import ApiFiorygiStar
 from .api_diario_random import ApiDiarioRandomStar
 from .api_poll import ApiPollStar
@@ -21,7 +20,6 @@ available_page_stars = [
     ApiDiarioGetStar,
     ApiDiarioPagesStar,
     ApiDiscordCvStar,
-    ApiDiscordPlayStar,
     ApiFiorygiStar,
     ApiDiarioRandomStar,
     ApiPollStar,

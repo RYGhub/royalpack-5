@@ -13,31 +13,35 @@ class GivefiorygiCommand(rc.Command):
     syntax: str = "{destinatario} {quantità} {motivo}"
 
     async def run(self, args: rc.CommandArgs, data: rc.CommandData) -> None:
-        author = await data.get_author(error_if_none=True)
-
-        user_arg = args[0]
-        qty_arg = args[1]
-
-        if user_arg is None:
-            raise rc.InvalidInputError("Non hai specificato un destinatario!")
         async with data.session_acm() as session:
-            user = await rbt.User.find(self.alchemy, session, user_arg)
-        if user is None:
-            raise rc.InvalidInputError("L'utente specificato non esiste!")
-        if user.uid == author.uid:
-            raise rc.InvalidInputError("Non puoi inviare fiorygi a te stesso!")
+            author = await data.find_author(session=session, required=True)
 
-        if qty_arg is None:
-            raise rc.InvalidInputError("Non hai specificato una quantità!")
-        try:
-            qty = int(qty_arg)
-        except ValueError:
-            raise rc.InvalidInputError("La quantità specificata non è un numero!")
-        if qty <= 0:
-            raise rc.InvalidInputError("La quantità specificata deve essere almeno 1!")
+            user_arg = args[0]
+            qty_arg = args[1]
 
-        if author.fiorygi.fiorygi < qty:
-            raise rc.InvalidInputError("Non hai abbastanza fiorygi per effettuare la transazione!")
+            if user_arg is None:
+                raise rc.InvalidInputError("Non hai specificato un destinatario!")
+            user = await rbt.User.find(alchemy=self.alchemy, session=session, identifier=user_arg)
+            if user is None:
+                raise rc.InvalidInputError("L'utente specificato non esiste!")
+            if user.uid == author.uid:
+                raise rc.InvalidInputError("Non puoi inviare fiorygi a te stesso!")
 
-        await FiorygiTransaction.spawn_fiorygi(data, author, -qty, f"aver ceduto fiorygi a {user}")
-        await FiorygiTransaction.spawn_fiorygi(data, user, qty, f"aver ricevuto fiorygi da {author}")
+            if qty_arg is None:
+                raise rc.InvalidInputError("Non hai specificato una quantità!")
+            try:
+                qty = int(qty_arg)
+            except ValueError:
+                raise rc.InvalidInputError("La quantità specificata non è un numero!")
+            if qty <= 0:
+                raise rc.InvalidInputError("La quantità specificata deve essere almeno 1!")
+
+            if author.fiorygi.fiorygi < qty:
+                raise rc.InvalidInputError("Non hai abbastanza fiorygi per effettuare la transazione!")
+
+            await FiorygiTransaction.spawn_fiorygi(author, -qty, f"aver ceduto fiorygi a {user}",
+                                                   data=data,
+                                                   session=session)
+            await FiorygiTransaction.spawn_fiorygi(user, qty, f"aver ricevuto fiorygi da {author}",
+                                                   data=data,
+                                                   session=session)
