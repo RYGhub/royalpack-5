@@ -21,8 +21,8 @@ class LinkerCommand(rc.Command, metaclass=abc.ABCMeta):
             self.updater_task = self.loop.create_task(self.run_updater())
 
     async def run(self, args: rc.CommandArgs, data: rc.CommandData) -> None:
-        author = await data.get_author(error_if_none=True)
         async with data.session_acm() as session:
+            author = await data.find_author(session=session, required=True)
             if len(args) == 0:
                 message = []
                 for obj in await self.get_updatables_of_user(session=session, user=author):
