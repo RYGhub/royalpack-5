@@ -368,7 +368,7 @@ requests = "*"
 
 [[package]]
 name = "royalnet"
-version = "5.11.2"
+version = "5.11.3"
 description = "A multipurpose bot and web framework"
 category = "main"
 optional = false
@@ -622,7 +622,7 @@ multidict = ">=4.0"
 [metadata]
 lock-version = "1.0"
     python-versions = "^3.8"
-content-hash = "18a585dcd6662c69d9fd39c9c683270e55ff4636addc591f539385f844a9f9d9"
+content-hash = "10291d5e853dec96feb4cf4a557e421eb9bddf046b4f39d50bcf86022e353e66"
 
 [metadata.files]
 aiohttp = [
@@ -919,8 +919,8 @@ riotwatcher = [
     {file = "riotwatcher-3.0.0.tar.gz", hash = "sha256:bf8b8eb7e13c794730c18cd7846513cf22295a068204433117ce4d83a25b0fd2"},
 ]
 royalnet = [
-    {file = "royalnet-5.11.2-py3-none-any.whl", hash = "sha256:443c5e27dd60767ed88530f5c16d349a7353fbdd9177e0c6260d230565db2bc1"},
-    {file = "royalnet-5.11.2.tar.gz", hash = "sha256:95368b1f0ffa3390876643d3958dc3e8d62c788d78a5487213a204ebe4f3dfe7"},
+    {file = "royalnet-5.11.3-py3-none-any.whl", hash = "sha256:6fe2ebec8bc45c65af6eec0026eeeecf3174b7aa079eb5253106a5438e8cd448"},
+    {file = "royalnet-5.11.3.tar.gz", hash = "sha256:baf244e7feef22900730f9353c6351f743332d7225eee1b17ec9e17a72dbbf50"},
 ]
 royalspells = [
     {file = "royalspells-3.2.tar.gz", hash = "sha256:2bd4a9a66514532e35c02c3907425af48c7cb292364c4843c795719a82b25dfe"},
