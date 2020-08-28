@@ -6,7 +6,7 @@ import itsdangerous
 import aiohttp
 import aiohttp.client_exceptions
 import datetime
-from ..types import oauth_refresh
+from ..types import oauth_refresh, oauth_auth
 from ..tables import Osu
 
 
@@ -60,11 +60,11 @@ class ApiAuthLoginOsuStar(rca.ApiStar):
             user = None
 
         try:
-            t = await oauth_refresh(url="https://osu.ppy.sh/oauth/token",
-                                    client_id=self.client_id,
-                                    client_secret=self.client_secret,
-                                    redirect_uri=f"{self.base_url}{self.path}",
-                                    refresh_code=code)
+            t = await oauth_auth(url="https://osu.ppy.sh/oauth/token",
+                                 client_id=self.client_id,
+                                 client_secret=self.client_secret,
+                                 redirect_uri=f"{self.base_url}{self.path}",
+                                 auth_code=code)
         except aiohttp.client_exceptions.ClientResponseError as e:
             ru.sentry_exc(e)
             raise rca.ForbiddenError("osu! API returned an error in the OAuth token exchange")

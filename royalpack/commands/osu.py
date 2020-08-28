@@ -57,9 +57,7 @@ class OsuCommand(LinkerCommand):
 
     async def update(self, session, obj: Osu, change: Callable[[str, Any], Awaitable[None]]):
         await obj.refresh_if_expired(client_id=self.client_id,
-                                     client_secret=self.client_secret,
-                                     base_url=self.base_url,
-                                     path=ApiAuthLoginOsuStar.path)
+                                     client_secret=self.client_secret)
         async with aiohttp.ClientSession(headers={"Authorization": f"Bearer {obj.access_token}"}) as session:
             async with session.get("https://osu.ppy.sh/api/v2/me/osu") as response:
                 m = await response.json()
