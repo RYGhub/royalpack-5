@@ -65,7 +65,8 @@ class ApiAuthLoginOsuStar(rca.ApiStar):
                                     client_secret=self.client_secret,
                                     redirect_uri=f"{self.base_url}{self.path}",
                                     refresh_code=code)
-        except aiohttp.client_exceptions.ClientResponseError:
+        except aiohttp.client_exceptions.ClientResponseError as e:
+            ru.sentry_exc(e)
             raise rca.ForbiddenError("osu! API returned an error in the OAuth token exchange")
 
         async with aiohttp.ClientSession(headers={"Authorization": f"Bearer {t['access_token']}"}) as session:
