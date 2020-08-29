@@ -19,5 +19,6 @@ class ApiUserRygListStar(rca.ApiStar):
             "fiorygi": user.fiorygi.fiorygi if user.fiorygi is not None else None,
             "steam": [steam.json() for steam in user.steam],
             "leagueoflegends": [leagueoflegends.json() for leagueoflegends in user.leagueoflegends],
+            "osu": [osu.json() for osu in user.osu],
             "trivia": user.trivia_score.json() if user.trivia_score is not None else None
         } for user in users]

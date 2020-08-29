@@ -33,8 +33,8 @@ class FortuneCommand(rc.Command):
         "⭐️ Oggi la stella della RYG ti sembrerà un pochino più dritta!",
         "⭐️ Oggi la stella della RYG ti sembrerà anche più storta del solito!",
         "💎 Oggi i tuoi avversari non riusciranno a deflettere i tuoi Emerald Splash!",
-        "⁉️ Oggi le tue supercazzole prematureranno un po' più a destra!",
-        "⁉️ Oggi le tue supercazzole prematureranno un po' più a sinistra!",
+        "⬅️ Oggi le tue supercazzole prematureranno un po' più a sinistra!",
+        "➡️ Oggi le tue supercazzole prematureranno un po' più a destra!",
         "🌅 Oggi sarà il giorno dopo ieri e il giorno prima di domani!",
         "🤖 Oggi il Royal Bot ti dirà qualcosa di molto utile!",
         "💤 Oggi rischierai di addormentarti più volte!",
@@ -47,10 +47,22 @@ class FortuneCommand(rc.Command):
         "🧻 Oggi fai attenzione alla carta igienica: potrebbe finire!",
         "🔮 Oggi chiederai a @royalgamesbot di dirti la tua /fortune!",
         "🧨 Oggi calpesterai delle [url=https://www.youtube.com/watch?v=Zyef3NU3wqk&t=57]mine di Techies[/url]!",
+        "👽 Oggi incontrerai gli UFI!!!1!!uno!",
+        "🦾 Oggi uno scienziato pazzo ti proporrà di sostituire il tuo braccio con un braccio-razzo meccanico!",
+        "🕵️ Oggi una spia in incognito ti chiederà se hai mai visto the Emoji Movie!",
+        "🍕 Oggi mangerai una margherita doppio pomodoro!",
+        "🍰 Oggi mangerai una [url=https://www.youtube.com/watch?v=2EWWL3niBWY]torta al gusto di torta[/url]!",
+        "🥇 Oggi vincerai qualcosa!",
+        "🏴‍☠️ Oggi salperai i sette mari con la tua ciurma pirata!",
+        "🕒 Oggi sarà ieri, e domani sarà oggi!",
+        "🔙 Oggi torneai indietro nel tempo!",
+        "🚨 Oggi suonerà l'allarme della Velvet Room!",
+        "♾ Oggi ti sembrerà infinito!",
     ]
 
     async def run(self, args: rc.CommandArgs, data: rc.CommandData) -> None:
-        author = await data.get_author()
+        async with data.session_acm() as session:
+            author = await data.find_author(session=session, required=True)
         today = datetime.date.today()
 
         h = author.uid * hash(today)

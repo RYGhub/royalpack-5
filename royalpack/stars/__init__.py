@@ -1,7 +1,7 @@
 # Imports go here!
 from .api_bio import ApiBioSetStar
 from .api_diario import ApiDiarioGetStar
-from .api_diario_list import ApiDiarioPagesStar
+from .api_diario_all import ApiDiarioAllStar
 from .api_discord_cv import ApiDiscordCvStar
 from .api_fiorygi import ApiFiorygiStar
 from .api_diario_random import ApiDiarioRandomStar
@@ -18,7 +18,7 @@ from .api_auth_login_osu import ApiAuthLoginOsuStar
 available_page_stars = [
     ApiBioSetStar,
     ApiDiarioGetStar,
-    ApiDiarioPagesStar,
+    ApiDiarioAllStar,
     ApiDiscordCvStar,
     ApiFiorygiStar,
     ApiDiarioRandomStar,
