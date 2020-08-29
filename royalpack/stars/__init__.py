@@ -14,6 +14,7 @@ from .api_user_ryg_list import ApiUserRygListStar
 from .api_user_avatar import ApiUserAvatarStar
 from .api_auth_login_osu import ApiAuthLoginOsuStar
 from .api_diario_range import ApiDiarioRangeStar
+from .api_diario_latest import ApiDiarioLatestStar
 
 # Enter the PageStars of your Pack here!
 available_page_stars = [
@@ -32,6 +33,7 @@ available_page_stars = [
     ApiUserAvatarStar,
     ApiAuthLoginOsuStar,
     ApiDiarioRangeStar,
+    ApiDiarioLatestStar,
 ]
 
 # Don't change this, it should automatically generate __all__
