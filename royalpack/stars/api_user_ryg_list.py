@@ -11,8 +11,10 @@ class ApiUserRygListStar(rca.ApiStar):
 
     @rca.magic
     async def get(self, data: rca.ApiData) -> ru.JSON:
-        """Get Royalpack information about all user."""
-        users: typing.List[rbt.User] = await ru.asyncify(data.session.query(self.alchemy.get(rbt.User)).all)
+        """Get Royalpack information about all users."""
+        users: typing.List[rbt.User] = await ru.asyncify(
+            data.session.query(self.alchemy.get(rbt.User)).all
+        )
         return [{
             **user.json(),
             "bio": user.bio.json() if user.bio is not None else None,
@@ -21,4 +23,4 @@ class ApiUserRygListStar(rca.ApiStar):
             "leagueoflegends": [leagueoflegends.json() for leagueoflegends in user.leagueoflegends],
             "osu": [osu.json() for osu in user.osu],
             "trivia": user.trivia_score.json() if user.trivia_score is not None else None
-        } for user in users]
+        } for user in users if "member" in user.roles]
