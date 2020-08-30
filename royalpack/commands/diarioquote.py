@@ -21,6 +21,6 @@ class DiarioquoteCommand(rc.Command):
             raise rc.CommandError("L'id che hai specificato non è valido.")
         async with data.session_acm() as session:
             entry: Diario = await ru.asyncify(session.query(self.alchemy.get(Diario)).get, entry_id)
-        if entry is None:
-            raise rc.CommandError("Nessuna riga con quell'id trovata.")
-        await data.reply(f"ℹ️ {entry}")
+            if entry is None:
+                raise rc.CommandError("Nessuna riga con quell'id trovata.")
+            await data.reply(f"ℹ️ {entry}")

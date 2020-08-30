@@ -66,7 +66,7 @@ class Osu(Updatable):
                                 client_secret=client_secret,
                                 refresh_code=self.refresh_token)
         self.access_token = j["access_token"]
-        self.refresh_token = j["refresh_token"]
+        self.refresh_token = j.get("refresh_token") or self.refresh_token
         self.expiration_date = datetime.datetime.now() + datetime.timedelta(seconds=j["expires_in"])
 
     async def refresh_if_expired(self, *, client_id, client_secret):

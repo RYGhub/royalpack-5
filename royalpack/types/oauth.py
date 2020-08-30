@@ -19,7 +19,7 @@ async def oauth_refresh(*, url, client_id, client_secret, refresh_code):
         async with session.post(url, data={
             "client_id": client_id,
             "client_secret": client_secret,
-            "code": refresh_code,
+            "refresh_token": refresh_code,
             "grant_type": "refresh_token"
         }) as response:
             j = await response.json()

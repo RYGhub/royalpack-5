@@ -61,7 +61,7 @@ class OsuCommand(LinkerCommand):
         async with aiohttp.ClientSession(headers={"Authorization": f"Bearer {obj.access_token}"}) as session:
             async with session.get("https://osu.ppy.sh/api/v2/me/osu") as response:
                 m = await response.json()
-                obj.avatar_url = m["avatar_url"]
+                obj.avatar_url = m.get("avatar_url")
                 obj.username = m["username"]
                 if "statistics" in m:
                     await change("standard_pp", m["statistics"].get("pp"))
