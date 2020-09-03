@@ -28,7 +28,6 @@ class DiscordCvEvent(rc.HeraldEvent):
             guild: discord.Guild = client.get_guild(guild_id)
 
         members: List[Union[discord.User, discord.Member]] = guild.members
-        channels: List[discord.VoiceChannel] = guild.voice_channels
 
         results = []
 
@@ -88,6 +87,5 @@ class DiscordCvEvent(rc.HeraldEvent):
                 "id": guild.id,
                 "name": guild.name,
                 "members": results,
-                "channels": channels,
             }
         }

@@ -310,14 +310,17 @@ class MMTask:
         return InKM(rows)
 
     def register_telegram_keyboard(self, inkm: InKM):
-        # noinspection PyListCreation
+        assert isinstance(self.command.serf, rst.TelegramSerf)
         royalnet_keyboard = self.royalnet_keyboard
         for x, row in enumerate(inkm.inline_keyboard):
             for y, key in enumerate(row):
                 key: InKB
-                self.command.serf.register_keyboard_key(key.callback_data, key=royalnet_keyboard[x][y])
+                self.command.serf.register_keyboard_key(key.callback_data,
+                                                        key=royalnet_keyboard[x][y],
+                                                        command=self.command)
 
     def unregister_telegram_keyboard(self, inkm: InKM):
+        assert isinstance(self.command.serf, rst.TelegramSerf)
         for row in inkm.inline_keyboard:
             for key in row:
                 key: InKB
@@ -332,14 +335,15 @@ class MMTask:
 
     @property
     def telegram_channel_id(self):
-        return self.command.config["Matchmaking"]["mm_telegram_channel_id"]
+        return self.command.config["matchmaking"]["channel_id"]
 
     @property
     def telegram_group_id(self):
-        return self.command.config["Matchmaking"]["mm_telegram_group_id"]
+        return self.command.config["matchmaking"]["group_id"]
 
     @contextlib.asynccontextmanager
     async def telegram_channel_message(self):
+        assert isinstance(self.command.serf, rst.TelegramSerf)
 
         # Generate the InlineKeyboardMarkup
         inkm = self.telegram_keyboard
@@ -385,6 +389,9 @@ class MMTask:
 
     async def telegram_channel_message_update(self):
         log.debug(f"Updating message for: {self.mmid}")
+
+        assert isinstance(self.command.serf, rst.TelegramSerf)
+
         try:
             await ru.asyncify(
                 self.command.serf.client.edit_message_text,
@@ -399,6 +406,8 @@ class MMTask:
             log.warning(f"TelegramError during update: {e}")
 
     async def telegram_group_message_start(self):
+        assert isinstance(self.command.serf, rst.TelegramSerf)
+
         await self.command.serf.api_call(
             self.command.serf.client.send_message,
             chat_id=self.telegram_group_id,
@@ -408,6 +417,8 @@ class MMTask:
         )
 
     async def telegram_group_message_delete(self):
+        assert isinstance(self.command.serf, rst.TelegramSerf)
+
         await self.command.serf.api_call(
             self.command.serf.client.send_message,
             chat_id=self.telegram_group_id,

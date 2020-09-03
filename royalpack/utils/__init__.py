@@ -1,5 +1,5 @@
-# from .mmtask import MMTask
+from .mmtask import MMTask
 
 __all__ = [
-    # "MMTask",
+    "MMTask",
 ]

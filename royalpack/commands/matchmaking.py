@@ -70,13 +70,14 @@ class MatchmakingCommand(rc.Command):
 
     async def run(self, args: rc.CommandArgs, data: rc.CommandData) -> None:
         """Handle a matchmaking command call."""
-        author = await data.get_author(error_if_none=True)
 
         # Parse the arguments, either with the standard syntax or with the Proto syntax
         dt, title, description = self._parse_args(args)
 
         # Add the MMEvent to the database
         async with data.session_acm() as session:
+            author = await data.find_author(session=session, required=True)
+
             mmevent: MMEvent = self.alchemy.get(MMEvent)(creator=author,
                                                          datetime=dt,
                                                          title=title,
@@ -85,8 +86,8 @@ class MatchmakingCommand(rc.Command):
             session.add(mmevent)
             await ru.asyncify(session.commit)
 
-        # Create and run a task for the newly created MMEvent
-        task = MMTask(mmevent.mmid, command=self)
-        task.start()
+            # Create and run a task for the newly created MMEvent
+            task = MMTask(mmevent.mmid, command=self)
+            task.start()
 
         await data.reply(f"🚩 Matchmaking creato!")
