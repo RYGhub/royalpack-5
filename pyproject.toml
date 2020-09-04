@@ -28,7 +28,7 @@
     itsdangerous = "^1.1.0"
 
     [tool.poetry.dependencies.royalnet]
-        version = "~5.11.8"
+        version = "~5.11.9"
         # Maybe... there is a way to make these selectable?
         extras = [
             "telegram",

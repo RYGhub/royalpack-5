@@ -177,7 +177,7 @@ class MMTask:
                     session.add(mmresponse)
 
                     # Drop fiorygi
-                    if random.randrange(100) < self.command.config["Matchmaking"]["fiorygi_award_chance"]:
+                    if random.randrange(100) < self.command.config["matchmaking"]["fiorygi_award_chance"]:
                         await FiorygiTransaction.spawn_fiorygi(user, 1, "aver risposto a un matchmaking", data=data, session=session)
                 else:
                     # Change their response
@@ -220,14 +220,14 @@ class MMTask:
                 # Get the related MMEvent
                 mmevent: MMEvent = await ru.asyncify(session.query(self._EventT).get, self.mmid)
 
-            # Ensure the user has the required roles to start the matchmaking
-            if user != mmevent.creator and "admin" not in user.roles:
-                raise rc.UserError("Non hai i permessi per eliminare questo matchmaking!")
+                # Ensure the user has the required roles to start the matchmaking
+                if user != mmevent.creator and "admin" not in user.roles:
+                    raise rc.UserError("Non hai i permessi per eliminare questo matchmaking!")
 
-            # Interrupt the matchmaking with the MANUAL_DELETE reason
-            await self.queue.put(Interrupts.MANUAL_START)
+                # Interrupt the matchmaking with the MANUAL_DELETE reason
+                await self.queue.put(Interrupts.MANUAL_START)
 
-            await data.reply(f"🚩 Evento avviato!")
+                await data.reply(f"🚩 Evento avviato!")
         return callback
 
     @property
@@ -429,7 +429,7 @@ class MMTask:
 
     def start(self):
         log.debug(f"Starting task for: {self.mmid}")
-        self.task = self.loop.create_task(self.run())
+        self.task = self.command.serf.tasks.add(self.run())
 
     @ru.sentry_async_wrap()
     async def run(self):
@@ -448,7 +448,7 @@ class MMTask:
             raise rc.UnsupportedError("Currently only the Telegram interface is supported.")
 
         async with self.telegram_channel_message():
-            self.loop.create_task(self.wait_until_due())
+            self.command.serf.tasks.add(self.wait_until_due())
 
             # Sleep until something interrupts the task
             interrupt = await self.queue.get()
