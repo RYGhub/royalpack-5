@@ -77,14 +77,14 @@ class SteampoweredCommand(LinkerCommand):
         obj.primary_clan_id = r["primaryclanid"]
         obj.account_creation_date = datetime.datetime.fromtimestamp(r["timecreated"])
         response = await self._call(self._api.IPlayerService.GetSteamLevel_v1, steamid=obj.steamid.as_64)
-        obj.account_level = response["response"]["player_level"]
+        obj.account_level = response["response"].get("player_level", 0)
         response = await self._call(self._api.IPlayerService.GetOwnedGames_v1,
                                     steamid=obj.steamid.as_64,
                                     include_appinfo=False,
                                     include_played_free_games=True,
                                     include_free_sub=False,
                                     appids_filter=None)
-        obj.owned_games_count = response["response"]["game_count"]
+        obj.owned_games_count = response["response"].get("game_count", 0)
         if response["response"]["game_count"] >= 0:
             obj.most_played_game_2weeks = sorted(response["response"]["games"], key=lambda g: -g.get("playtime_2weeks", 0))[0]["appid"]
             obj.most_played_game_forever = sorted(response["response"]["games"], key=lambda g: -g.get("playtime_forever", 0))[0]["appid"]
