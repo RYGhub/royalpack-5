@@ -51,7 +51,7 @@ class AnswerCommand(rc.Command):
         "❌ Hell no.",
         "❌ [url=https://www.youtube.com/watch?v=fKEZFRcuEqw]NO! NO! NO![/url]",
         "❌ lolno",
-        "❌ [url=https://www.youtube.com/watch?v=5lbGAzo9RrM]NEIN NEIN NEIN NEIN[/url],
+        "❌ [url=https://www.youtube.com/watch?v=5lbGAzo9RrM]NEIN NEIN NEIN NEIN[/url]",
         "❌ Delet dis",
         
         # risposte "boh": 18
