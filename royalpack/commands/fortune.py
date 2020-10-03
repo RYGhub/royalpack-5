@@ -58,6 +58,14 @@ class FortuneCommand(rc.Command):
         "🔙 Oggi torneai indietro nel tempo!",
         "🚨 Oggi suonerà l'allarme della Velvet Room!",
         "♾ Oggi ti sembrerà infinito!",
+        "🤔 Oggi potresti dimenticare qualcosa di imoprtante",
+        "🥠 Oggi faresti meglio a chiedere a un biscotto della fortuna",
+        "🏳️‍🌈 Oggi scoprirai l'esistenza di almeno un gender che non conoscevi",
+        "▯ Oggi le emoji non funzioneranno",
+        "🌌 Oggi sarai votato come impostor",
+        "⬜️ Oggi non succederà assolutamente nulla",
+        "🥴 [url=https://www.youtube.com/watch?v=LLrKV_zRxvs]Oggi ti dimenticherai come ci si siede[/url]",
+        "👀 Oggi scoprirai di avere degli occhi"
     ]
 
     async def run(self, args: rc.CommandArgs, data: rc.CommandData) -> None:
