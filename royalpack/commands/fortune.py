@@ -65,7 +65,7 @@ class FortuneCommand(rc.Command):
         "🌌 Oggi sarai votato come impostor",
         "⬜️ Oggi non succederà assolutamente nulla",
         "🥴 [url=https://www.youtube.com/watch?v=LLrKV_zRxvs]Oggi ti dimenticherai come ci si siede[/url]",
-        "👀 Oggi scoprirai di avere degli occhi"
+        "👀 Oggi scoprirai di avere degli occhi",
     ]
 
     async def run(self, args: rc.CommandArgs, data: rc.CommandData) -> None:
