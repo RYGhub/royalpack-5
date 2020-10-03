@@ -72,7 +72,7 @@ class AnswerCommand(rc.Command):
         "❔ No comment.",
         "❔ maibi",
         "❔ maibi not",
-        "❔ idk dude"
+        "❔ idk dude",
     ]
 
     async def run(self, args: rc.CommandArgs, data: rc.CommandData) -> None:
