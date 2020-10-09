@@ -16,7 +16,7 @@ class AnswerCommand(rc.Command):
         # Cerchiamo di tenere bilanciate le tre colonne, o almeno le prime due.
         # Se avete un'idea ma metterebbe troppe opzioni in un'unica categoria, mettetela sotto commento.
 
-        # risposte "sì": 15
+        # risposte "sì": 16
         "🔵 Sì.",
         "🔵 Decisamente sì!",
         "🔵 Uhm, secondo me sì.",
@@ -32,11 +32,13 @@ class AnswerCommand(rc.Command):
         "🔵 Hell yeah.",
         "🔵 [url=https://www.youtube.com/watch?v=sq_Fm7qfRQk]YES! YES! YES![/url]",
         "🔵 yusssssss",
+        "🔵 Non vedo perchè no",
+        "🔵 Ha senso, ha perfettamente senso, nulla da obiettare, ha senso.",
 
-        # risposte "no": 15
+        # risposte "no": 17
         "❌ No.",
         "❌ Decisamente no!",
-        "❌ Uhm, secondo me sì.",
+        "❌ Uhm, secondo me sì. No, aspetta, ci ho ripensato. è un no.",
         "❌ No, no, e ancora NO!",
         "❌ Nope.",
         "❌ Direi proprio di no.",
@@ -49,8 +51,10 @@ class AnswerCommand(rc.Command):
         "❌ Hell no.",
         "❌ [url=https://www.youtube.com/watch?v=fKEZFRcuEqw]NO! NO! NO![/url]",
         "❌ lolno",
-
-        # risposte "boh": 15
+        "❌ [url=https://www.youtube.com/watch?v=5lbGAzo9RrM]NEIN NEIN NEIN NEIN[/url]",
+        "❌ Delet dis",
+        
+        # risposte "boh": 18
         "❔ Boh.",
         "❔ E io che ne so?!",
         "❔ Non so proprio rispondere.",
@@ -67,6 +71,8 @@ class AnswerCommand(rc.Command):
         "❔ Non ne ho la più pallida idea.",
         "❔ No comment.",
         "❔ maibi",
+        "❔ maibi not",
+        "❔ idk dude",
     ]
 
     async def run(self, args: rc.CommandArgs, data: rc.CommandData) -> None:
